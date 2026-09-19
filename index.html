@@ -679,6 +679,7 @@ font-weight:700
 }
 
 @media(max-width:380px){
+
 .auth-box{
 padding:28px 20px
 }
@@ -694,6 +695,7 @@ width:min(100% - 20px,760px)
 .card{
 padding:16px
 }
+
 }
 </style>
 </head>
@@ -828,20 +830,40 @@ jd:get("day")
 }
 }
 
+
+/*
+  کش کردن تبدیل تاریخ باعث می‌شود
+  تقویم روی موبایل دوباره و دوباره
+  همان تاریخ‌ها را محاسبه نکند.
+*/
+
+const jalaliIsoCache=new Map();
+
 function jalaliDateToISO(jy,jm,jd){
+
+const key=
+`${jy}-${jm}-${jd}`;
+
+if(jalaliIsoCache.has(key))
+return jalaliIsoCache.get(key);
 
 let gy=jy-621;
 
 let guess=
 new Date(
-Date.UTC(gy,2,20)
+Date.UTC(
+gy,
+2,
+20
+)
 );
 
 for(let i=-5;i<=370;i++){
 
 const x=
 new Date(
-guess.getTime()+i*86400000
+guess.getTime()+
+i*86400000
 );
 
 const j=
@@ -857,12 +879,19 @@ j.jm===jm &&
 j.jd===jd
 ){
 
-return `${x.getUTCFullYear()}-${String(
+const iso=
+`${x.getUTCFullYear()}-${String(
 x.getUTCMonth()+1
 ).padStart(2,"0")}-${String(
 x.getUTCDate()
 ).padStart(2,"0")}`;
 
+jalaliIsoCache.set(
+key,
+iso
+);
+
+return iso;
 }
 }
 
@@ -871,23 +900,46 @@ throw new Error("تبدیل تاریخ انجام نشد.")
 
 function isoToJalali(iso){
 
-const[y,m,d]=
-iso.slice(0,10)
+const[
+y,
+m,
+d
+]=
+iso
+.slice(0,10)
 .split("-")
 .map(Number);
 
-return gregorianToJalali(y,m,d)
+return gregorianToJalali(
+y,
+m,
+d
+)
 }
 
 function jalaliMonthDays(y,m){
 
 const a=
-jalaliDateToISO(y,m,1);
+jalaliDateToISO(
+y,
+m,
+1
+);
 
 const b=
 m===12
-?jalaliDateToISO(y+1,1,1)
-:jalaliDateToISO(y,m+1,1);
+?
+jalaliDateToISO(
+y+1,
+1,
+1
+)
+:
+jalaliDateToISO(
+y,
+m+1,
+1
+);
 
 return Math.round(
 (Date.parse(b)-Date.parse(a))
@@ -922,7 +974,13 @@ const months=[
 ];
 
 const weekdays=[
-"ش","ی","د","س","چ","پ","ج"
+"ش",
+"ی",
+"د",
+"س",
+"چ",
+"پ",
+"ج"
 ];
 
 function jalaliDateLabel(iso){
@@ -938,11 +996,13 @@ if(!iso)return "";
 
 const d=new Date(iso);
 
-const s=Math.floor(
+const s=
+Math.floor(
 (Date.now()-d.getTime())/1000
 );
 
-if(s<60)return "همین الان";
+if(s<60)
+return "همین الان";
 
 if(s<3600)
 return `${Math.floor(s/60)} دقیقه پیش`;
@@ -1077,7 +1137,11 @@ $("username")?.value.trim().toLowerCase();
 const password=
 $("password")?.value;
 
-if(!displayName||!username||!password)
+if(
+!displayName||
+!username||
+!password
+)
 return showMessage(
 "همه فیلدها رو کامل کن."
 );
@@ -1104,7 +1168,8 @@ error
 supabaseClient.auth.signUp({
 
 email:
-username+"@gharamoon.local",
+username+
+"@gharamoon.local",
 
 password,
 
@@ -1121,7 +1186,10 @@ display_name:displayName
 if(error)
 throw error;
 
-if(data.session&&data.user){
+if(
+data.session&&
+data.user
+){
 
 currentUser=data.user;
 
@@ -1166,7 +1234,10 @@ $("username")?.value.trim().toLowerCase();
 const password=
 $("password")?.value;
 
-if(!username||!password)
+if(
+!username||
+!password
+)
 return showMessage(
 "نام کاربری و رمز عبور رو وارد کن."
 );
@@ -1220,7 +1291,7 @@ await loadProfile();
 
 renderApp();
 
-hideLoading();
+hideLoading()
 
 }catch(e){
 
@@ -1355,9 +1426,11 @@ x.classList.remove("active")
 );
 
 const n=
-$("nav"+
+$(
+"nav"+
 page.charAt(0).toUpperCase()+
-page.slice(1));
+page.slice(1)
+);
 
 if(n)
 n.classList.add("active");
@@ -1654,7 +1727,9 @@ return box.innerHTML=
 این خودتی 😄
 </div>`;
 
-const{data:existing}=
+const{
+data:existing
+}=
 await supabaseClient
 .from("friendships")
 .select("*")
@@ -1674,14 +1749,18 @@ onclick="sendFriendRequest('${data.id}')">
 افزودن
 </button>`;
 
-else if(existing.status==="accepted")
+else if(
+existing.status==="accepted"
+)
 
 action=
 `<span class="username">
 دوست شماست
 </span>`;
 
-else if(existing.requester_id===currentUser.id)
+else if(
+existing.requester_id===currentUser.id
+)
 
 action=
 `<span class="username">
@@ -1835,7 +1914,9 @@ async function acceptFriend(actorId){
 const{error}=
 await supabaseClient
 .from("friendships")
-.update({status:"accepted"})
+.update({
+status:"accepted"
+})
 .eq("requester_id",actorId)
 .eq("receiver_id",currentUser.id);
 
@@ -1898,6 +1979,12 @@ calendarMonth=t.jm;
 
 goPage("calendar")
 }
+
+
+/*
+  صفحه تقویم بدون منتظر ماندن برای
+  بخش قرارهای ثبت‌شده ساخته می‌شود.
+*/
 
 async function renderCalendarPage(){
 
@@ -1977,9 +2064,42 @@ calendarMonth=t.jm
 
 }
 
+
+/*
+  تقویم را مستقل از قرارها اجرا می‌کنیم.
+*/
+
 await renderCalendar();
-await renderAppointments()
+
+
+/*
+  قرارهای ثبت‌شده جداگانه بارگذاری می‌شوند.
+  اگر مشکل سرور باشد، خود تقویم همچنان باز می‌ماند.
+*/
+
+renderAppointments().catch(e=>{
+
+console.error(e);
+
+const box=$("appointmentsList");
+
+if(box){
+
+box.innerHTML=
+`<div class="empty">
+دریافت قرارها انجام نشد.
+</div>`;
+
 }
+
+});
+
+}
+
+
+/*
+  تغییر ماه
+*/
 
 async function changeMonth(dir){
 
@@ -2000,8 +2120,30 @@ calendarYear--
 }
 
 await renderCalendar();
-await renderAppointments()
+
+renderAppointments().catch(e=>{
+
+console.error(e);
+
+const box=$("appointmentsList");
+
+if(box){
+
+box.innerHTML=
+`<div class="empty">
+دریافت قرارها انجام نشد.
+</div>`;
+
 }
+
+});
+
+}
+
+
+/*
+  ساخت تقویم
+*/
 
 async function renderCalendar(){
 
@@ -2013,12 +2155,24 @@ return;
 title.textContent=
 `${months[calendarMonth-1]} ${calendarYear}`;
 
-$("calendarOwnerLabel").textContent=
+const ownerLabel=
+$("calendarOwnerLabel");
+
+if(ownerLabel){
+
+ownerLabel.textContent=
 ownCalendar
-?"تقویم من"
-:`تقویم ${calendarOwnerName}`;
+?
+"تقویم من"
+:
+`تقویم ${calendarOwnerName}`;
+
+}
 
 const grid=$("calendarGrid");
+
+if(!grid)
+return;
 
 grid.innerHTML=
 weekdays
@@ -2029,6 +2183,11 @@ ${x}
 `)
 .join("");
 
+
+/*
+  تبدیل فقط روز اول ماه
+*/
+
 const first=
 jalaliDateToISO(
 calendarYear,
@@ -2036,23 +2195,30 @@ calendarMonth,
 1
 );
 
-const[
-gy,
-gm,
-gd
-]=first.split("-").map(Number);
 
-const saturdayIndex=
-(new Date(
-Date.UTC(gy,gm-1,gd)
-).getUTCDay()+1)%7;
+/*
+  روز اول ماه بعد
+*/
 
-for(let i=0;i<saturdayIndex;i++)
-
-grid.insertAdjacentHTML(
-"beforeend",
-`<div class="day empty"></div>`
+const nextMonth=
+calendarMonth===12
+?
+jalaliDateToISO(
+calendarYear+1,
+1,
+1
+)
+:
+jalaliDateToISO(
+calendarYear,
+calendarMonth+1,
+1
 );
+
+
+/*
+  تعداد روزهای ماه
+*/
 
 const days=
 jalaliMonthDays(
@@ -2060,20 +2226,57 @@ calendarYear,
 calendarMonth
 );
 
+
+/*
+  جایگاه روز اول در هفته
+*/
+
+const[
+gy,
+gm,
+gd
+]=first
+.split("-")
+.map(Number);
+
+const saturdayIndex=
+(
+new Date(
+Date.UTC(
+gy,
+gm-1,
+gd
+)
+)
+.getUTCDay()+1
+)%7;
+
+for(
+let i=0;
+i<saturdayIndex;
+i++
+){
+
+grid.insertAdjacentHTML(
+"beforeend",
+`<div class="day empty"></div>`
+);
+
+}
+
+
+/*
+  دریافت اطلاعات روزها
+*/
+
 let data={};
 
 try{
 
-const start=first;
-
-const end=
-jalaliDateToISO(
-calendarYear,
-calendarMonth,
-days
-);
-
-if(!ownCalendar&&calendarOwner){
+if(
+!ownCalendar &&
+calendarOwner
+){
 
 const{
 data:d,
@@ -2084,19 +2287,27 @@ supabaseClient.rpc(
 "get_friend_calendar",
 {
 p_friend_id:calendarOwner,
-p_start_date:start,
-p_end_date:end
+p_start_date:first,
+p_end_date:nextMonth
 }
-)
+),
+
+12000
 
 );
 
 if(error)
 throw error;
 
-(d||[]).forEach(
-x=>data[x.date]=x
-);
+(d||[]).forEach(x=>{
+
+const date=
+String(x.date)
+.slice(0,10);
+
+data[date]=x;
+
+});
 
 }else{
 
@@ -2108,21 +2319,32 @@ error
 supabaseClient
 .from("bookings")
 .select("date,partner_id")
-.eq("user_id",currentUser.id)
-.gte("date",start)
-.lte("date",end)
+.eq(
+"user_id",
+currentUser.id
+)
+.gte("date",first)
+.lt("date",nextMonth),
+
+12000
 
 );
 
 if(error)
 throw error;
 
-(d||[]).forEach(
-x=>data[x.date]={
+(d||[]).forEach(x=>{
+
+const date=
+String(x.date)
+.slice(0,10);
+
+data[date]={
 is_booked:true,
 partner_id:x.partner_id
-}
-);
+};
+
+});
 
 }
 
@@ -2136,7 +2358,15 @@ grid.insertAdjacentHTML(
 <div
 style="grid-column:1/-1"
 class="empty">
+
 دریافت تقویم انجام نشد.
+
+<br>
+
+<small>
+${escapeHtml(e.message||"")}
+</small>
+
 </div>
 `
 );
@@ -2144,7 +2374,18 @@ class="empty">
 return
 }
 
-const today=todayJalali();
+
+/*
+  ساخت روزهای ماه
+*/
+
+const today=
+todayJalali();
+
+const startTime=
+Date.parse(
+first+"T00:00:00Z"
+);
 
 for(
 let day=1;
@@ -2152,32 +2393,47 @@ day<=days;
 day++
 ){
 
-const iso=
-jalaliDateToISO(
-calendarYear,
-calendarMonth,
-day
+const date=
+new Date(
+startTime+
+(day-1)*86400000
 );
 
-const info=data[iso];
+const iso=
+date
+.toISOString()
+.slice(0,10);
+
+const info=
+data[iso];
 
 const el=
 document.createElement("div");
 
 el.className=
 "day "+
-(info?.is_booked
-?"booked"
-:"free")+
-(info?.is_wish
-?" wish"
-:"")+
+(
+info?.is_booked
+?
+"booked"
+:
+"free"
+)+
+(
+info?.is_wish
+?
+" wish"
+:
+""
+)+
 (
 today.jy===calendarYear &&
 today.jm===calendarMonth &&
 today.jd===day
-?" today"
-:""
+?
+" today"
+:
+""
 );
 
 el.innerHTML=`
@@ -2188,11 +2444,16 @@ ${day}
 
 ${
 info?.is_booked
-?"<small>قرار</small>"
-:info?.is_wish
-?"<small>هم‌قرار</small>"
-:"<small>آزاد</small>"
+?
+"<small>قرار</small>"
+:
+info?.is_wish
+?
+"<small>هم‌قرار</small>"
+:
+"<small>آزاد</small>"
 }
+
 `;
 
 el.onclick=
@@ -2202,16 +2463,29 @@ day,
 info
 );
 
-grid.appendChild(el)
+grid.appendChild(el);
+
 }
+
 }
+
+
+/*
+  قرارهای ثبت‌شده
+*/
 
 async function renderAppointments(){
 
-const box=$("appointmentsList");
+const box=
+$("appointmentsList");
 
 if(!box)
 return;
+
+box.innerHTML=
+`<div class="empty">
+در حال دریافت...
+</div>`;
 
 const todayISO=
 jalaliDateToISO(
@@ -2222,39 +2496,64 @@ calendarMonth,
 
 const nextISO=
 calendarMonth===12
-?jalaliDateToISO(
+?
+jalaliDateToISO(
 calendarYear+1,
 1,
 1
 )
-:jalaliDateToISO(
+:
+jalaliDateToISO(
 calendarYear,
 calendarMonth+1,
 1
 );
 
+try{
+
 const{
 data,
 error
-}=await supabaseClient
+}=await withTimeout(
+
+supabaseClient
 .from("bookings")
 .select("date,partner_id")
-.eq("user_id",currentUser.id)
-.gte("date",todayISO)
-.lt("date",nextISO)
-.order("date",{ascending:true});
+.eq(
+"user_id",
+currentUser.id
+)
+.gte(
+"date",
+todayISO
+)
+.lt(
+"date",
+nextISO
+)
+.order(
+"date",
+{
+ascending:true
+}
+),
+
+12000
+
+);
 
 if(error)
-return box.innerHTML=
-`<div class="empty">
-${escapeHtml(error.message)}
-</div>`;
+throw error;
 
-if(!data?.length)
-return box.innerHTML=
+if(!data?.length){
+
+box.innerHTML=
 `<div class="empty">
 برای این ماه قراری ثبت نشده.
 </div>`;
+
+return
+}
 
 const ids=
 [
@@ -2265,25 +2564,45 @@ data
 )
 ];
 
-const{data:profiles}=
-ids.length
-?await supabaseClient
+let profiles=[];
+
+if(ids.length){
+
+const{
+data:p,
+error:profileError
+}=await withTimeout(
+
+supabaseClient
 .from("profiles")
-.select("id,display_name,username")
-.in("id",ids)
-:{data:[]};
+.select(
+"id,display_name,username"
+)
+.in("id",ids),
+
+12000
+
+);
+
+if(profileError)
+throw profileError;
+
+profiles=p||[];
+
+}
 
 const map={};
 
-(profiles||[])
-.forEach(
+profiles.forEach(
 p=>map[p.id]=p
 );
 
 box.innerHTML=
-data.map(x=>{
+data
+.map(x=>{
 
-const p=map[x.partner_id];
+const p=
+map[x.partner_id];
 
 return`
 
@@ -2297,7 +2616,8 @@ ${jalaliDateLabel(x.date)}
 با
 <b>
 ${escapeHtml(
-p?.display_name||"کاربر"
+p?.display_name||
+"کاربر"
 )}
 </b>
 قرار داری.
@@ -2305,15 +2625,34 @@ p?.display_name||"کاربر"
 
 <div class="appointment-status">
 ${p?.username
-?"@"+escapeHtml(p.username)
-:""}
+?
+"@"+escapeHtml(p.username)
+:
+""}
  · تأیید شده
 </div>
 
 </div>
+
 `
 
-}).join("")
+})
+.join("");
+
+}catch(e){
+
+console.error(e);
+
+box.innerHTML=
+`<div class="empty">
+${escapeHtml(
+e.message||
+"دریافت قرارها انجام نشد."
+)}
+</div>`;
+
+}
+
 }
 
 
@@ -2327,16 +2666,23 @@ day,
 info
 ){
 
-const p=$("datePanel");
+const p=
+$("datePanel");
+
+if(!p)
+return;
 
 p.classList.remove("hidden");
 
-const j=isoToJalali(iso);
+const j=
+isoToJalali(iso);
 
 let html=`
 
 <div class="card-title">
-${j.jd} ${months[j.jm-1]} ${j.jy}
+${j.jd}
+${months[j.jm-1]}
+${j.jy}
 </div>
 `;
 
@@ -2345,13 +2691,18 @@ if(info?.is_booked){
 html+=`
 
 <div class="date-info">
+
 این تاریخ با
+
 <b>
 ${escapeHtml(
-info.partner_name||"یک دوست"
+info.partner_name||
+"یک دوست"
 )}
 </b>
+
 رزرو شده است.
+
 </div>
 
 `;
@@ -2363,7 +2714,10 @@ else if(ownCalendar){
 html+=`
 
 <div class="date-info">
-این تاریخ آزاده. می‌تونی اعلام کنی که این روز دنبال هم‌قرار می‌گردی.
+
+این تاریخ آزاده.
+می‌تونی اعلام کنی که این روز دنبال هم‌قرار می‌گردی.
+
 </div>
 
 <br>
@@ -2371,8 +2725,11 @@ html+=`
 <button
 class="primary"
 onclick="createWish('${iso}')">
+
 می‌خوام این روز برم بیرون
+
 </button>
+
 `;
 
 }
@@ -2382,9 +2739,15 @@ else{
 html+=`
 
 <div class="date-info">
+
 این تاریخ در تقویم
-${escapeHtml(calendarOwnerName)}
+
+${escapeHtml(
+calendarOwnerName
+)}
+
 آزاد است.
+
 </div>
 
 <br>
@@ -2392,8 +2755,11 @@ ${escapeHtml(calendarOwnerName)}
 <button
 class="primary"
 onclick="sendHangoutRequest('${iso}')">
+
 درخواست قرار برای این تاریخ
+
 </button>
+
 `;
 
 }
@@ -2420,8 +2786,9 @@ showLoading();
 
 try{
 
-const{error}=
-await withTimeout(
+const{
+error
+}=await withTimeout(
 
 supabaseClient.rpc(
 "create_hangout_request",
@@ -2429,7 +2796,9 @@ supabaseClient.rpc(
 p_receiver_id:calendarOwner,
 p_hangout_date:iso
 }
-)
+),
+
+12000
 
 );
 
@@ -2470,15 +2839,18 @@ showLoading();
 
 try{
 
-const{error}=
-await withTimeout(
+const{
+error
+}=await withTimeout(
 
 supabaseClient.rpc(
 "set_outing_wish",
 {
 p_date:iso
 }
-)
+),
+
+12000
 
 );
 
@@ -2541,22 +2913,37 @@ $("mainContent").innerHTML=`
 `;
 
 await loadFriendRequests();
+
 await loadHangoutRequests()
 }
 
 async function loadFriendRequests(){
 
-const box=$("friendRequestsList");
+const box=
+$("friendRequestsList");
 
 const{
 data,
 error
 }=await supabaseClient
 .from("friendships")
-.select("id,requester_id,created_at")
-.eq("receiver_id",currentUser.id)
-.eq("status","pending")
-.order("created_at",{ascending:false});
+.select(
+"id,requester_id,created_at"
+)
+.eq(
+"receiver_id",
+currentUser.id
+)
+.eq(
+"status",
+"pending"
+)
+.order(
+"created_at",
+{
+ascending:false
+}
+);
 
 if(error)
 return box.innerHTML=
@@ -2571,12 +2958,18 @@ return box.innerHTML=
 </div>`;
 
 const ids=
-data.map(x=>x.requester_id);
+data.map(
+x=>x.requester_id
+);
 
-const{data:p}=
+const{
+data:p
+}=
 await supabaseClient
 .from("profiles")
-.select("id,display_name,username")
+.select(
+"id,display_name,username"
+)
 .in("id",ids);
 
 const map={};
@@ -2586,7 +2979,8 @@ x=>map[x.id]=x
 );
 
 box.innerHTML=
-data.map(r=>`
+data
+.map(r=>`
 
 <div class="request-item">
 
@@ -2622,12 +3016,14 @@ onclick="rejectFriend('${r.requester_id}')">
 
 </div>
 
-`).join("")
+`)
+.join("")
 }
 
 async function loadHangoutRequests(){
 
-const box=$("requestsList");
+const box=
+$("requestsList");
 
 const{
 data,
@@ -2635,9 +3031,20 @@ error
 }=await supabaseClient
 .from("hangout_requests")
 .select("*")
-.eq("receiver_id",currentUser.id)
-.eq("status","pending")
-.order("created_at",{ascending:false});
+.eq(
+"receiver_id",
+currentUser.id
+)
+.eq(
+"status",
+"pending"
+)
+.order(
+"created_at",
+{
+ascending:false
+}
+);
 
 if(error)
 return box.innerHTML=
@@ -2652,12 +3059,18 @@ return box.innerHTML=
 </div>`;
 
 const ids=
-data.map(x=>x.requester_id);
+data.map(
+x=>x.requester_id
+);
 
-const{data:p}=
+const{
+data:p
+}=
 await supabaseClient
 .from("profiles")
-.select("id,display_name,username")
+.select(
+"id,display_name,username"
+)
 .in("id",ids);
 
 const map={};
@@ -2667,7 +3080,8 @@ x=>map[x.id]=x
 );
 
 box.innerHTML=
-data.map(r=>`
+data
+.map(r=>`
 
 <div class="request-item">
 
@@ -2686,8 +3100,11 @@ map[r.requester_id]?.username||
 </div>
 
 <div class="date-info">
+
 درخواست قرار برای
+
 ${jalaliDateLabel(r.date)}
+
 </div>
 
 <div class="notification-actions">
@@ -2708,7 +3125,8 @@ onclick="respondHangout('${r.id}',false)">
 
 </div>
 
-`).join("")
+`)
+.join("")
 }
 
 async function respondHangout(
@@ -2720,8 +3138,9 @@ showLoading();
 
 try{
 
-const{error}=
-await withTimeout(
+const{
+error
+}=await withTimeout(
 
 supabaseClient.rpc(
 "respond_to_hangout",
@@ -2729,7 +3148,9 @@ supabaseClient.rpc(
 request_id:requestId,
 accept_request:accept
 }
-)
+),
+
+12000
 
 );
 
@@ -2740,8 +3161,10 @@ hideLoading();
 
 alert(
 accept
-?"قرار قبول شد ❤️"
-:"درخواست رد شد."
+?
+"قرار قبول شد ❤️"
+:
+"درخواست رد شد."
 );
 
 await renderRequests();
@@ -2810,7 +3233,7 @@ onclick="respondHangout('${requestId}',false)">
 }
 
 
-/* کسی اعلام کرده می‌خواهد بیرون برود */
+/* اعلام هم‌قرار */
 
 if(
 n.type==="outing_wish" &&
@@ -2892,12 +3315,26 @@ $("mainContent").innerHTML=`
 const{
 data,
 error
-}=await supabaseClient
+}=await withTimeout(
+
+supabaseClient
 .from("notifications")
 .select("*")
-.eq("user_id",currentUser.id)
-.order("created_at",{ascending:false})
-.limit(50);
+.eq(
+"user_id",
+currentUser.id
+)
+.order(
+"created_at",
+{
+ascending:false
+}
+)
+.limit(50),
+
+12000
+
+);
 
 if(error)
 
@@ -2918,13 +3355,17 @@ return $("notificationsList").innerHTML=
 `;
 
 $("notificationsList").innerHTML=
-data.map(n=>`
+data
+.map(n=>`
 
 <div
 class="notification-item ${n.is_read?"":"unread"}">
 
 <div class="name">
-${escapeHtml(n.title||"اعلان")}
+${escapeHtml(
+n.title||
+"اعلان"
+)}
 </div>
 
 <div
@@ -2934,7 +3375,10 @@ color:#666;
 font-size:12px;
 line-height:1.9">
 
-${escapeHtml(n.body||"")}
+${escapeHtml(
+n.body||
+""
+)}
 
 </div>
 
@@ -2946,7 +3390,8 @@ ${notificationActions(n)}
 
 </div>
 
-`).join("");
+`)
+.join("");
 
 await markNotificationsRead()
 }
@@ -2958,8 +3403,14 @@ await supabaseClient
 .update({
 is_read:true
 })
-.eq("user_id",currentUser.id)
-.eq("is_read",false)
+.eq(
+"user_id",
+currentUser.id
+)
+.eq(
+"is_read",
+false
+)
 }
 
 
@@ -2977,8 +3428,9 @@ showLoading();
 
 try{
 
-const{error}=
-await withTimeout(
+const{
+error
+}=await withTimeout(
 
 supabaseClient.rpc(
 "respond_to_outing_wish",
@@ -2987,7 +3439,9 @@ owner_id:ownerId,
 wish_date:wishDate,
 accept_request:accept
 }
-)
+),
+
+12000
 
 );
 
@@ -2998,8 +3452,10 @@ hideLoading();
 
 alert(
 accept
-?"قرار ثبت شد ❤️"
-:"درخواست رد شد."
+?
+"قرار ثبت شد ❤️"
+:
+"درخواست رد شد."
 );
 
 await renderNotifications();
@@ -3043,13 +3499,16 @@ const{
 data,
 error
 }=await withTimeout(
-supabaseClient.auth.getSession()
+supabaseClient.auth.getSession(),
+12000
 );
 
 if(error)
 throw error;
 
-if(data?.session?.user){
+if(
+data?.session?.user
+){
 
 currentUser=
 data.session.user;
@@ -3082,4 +3541,4 @@ start();
 </script>
 
 </body>
-  </html>
+   </html>
