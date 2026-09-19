@@ -8,59 +8,58 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
-
 :root{
-  --bg:#f7f5ff;
-  --white:#fff;
   --purple:#7557d9;
-  --purple2:#9479ed;
-  --light:#eee9ff;
-  --soft:#f6f2ff;
-  --text:#24202f;
-  --muted:#918c9f;
-  --border:rgba(105,82,160,.10);
-  --green:#42ae78;
-  --green-bg:#e8f8ef;
-  --red:#dc5c69;
+  --purple2:#9b7bea;
+  --light:#f1edff;
+  --soft:#f7f4ff;
+  --text:#292532;
+  --muted:#888391;
+  --border:#eeeaf5;
+  --red:#d85b67;
   --red-bg:#fff0f2;
-  --shadow:0 18px 50px rgba(76,55,135,.10);
+  --green-bg:#eaf8f1;
+  --shadow:0 15px 45px rgba(60,45,110,.10);
 }
 
-*{box-sizing:border-box;margin:0;padding:0}
-
-html{scroll-behavior:smooth}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Tahoma,Arial,sans-serif;
+}
 
 body{
-  font-family:"Vazirmatn",Tahoma,sans-serif;
-  background:
-    radial-gradient(circle at 100% 0%,rgba(153,125,235,.20),transparent 28%),
-    radial-gradient(circle at 0% 55%,rgba(210,196,255,.20),transparent 25%),
-    var(--bg);
+  background:#f7f5ff;
   color:var(--text);
-  min-height:100vh;
 }
 
-button,input{font-family:inherit}
-button{cursor:pointer;border:0}
-.hidden{display:none!important}
+button{
+  border:0;
+  cursor:pointer;
+  font-family:inherit;
+}
+
+.hidden{
+  display:none!important;
+}
 
 /* loading */
+
 .loading{
   position:fixed;
   inset:0;
   z-index:9999;
-  background:rgba(247,245,255,.92);
-  backdrop-filter:blur(18px);
   display:flex;
   align-items:center;
   justify-content:center;
+  background:#f7f5ff;
 }
 
 .loading-box{
-  background:#fff;
   padding:22px 28px;
-  border-radius:24px;
+  background:#fff;
+  border-radius:22px;
   box-shadow:var(--shadow);
   color:var(--purple);
   font-size:14px;
@@ -68,6 +67,7 @@ button{cursor:pointer;border:0}
 }
 
 /* error */
+
 .error-box{
   width:min(90%,430px);
   margin:100px auto;
@@ -78,7 +78,10 @@ button{cursor:pointer;border:0}
   text-align:center;
 }
 
-.error-box h2{margin-bottom:12px}
+.error-box h2{
+  margin-bottom:12px;
+}
+
 .error-box p{
   color:#777;
   line-height:1.9;
@@ -87,6 +90,7 @@ button{cursor:pointer;border:0}
 }
 
 /* auth */
+
 .auth-page{
   min-height:100vh;
   display:flex;
@@ -153,7 +157,9 @@ button{cursor:pointer;border:0}
   box-shadow:0 5px 18px rgba(70,50,120,.08);
 }
 
-.field{margin-bottom:15px}
+.field{
+  margin-bottom:15px;
+}
 
 .field label{
   display:block;
@@ -213,6 +219,7 @@ button{cursor:pointer;border:0}
 }
 
 /* app */
+
 .app{
   min-height:100vh;
   padding-bottom:95px;
@@ -237,7 +244,9 @@ button{cursor:pointer;border:0}
   letter-spacing:-1px;
 }
 
-.brand span{color:var(--purple)}
+.brand span{
+  color:var(--purple);
+}
 
 .user-name{
   margin-top:3px;
@@ -282,6 +291,7 @@ button{cursor:pointer;border:0}
 }
 
 /* home */
+
 .home-hello{
   padding:5px 2px 18px;
 }
@@ -342,7 +352,7 @@ button{cursor:pointer;border:0}
   line-height:1.7;
 }
 
-/* notification badge */
+/* badges */
 
 .badge{
   display:inline-flex;
@@ -378,6 +388,7 @@ button{cursor:pointer;border:0}
 }
 
 /* calendar */
+
 .month-head{
   display:flex;
   align-items:center;
@@ -435,8 +446,13 @@ button{cursor:pointer;border:0}
   transition:.18s;
 }
 
-.day.empty{background:transparent}
-.day.free{cursor:pointer}
+.day.empty{
+  background:transparent;
+}
+
+.day.free{
+  cursor:pointer;
+}
 
 .day.free:active{
   transform:scale(.93);
@@ -460,7 +476,9 @@ button{cursor:pointer;border:0}
   box-shadow:0 0 0 2px rgba(117,87,217,.08);
 }
 
-.day strong{font-size:13px}
+.day strong{
+  font-size:13px;
+}
 
 .day small{
   font-size:7px;
@@ -519,12 +537,16 @@ button{cursor:pointer;border:0}
 }
 
 /* friends */
+
 .search-row{
   display:flex;
   gap:8px;
 }
 
-.search-row input{flex:1;min-width:0}
+.search-row input{
+  flex:1;
+  min-width:0;
+}
 
 .search-row button{
   padding:0 17px;
@@ -586,6 +608,7 @@ button{cursor:pointer;border:0}
 }
 
 /* notifications */
+
 .notification-item.unread{
   border-color:#d9ccff;
   background:#faf8ff;
@@ -633,6 +656,7 @@ button{cursor:pointer;border:0}
 }
 
 /* common */
+
 .date-info{
   line-height:2;
   font-size:12px;
@@ -646,7 +670,8 @@ button{cursor:pointer;border:0}
   font-size:12px;
 }
 
-/* bottom navigation */
+/* bottom nav */
+
 .nav{
   position:fixed;
   bottom:12px;
@@ -714,7 +739,6 @@ const SUPABASE_KEY =
 "sb_publishable_-Zsn2pWcBLDOUJAeK2GlnA_Q_GBUmoU";
 
 let supabaseClient=null;
-
 let currentUser=null;
 let currentProfile=null;
 let currentPage="home";
@@ -778,42 +802,34 @@ function hideMessage(){
 
 
 /* =========================
-   REAL PERSIAN DATE
-   Uses browser Persian calendar
+   PERSIAN DATE
 ========================= */
 
-const persianFormatter =
-  new Intl.DateTimeFormat(
-    "en-US-u-ca-persian",
-    {
-      year:"numeric",
-      month:"numeric",
-      day:"numeric"
-    }
-  );
+const persianFormatter=
+new Intl.DateTimeFormat(
+  "en-US-u-ca-persian",
+  {
+    year:"numeric",
+    month:"numeric",
+    day:"numeric"
+  }
+);
 
 function getPersianParts(date){
 
   const parts=persianFormatter.formatToParts(date);
-
   const result={};
 
   parts.forEach(p=>{
-    if(p.type==="year")
-      result.year=parseInt(p.value);
-
-    if(p.type==="month")
-      result.month=parseInt(p.value);
-
-    if(p.type==="day")
-      result.day=parseInt(p.value);
+    if(p.type==="year")result.year=parseInt(p.value);
+    if(p.type==="month")result.month=parseInt(p.value);
+    if(p.type==="day")result.day=parseInt(p.value);
   });
 
   return result;
 }
 
 function localISO(date){
-
   return [
     date.getFullYear(),
     String(date.getMonth()+1).padStart(2,"0"),
@@ -822,15 +838,12 @@ function localISO(date){
 }
 
 function todayPersian(){
-
   return getPersianParts(new Date());
-
 }
 
 function getPersianMonthDays(year,month){
 
   const result=[];
-
   const approxGregorianYear=year+621;
 
   const start=new Date(
@@ -853,10 +866,7 @@ function getPersianMonthDays(year,month){
 
     const p=getPersianParts(d);
 
-    if(
-      p.year===year &&
-      p.month===month
-    ){
+    if(p.year===year && p.month===month){
 
       result.push({
         day:p.day,
@@ -877,7 +887,6 @@ function isoToPersian(iso){
   return getPersianParts(
     new Date(y,m-1,d)
   );
-
 }
 
 function getMonthName(month){
@@ -896,7 +905,6 @@ function getMonthName(month){
     "بهمن",
     "اسفند"
   ][month-1];
-
 }
 
 
@@ -920,6 +928,8 @@ function showFatalError(error){
           String(error)
         )}
       </p>
+
+      <br>
 
       <button
         class="primary"
@@ -1082,7 +1092,8 @@ async function signup(){
 
   try{
 
-    const fakeEmail=username+"@gharamoon.local";
+    const fakeEmail=
+      username+"@gharamoon.local";
 
     const {data,error}=await withTimeout(
       supabaseClient.auth.signUp({
@@ -1107,8 +1118,6 @@ async function signup(){
 
       renderApp();
 
-      hideLoading();
-
       return;
     }
 
@@ -1123,10 +1132,12 @@ async function signup(){
   }catch(error){
 
     hideLoading();
+
     renderAuth("signup");
 
     showMessage(
-      error.message||"ثبت‌نام انجام نشد."
+      error.message||
+      "ثبت‌نام انجام نشد."
     );
   }
 }
@@ -1182,15 +1193,15 @@ async function login(){
 
     renderApp();
 
-    hideLoading();
-
   }catch(error){
 
     hideLoading();
+
     renderAuth("login");
 
     showMessage(
-      error.message||"ورود انجام نشد."
+      error.message||
+      "ورود انجام نشد."
     );
   }
 }
@@ -1223,7 +1234,7 @@ async function loadProfile(){
 
 
 /* =========================
-   APP / HOME
+   APP
 ========================= */
 
 function renderApp(){
@@ -1335,40 +1346,31 @@ async function updateBadges(){
 
   try{
 
-    const {
-      count:notificationCount
-    }=await supabaseClient
-      .from("notifications")
-      .select("*",{count:"exact",head:true})
-      .eq("user_id",currentUser.id)
-      .eq("is_read",false);
+    const {count:notificationCount}=
+      await supabaseClient
+        .from("notifications")
+        .select("*",{count:"exact",head:true})
+        .eq("user_id",currentUser.id)
+        .eq("is_read",false);
 
+    const {count:hangoutCount}=
+      await supabaseClient
+        .from("hangout_requests")
+        .select("*",{count:"exact",head:true})
+        .eq("receiver_id",currentUser.id)
+        .eq("status","pending");
 
-    const {
-      count:hangoutCount
-    }=await supabaseClient
-      .from("hangout_requests")
-      .select("*",{count:"exact",head:true})
-      .eq("receiver_id",currentUser.id)
-      .eq("status","pending");
-
-
-    const {
-      count:friendCount
-    }=await supabaseClient
-      .from("friendships")
-      .select("*",{count:"exact",head:true})
-      .eq("receiver_id",currentUser.id)
-      .eq("status","pending");
-
+    const {count:friendCount}=
+      await supabaseClient
+        .from("friendships")
+        .select("*",{count:"exact",head:true})
+        .eq("receiver_id",currentUser.id)
+        .eq("status","pending");
 
     const totalRequests=
-      (hangoutCount||0)+
-      (friendCount||0);
+      (hangoutCount||0)+(friendCount||0);
 
-
-    const notificationBadge=
-      $("notificationBadge");
+    const notificationBadge=$("notificationBadge");
 
     if(notificationBadge){
 
@@ -1379,23 +1381,16 @@ async function updateBadges(){
             ?"99+"
             :notificationCount;
 
-        notificationBadge.classList.remove(
-          "hidden"
-        );
+        notificationBadge.classList.remove("hidden");
 
       }else{
 
-        notificationBadge.classList.add(
-          "hidden"
-        );
+        notificationBadge.classList.add("hidden");
 
       }
-
     }
 
-
-    const requestBadge=
-      $("requestBadge");
+    const requestBadge=$("requestBadge");
 
     if(requestBadge){
 
@@ -1406,20 +1401,14 @@ async function updateBadges(){
             ?"99+"
             :totalRequests;
 
-        requestBadge.classList.remove(
-          "hidden"
-        );
+        requestBadge.classList.remove("hidden");
 
       }else{
 
-        requestBadge.classList.add(
-          "hidden"
-        );
+        requestBadge.classList.add("hidden");
 
       }
-
     }
-
 
     const homeRequestBadge=
       $("homeRequestBadge");
@@ -1433,20 +1422,14 @@ async function updateBadges(){
             ?"99+"
             :totalRequests;
 
-        homeRequestBadge.classList.remove(
-          "hidden"
-        );
+        homeRequestBadge.classList.remove("hidden");
 
       }else{
 
-        homeRequestBadge.classList.add(
-          "hidden"
-        );
+        homeRequestBadge.classList.add("hidden");
 
       }
-
     }
-
 
     const homeNotificationBadge=
       $("homeNotificationBadge");
@@ -1460,26 +1443,18 @@ async function updateBadges(){
             ?"99+"
             :notificationCount;
 
-        homeNotificationBadge.classList.remove(
-          "hidden"
-        );
+        homeNotificationBadge.classList.remove("hidden");
 
       }else{
 
-        homeNotificationBadge.classList.add(
-          "hidden"
-        );
+        homeNotificationBadge.classList.add("hidden");
 
       }
-
     }
 
   }catch(error){
 
-    console.error(
-      "Badge error:",
-      error
-    );
+    console.error("Badge error:",error);
 
   }
 }
@@ -1495,9 +1470,7 @@ async function goPage(page){
 
   document
     .querySelectorAll(".nav button")
-    .forEach(x=>
-      x.classList.remove("active")
-    );
+    .forEach(x=>x.classList.remove("active"));
 
   const nav=$(
     "nav"+
@@ -1507,22 +1480,38 @@ async function goPage(page){
 
   if(nav)nav.classList.add("active");
 
-  if(page==="home")
-    await renderHome();
+  try{
 
-  if(page==="friends")
-    await renderFriends();
+    if(page==="home")
+      await renderHome();
 
-  if(page==="calendar")
-    await renderCalendarPage();
+    if(page==="friends")
+      await renderFriends();
 
-  if(page==="requests")
-    await renderRequests();
+    if(page==="calendar")
+      await renderCalendarPage();
 
-  if(page==="notifications")
-    await renderNotifications();
+    if(page==="requests")
+      await renderRequests();
 
-  await updateBadges();
+    if(page==="notifications")
+      await renderNotifications();
+
+    await updateBadges();
+
+  }catch(error){
+
+    console.error(error);
+
+    $("mainContent").innerHTML=`
+      <div class="card">
+        <div class="empty">
+          ${escapeHtml(error.message||"خطایی رخ داد.")}
+        </div>
+      </div>
+    `;
+
+  }
 }
 
 
@@ -1709,7 +1698,7 @@ async function changeMonth(direction){
 
 
 /* =========================
-   LOAD CALENDAR DATA
+   CALENDAR
 ========================= */
 
 async function renderCalendar(){
@@ -1764,11 +1753,7 @@ async function renderCalendar(){
   const firstIndex=
     (firstDate.getDay()+1)%7;
 
-  for(
-    let i=0;
-    i<firstIndex;
-    i++
-  ){
+  for(let i=0;i<firstIndex;i++){
 
     const empty=document.createElement("div");
 
@@ -1823,6 +1808,24 @@ async function renderCalendar(){
         };
       });
 
+      const {data:wishes}=await supabaseClient
+        .from("outing_wishes")
+        .select("date")
+        .eq("user_id",currentUser.id)
+        .gte("date",start)
+        .lte("date",end);
+
+      (wishes||[]).forEach(item=>{
+
+        if(!calendarData[item.date]){
+
+          calendarData[item.date]={
+            is_wish:true
+          };
+
+        }
+
+      });
     }
 
   }catch(error){
@@ -1834,6 +1837,8 @@ async function renderCalendar(){
         class="empty"
         style="grid-column:1/-1">
         دریافت تقویم انجام نشد.
+        <br>
+        ${escapeHtml(error.message||"")}
       </div>
     `;
 
@@ -1868,9 +1873,7 @@ async function renderCalendar(){
 
     el.innerHTML=`
 
-      <strong>
-        ${item.day}
-      </strong>
+      <strong>${item.day}</strong>
 
       ${
         info?.is_booked
@@ -1903,7 +1906,7 @@ async function renderCalendar(){
 
 
 /* =========================
-   APPOINTMENTS UNDER CALENDAR
+   APPOINTMENTS
 ========================= */
 
 async function renderAppointments(
@@ -1974,11 +1977,10 @@ async function renderAppointments(
     ${
       booked.map(item=>{
 
-        const person=
-          map[item.info.partner_id];
+        const person=map[item.info.partner_id];
 
         const name=
-          person?.display_name ||
+          person?.display_name||
           "یک کاربر";
 
         return `
@@ -1987,9 +1989,7 @@ async function renderAppointments(
 
             <div class="appointment-date">
 
-              <strong>
-                ${item.day}
-              </strong>
+              <strong>${item.day}</strong>
 
               <small>
                 ${getMonthName(calendarMonth)}
@@ -2062,28 +2062,50 @@ function openDate(
 
   }else if(ownCalendar){
 
-    html+=`
+    if(info?.is_wish){
 
-      <div class="date-info">
+      html+=`
 
-        این روز آزاده.
+        <div class="date-info">
+          برای این تاریخ قبلاً اعلام کردی که دنبال هم‌قرار می‌گردی.
+        </div>
+
         <br>
-        اگر دوست داری اعلام کنی که این روز
-        دنبال هم‌قرار می‌گردی:
 
-      </div>
+        <button
+          class="secondary"
+          onclick="removeWish('${iso}')">
+          لغو اعلام این تاریخ
+        </button>
 
-      <br>
+      `;
 
-      <button
-        class="primary"
-        onclick="createWish('${iso}')">
+    }else{
 
-        می‌خوام این روز برم بیرون
+      html+=`
 
-      </button>
+        <div class="date-info">
 
-    `;
+          این روز آزاده.
+          <br>
+          اگر دوست داری اعلام کنی که این روز
+          دنبال هم‌قرار می‌گردی:
+
+        </div>
+
+        <br>
+
+        <button
+          class="primary"
+          onclick="createWish('${iso}')">
+
+          می‌خوام این روز برم بیرون
+
+        </button>
+
+      `;
+
+    }
 
   }else{
 
@@ -2123,7 +2145,7 @@ function openDate(
 
 
 /* =========================
-   SEND HANGOUT
+   HANGOUT
 ========================= */
 
 async function sendHangoutRequest(iso){
@@ -2335,9 +2357,7 @@ async function searchFriend(){
 
         </div>
 
-        <div>
-          ${action}
-        </div>
+        <div>${action}</div>
 
       </div>
 
@@ -2365,6 +2385,16 @@ async function sendFriendRequest(receiverId){
 
     return;
   }
+
+  await supabaseClient
+    .from("notifications")
+    .insert({
+      user_id:receiverId,
+      type:"friend_request",
+      title:"درخواست دوستی جدید",
+      body:`${currentProfile.display_name} برایت درخواست دوستی فرستاد.`,
+      related_user_id:currentUser.id
+    });
 
   alert("درخواست دوستی ارسال شد.");
 
@@ -2546,18 +2576,16 @@ async function createWish(iso){
 
   try{
 
-    const {
-      error
-    } = await withTimeout(
+    const {error}=await withTimeout(
       supabaseClient.rpc(
         "set_outing_wish",
         {
-          p_date: iso
+          p_date:iso
         }
       )
     );
 
-    if(error) throw error;
+    if(error)throw error;
 
     hideLoading();
 
@@ -2572,8 +2600,51 @@ async function createWish(iso){
     hideLoading();
 
     alert(
-      error.message ||
+      error.message||
       "ثبت نشد."
+    );
+  }
+}
+
+async function removeWish(iso){
+
+  if(!confirm(
+    "اعلام این تاریخ لغو شود؟"
+  ))return;
+
+  showLoading();
+
+  try{
+
+    const {error}=await withTimeout(
+      supabaseClient.rpc(
+        "remove_outing_wish",
+        {
+          p_date:iso
+        }
+      )
+    );
+
+    if(error)throw error;
+
+    hideLoading();
+
+    alert("اعلام این تاریخ لغو شد.");
+
+    await renderCalendar();
+
+    $("datePanel")?.classList.add("hidden");
+
+  }catch(error){
+
+    hideLoading();
+
+    alert(
+      error.message||
+      "لغو انجام نشد."
+    );
+  }
+}
 
 
 /* =========================
@@ -2625,11 +2696,6 @@ async function renderRequests(){
   await loadHangoutRequests();
   await loadFriendRequests();
 }
-
-
-/* =========================
-   HANGOUT REQUESTS
-========================= */
 
 async function loadHangoutRequests(){
 
@@ -2728,11 +2794,6 @@ async function loadHangoutRequests(){
 
   }).join("");
 }
-
-
-/* =========================
-   FRIEND REQUESTS
-========================= */
 
 async function loadFriendRequests(){
 
@@ -2885,6 +2946,12 @@ function notificationIcon(type){
   if(type==="outing_wish")
     return "✨";
 
+  if(type==="outing_wish_accepted")
+    return "❤️";
+
+  if(type==="outing_wish_rejected")
+    return "❌";
+
   return "🔔";
 }
 
@@ -3007,6 +3074,11 @@ async function renderNotifications(){
   await updateBadges();
 }
 
+
+/* =========================
+   NOTIFICATION ACTIONS
+========================= */
+
 function notificationActions(n){
 
   if(
@@ -3043,7 +3115,7 @@ function notificationActions(n){
 
   if(
     n.type==="outing_wish" &&
-    n.actor_id &&
+    n.related_user_id &&
     n.date
   ){
 
@@ -3054,7 +3126,7 @@ function notificationActions(n){
         <button
           class="small-btn success-btn"
           onclick="respondWish(
-            '${n.actor_id}',
+            '${n.related_user_id}',
             '${n.date}',
             true
           )">
@@ -3064,7 +3136,7 @@ function notificationActions(n){
         <button
           class="small-btn danger-btn"
           onclick="respondWish(
-            '${n.actor_id}',
+            '${n.related_user_id}',
             '${n.date}',
             false
           )">
@@ -3078,7 +3150,7 @@ function notificationActions(n){
 
   if(
     n.type==="friend_request" &&
-    n.actor_id
+    n.related_user_id
   ){
 
     return `
@@ -3088,7 +3160,7 @@ function notificationActions(n){
         <button
           class="small-btn success-btn"
           onclick="acceptFriend(
-            '${n.actor_id}'
+            '${n.related_user_id}'
           )">
           قبول دوستی
         </button>
@@ -3096,7 +3168,7 @@ function notificationActions(n){
         <button
           class="small-btn danger-btn"
           onclick="rejectFriend(
-            '${n.actor_id}'
+            '${n.related_user_id}'
           )">
           رد
         </button>
@@ -3108,6 +3180,11 @@ function notificationActions(n){
 
   return "";
 }
+
+
+/* =========================
+   MARK NOTIFICATIONS READ
+========================= */
 
 async function markNotificationsRead(){
 
@@ -3230,4 +3307,4 @@ start();
 </script>
 
 </body>
-</html>
+  </html>
