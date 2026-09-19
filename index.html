@@ -47,7 +47,7 @@ color:var(--text);
 min-height:100vh
 }
 
-button,input{
+button,input,textarea{
 font-family:inherit
 }
 
@@ -579,6 +579,28 @@ background:var(--light);
 color:#6949ae
 }
 
+.button-group{
+display:flex;
+align-items:center;
+gap:7px;
+flex-wrap:wrap
+}
+
+.unread-badge{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+min-width:18px;
+height:18px;
+padding:0 5px;
+border-radius:20px;
+background:var(--red);
+color:#fff;
+font-size:8px;
+font-weight:800;
+margin-right:4px
+}
+
 .search-row{
 display:flex;
 gap:8px
@@ -609,28 +631,6 @@ font-size:11px;
 font-weight:600
 }
 
-.friend-actions{
-display:flex;
-gap:6px;
-align-items:center;
-flex-shrink:0
-}
-
-.unread-badge{
-display:inline-flex;
-align-items:center;
-justify-content:center;
-min-width:19px;
-height:19px;
-padding:0 5px;
-border-radius:10px;
-background:var(--purple);
-color:#fff;
-font-size:8px;
-font-weight:800;
-margin-right:3px
-}
-
 .date-info{
 line-height:2;
 font-size:12px;
@@ -640,8 +640,7 @@ color:#777181
 .notification-actions{
 display:flex;
 gap:7px;
-margin-top:12px;
-flex-wrap:wrap
+margin-top:12px
 }
 
 .empty{
@@ -670,14 +669,14 @@ margin-top:7px
 }
 
 /* =========================
-چت
+CHAT
 ========================= */
 
 .chat-header{
 display:flex;
 align-items:center;
 gap:10px;
-margin-bottom:14px
+margin-bottom:15px
 }
 
 .chat-back{
@@ -690,30 +689,29 @@ font-size:20px;
 flex-shrink:0
 }
 
-.chat-user{
-flex:1;
-min-width:0
+.chat-user-info{
+flex:1
 }
 
-.chat-user .name{
-font-size:15px
+.chat-user-name{
+font-size:15px;
+font-weight:800
 }
 
-.chat-user .username{
-font-size:9px
-}
-
-.chat-status{
+.chat-user-status{
 font-size:9px;
-color:var(--green);
+color:var(--muted);
 margin-top:3px
 }
 
+.chat-card{
+padding:14px
+}
+
 .chat-messages{
-height:min(58vh,560px);
-min-height:300px;
+height:min(58vh,520px);
 overflow-y:auto;
-padding:10px 4px 14px;
+padding:8px 4px 15px;
 display:flex;
 flex-direction:column;
 gap:8px;
@@ -721,11 +719,14 @@ scroll-behavior:smooth
 }
 
 .chat-empty{
-margin:auto;
-text-align:center;
+flex:1;
+display:flex;
+align-items:center;
+justify-content:center;
 color:#aaa5b5;
 font-size:11px;
-line-height:2
+text-align:center;
+padding:30px
 }
 
 .chat-row{
@@ -754,68 +755,76 @@ white-space:pre-wrap
 .chat-bubble.mine{
 background:linear-gradient(135deg,var(--purple),var(--purple2));
 color:#fff;
-border-bottom-right-radius:6px
-}
-
-.chat-bubble.theirs{
-background:#f0edf6;
-color:var(--text);
 border-bottom-left-radius:6px
 }
 
-.chat-meta{
-font-size:8px;
+.chat-bubble.theirs{
+background:#f1eef8;
+color:var(--text);
+border-bottom-right-radius:6px
+}
+
+.chat-time{
+font-size:7px;
 opacity:.65;
 margin-top:4px;
 text-align:left
 }
 
-.chat-input-wrap{
+.chat-input-row{
 display:flex;
-gap:7px;
+gap:8px;
 align-items:flex-end;
-padding-top:10px;
-border-top:1px solid var(--border)
+border-top:1px solid var(--border);
+padding-top:12px
 }
 
 .chat-input{
 flex:1;
 min-width:0;
 resize:none;
-height:46px;
-max-height:120px;
+height:45px;
+max-height:110px;
 padding:12px 14px;
+border-radius:15px;
 border:1px solid var(--border);
-border-radius:16px;
 outline:none;
 background:#faf9fd;
-color:var(--text);
-font-size:12px
+font-size:12px;
+color:var(--text)
 }
 
 .chat-input:focus{
 background:#fff;
 border-color:#a18ae8;
-box-shadow:0 0 0 4px rgba(117,87,217,.07)
+box-shadow:0 0 0 4px rgba(117,87,217,.06)
 }
 
 .chat-send{
-width:46px;
-height:46px;
+width:45px;
+height:45px;
 border-radius:15px;
 background:linear-gradient(135deg,var(--purple),var(--purple2));
 color:#fff;
-font-size:18px;
-flex-shrink:0;
-box-shadow:0 8px 20px rgba(117,87,217,.2)
+font-size:17px;
+flex-shrink:0
+}
+
+.chat-send:disabled{
+opacity:.5;
+cursor:not-allowed
 }
 
 .chat-date{
 text-align:center;
 font-size:8px;
-color:#aaa;
-padding:7px 0
+color:#aaa5b5;
+margin:10px 0 2px
 }
+
+/* =========================
+NAV
+========================= */
 
 .nav{
 position:fixed;
@@ -849,22 +858,6 @@ color:var(--purple);
 font-weight:700
 }
 
-@media(max-width:520px){
-
-.friend-actions{
-gap:4px
-}
-
-.friend-actions .small-btn{
-padding:7px 8px
-}
-
-.chat-bubble{
-max-width:84%
-}
-
-}
-
 @media(max-width:380px){
 
 .auth-box{
@@ -883,9 +876,8 @@ width:min(100% - 20px,760px)
 padding:16px
 }
 
-.friend-actions .small-btn{
-font-size:9px;
-padding:7px
+.chat-bubble{
+max-width:84%
 }
 
 }
@@ -919,9 +911,7 @@ let calendarMonth=0;
 
 let chatPartnerId=null;
 let chatPartnerName="";
-let chatPartnerUsername="";
 let chatChannel=null;
-let chatMessages=[];
 
 const $=id=>document.getElementById(id);
 
@@ -933,33 +923,16 @@ function hideLoading(){
 $("loading")?.classList.add("hidden");
 }
 
-/* =========================
-امنیت HTML
-========================= */
-
 function escapeHtml(v){
-
 return String(v??"")
 .replaceAll("&","&amp;")
 .replaceAll("<","&lt;")
 .replaceAll(">","&gt;")
 .replaceAll('"',"&quot;")
 .replaceAll("'","&#039;");
-
-}
-
-function escapeJs(v){
-
-return String(v??"")
-.replaceAll("\\","\\\\")
-.replaceAll("'","\\'")
-.replaceAll("\n","\\n")
-.replaceAll("\r","\\r");
-
 }
 
 function withTimeout(promise,ms=12000){
-
 return Promise.race([
 promise,
 new Promise((_,reject)=>
@@ -969,34 +942,25 @@ ms
 )
 )
 ]);
-
 }
 
 function showMessage(t){
-
 const e=$("authMessage");
-
 if(e){
 e.textContent=t;
 e.style.display="block";
 }
-
 }
 
 function hideMessage(){
-
 const e=$("authMessage");
-
 if(e)e.style.display="none";
-
 }
 
 function showFatalError(e){
-
 hideLoading();
 
 $("root").innerHTML=`
-
 <div class="error-box">
 <h2>یه مشکلی پیش اومد</h2>
 <p>${escapeHtml(e?.message||e||"خطای ناشناخته")}</p>
@@ -1004,9 +968,7 @@ $("root").innerHTML=`
 تلاش دوباره
 </button>
 </div>
-
 `;
-
 }
 
 window.addEventListener("error",e=>{
@@ -1048,7 +1010,6 @@ jy:get("year"),
 jm:get("month"),
 jd:get("day")
 };
-
 }
 
 const jalaliIsoCache=new Map();
@@ -1102,13 +1063,10 @@ x.getUTCDate()
 jalaliIsoCache.set(key,iso);
 
 return iso;
-
 }
-
 }
 
 throw new Error("تبدیل تاریخ انجام نشد.");
-
 }
 
 function isoToJalali(iso){
@@ -1122,7 +1080,6 @@ d
 .map(Number);
 
 return gregorianToJalali(y,m,d);
-
 }
 
 function jalaliMonthDays(y,m){
@@ -1139,7 +1096,6 @@ const b=jalaliDateToISO(y+1,1,1);
 return Math.round(
 (Date.parse(b)-Date.parse(a))/86400000
 );
-
 }
 
 function todayJalali(){
@@ -1151,7 +1107,6 @@ d.getFullYear(),
 d.getMonth()+1,
 d.getDate()
 );
-
 }
 
 const months=[
@@ -1178,7 +1133,6 @@ function jalaliDateLabel(iso){
 const j=isoToJalali(iso);
 
 return `${j.jd} ${months[j.jm-1]} ${j.jy}`;
-
 }
 
 function relativeTime(iso){
@@ -1204,21 +1158,16 @@ if(s<604800)
 return `${Math.floor(s/86400)} روز پیش`;
 
 return d.toLocaleDateString("fa-IR");
-
 }
 
-function formatMessageTime(iso){
+function chatTime(iso){
 
-if(!iso)return "";
+const d=new Date(iso);
 
-return new Date(iso).toLocaleTimeString(
-"fa-IR",
-{
+return d.toLocaleTimeString("fa-IR",{
 hour:"2-digit",
 minute:"2-digit"
-}
-);
-
+});
 }
 
 /* =========================
@@ -1228,8 +1177,8 @@ minute:"2-digit"
 function renderAuth(mode="login"){
 
 $("root").innerHTML=`
-
 <div class="auth-page">
+
 <div class="auth-box">
 
 <div class="logo">قرارمون</div>
@@ -1258,7 +1207,6 @@ ${
 mode==="signup"
 ?
 `
-
 <div class="field">
 <label>اسم نمایشی</label>
 <input id="displayName" placeholder="مثلاً محمد کیان">
@@ -1277,11 +1225,9 @@ mode==="signup"
 <button class="primary" onclick="signup()">
 ساخت حساب
 </button>
-
 `
 :
 `
-
 <div class="field">
 <label>نام کاربری</label>
 <input id="username" placeholder="نام کاربری">
@@ -1295,7 +1241,6 @@ mode==="signup"
 <button class="primary" onclick="login()">
 ورود
 </button>
-
 `
 }
 
@@ -1303,9 +1248,7 @@ mode==="signup"
 
 </div>
 </div>
-
 `;
-
 }
 
 async function signup(){
@@ -1355,7 +1298,6 @@ renderApp();
 hideLoading();
 
 return;
-
 }
 
 hideLoading();
@@ -1371,9 +1313,7 @@ hideLoading();
 renderAuth("signup");
 
 showMessage(e.message||"ثبت‌نام انجام نشد.");
-
 }
-
 }
 
 async function login(){
@@ -1391,12 +1331,9 @@ showLoading();
 try{
 
 const{data:emailData,error:emailError}=await withTimeout(
-supabaseClient.rpc(
-"get_login_email",
-{
+supabaseClient.rpc("get_login_email",{
 p_username:username
-}
-)
+})
 );
 
 if(emailError)throw emailError;
@@ -1428,9 +1365,7 @@ hideLoading();
 renderAuth("login");
 
 showMessage(e.message||"ورود انجام نشد.");
-
 }
-
 }
 
 async function loadProfile(){
@@ -1452,7 +1387,6 @@ if(!data)
 throw new Error("پروفایل کاربر پیدا نشد.");
 
 currentProfile=data;
-
 }
 
 async function logout(){
@@ -1467,9 +1401,10 @@ console.error(e);
 
 currentUser=null;
 currentProfile=null;
+chatPartnerId=null;
+chatPartnerName="";
 
 renderAuth("login");
-
 }
 
 /* =========================
@@ -1518,17 +1453,16 @@ ${escapeHtml(currentProfile.display_name)}
 </nav>
 
 </div>
-
 `;
 
 goPage("home");
-
 }
 
 async function goPage(page){
 
-if(page!=="chat")
+if(currentPage==="chat" && page!=="chat"){
 cleanupChatRealtime();
+}
 
 currentPage=page;
 
@@ -1571,27 +1505,16 @@ console.error("goPage error:",e);
 if($("mainContent")){
 
 $("mainContent").innerHTML=`
-
 <div class="card">
-
 <div class="empty">
-
 خطایی در باز کردن این بخش رخ داد.
-
 <br><br>
-
 ${escapeHtml(e?.message||"خطای ناشناخته")}
-
 </div>
-
 </div>
-
 `;
-
 }
-
 }
-
 }
 
 /* =========================
@@ -1606,12 +1529,10 @@ reqCount,
 notifCount,
 chatUnread
 ]=await Promise.all([
-
 getFriendsCount(),
 getRequestsCount(),
 getUnreadCount(),
-getChatUnreadCount()
-
+getUnreadMessagesCount()
 ]);
 
 const t=todayJalali();
@@ -1639,7 +1560,7 @@ $("mainContent").innerHTML=`
 <b>دوستان</b>
 
 <small>
-پیدا کردن و دیدن تقویم دوستان
+پیدا کردن، چت کردن و دیدن تقویم دوستان
 </small>
 
 <span class="home-count">
@@ -1702,28 +1623,18 @@ ${
 chatUnread>0
 ?
 `
-<div class="card" style="margin-top:15px;cursor:pointer" onclick="goPage('friends')">
-
+<div class="card" style="margin-top:15px">
 <div class="row">
-
 <div>
-
-<div class="name">
-💬 پیام جدید
-</div>
-
+<div class="name">💬 پیام جدید داری</div>
 <div class="username">
-${chatUnread} پیام خوانده‌نشده داری
+${chatUnread} پیام خوانده‌نشده
 </div>
-
 </div>
-
-<div class="unread-badge">
-${chatUnread>99?"99+":chatUnread}
+<button class="small-btn purple-btn" onclick="goPage('friends')">
+دیدن چت‌ها
+</button>
 </div>
-
-</div>
-
 </div>
 `
 :
@@ -1731,7 +1642,6 @@ ${chatUnread>99?"99+":chatUnread}
 }
 
 `;
-
 }
 
 async function getFriendsCount(){
@@ -1745,7 +1655,6 @@ const{data}=await supabaseClient
 );
 
 return data?.length||0;
-
 }
 
 async function getRequestsCount(){
@@ -1770,7 +1679,6 @@ supabaseClient
 ]);
 
 return(a||0)+(b||0);
-
 }
 
 async function getUnreadCount(){
@@ -1782,39 +1690,26 @@ const{data}=await supabaseClient
 .eq("is_read",false);
 
 return data?.length||0;
-
 }
 
-/* =========================
-چت - تعداد پیام‌های خوانده نشده
-========================= */
+async function getUnreadMessagesCount(){
 
-async function getChatUnreadCount(){
-
-const{data,error}=await supabaseClient
+const{data}=await supabaseClient
 .from("messages")
 .select("id")
 .eq("receiver_id",currentUser.id)
 .eq("is_read",false);
 
-if(error){
-
-console.error("Unread chat count:",error);
-return 0;
-
-}
-
 return data?.length||0;
-
 }
 
-async function getFriendUnreadCount(friendId){
+async function getUnreadFromFriend(friendId){
 
 const{data,error}=await supabaseClient
 .from("messages")
 .select("id")
-.eq("sender_id",friendId)
 .eq("receiver_id",currentUser.id)
+.eq("sender_id",friendId)
 .eq("is_read",false);
 
 if(error){
@@ -1823,7 +1718,6 @@ return 0;
 }
 
 return data?.length||0;
-
 }
 
 /* =========================
@@ -1844,8 +1738,7 @@ $("mainContent").innerHTML=`
 
 <input
 id="friendSearch"
-placeholder="نام کاربری"
->
+placeholder="نام کاربری">
 
 <button onclick="searchFriend()">
 جستجو
@@ -1868,11 +1761,9 @@ placeholder="نام کاربری"
 </div>
 
 </div>
-
 `;
 
 await loadFriends();
-
 }
 
 async function searchFriend(){
@@ -1912,47 +1803,49 @@ const{data:existing}=await supabaseClient
 )
 .maybeSingle();
 
-let action="";
+let action;
 
 if(!existing){
 
-action=
-`
+action=`
 <button
 class="small-btn purple-btn"
-onclick="sendFriendRequest('${escapeJs(data.id)}')">
+onclick="sendFriendRequest('${data.id}')">
 افزودن
 </button>
 `;
 
 }else if(existing.status==="accepted"){
 
-action=
-`<span class="username">دوست شماست</span>`;
+action=`
+<span class="username">
+دوست شماست
+</span>
+`;
 
 }else if(existing.requester_id===currentUser.id){
 
-action=
-`<span class="username">درخواست ارسال شده</span>`;
+action=`
+<span class="username">
+درخواست ارسال شده
+</span>
+`;
 
 }else{
 
 action=`
-
 <button
 class="small-btn success-btn"
-onclick="acceptFriend('${escapeJs(data.id)}')">
+onclick="acceptFriend('${data.id}')">
 قبول
 </button>
 
 <button
 class="small-btn danger-btn"
-onclick="rejectFriend('${escapeJs(data.id)}')">
+onclick="rejectFriend('${data.id}')">
 رد
 </button>
-
 `;
-
 }
 
 box.innerHTML=`
@@ -1980,9 +1873,7 @@ ${action}
 </div>
 
 </div>
-
 `;
-
 }
 
 async function sendFriendRequest(receiverId){
@@ -2001,7 +1892,6 @@ return alert(error.message||"ارسال درخواست انجام نشد.");
 alert("درخواست دوستی ارسال شد.");
 
 await renderFriends();
-
 }
 
 async function loadFriends(){
@@ -2035,18 +1925,13 @@ const{data:profiles}=await supabaseClient
 .select("id,display_name,username")
 .in("id",ids);
 
-const unreadResults=await Promise.all(
-(ids||[]).map(async id=>[
-id,
-await getFriendUnreadCount(id)
-])
-);
-
 const unreadMap={};
 
-unreadResults.forEach(([id,count])=>{
-unreadMap[id]=count;
-});
+await Promise.all(
+(ids||[]).map(async id=>{
+unreadMap[id]=await getUnreadFromFriend(id);
+})
+);
 
 box.innerHTML=
 (profiles||[])
@@ -2060,7 +1945,7 @@ return`
 
 <div class="row">
 
-<div style="min-width:0">
+<div>
 
 <div class="name">
 ${escapeHtml(p.display_name)}
@@ -2072,39 +1957,36 @@ ${escapeHtml(p.display_name)}
 
 </div>
 
-<div class="friend-actions">
-
-${
-unread>0
-?
-`<span class="unread-badge">${unread>99?"99+":unread}</span>`
-:
-""
-}
+<div class="button-group">
 
 <button
 class="small-btn purple-btn"
-onclick="openChat('${escapeJs(p.id)}','${escapeJs(p.display_name)}','${escapeJs(p.username)}')">
-چت
-</button>
-
-<button
-class="small-btn purple-btn"
-onclick="openFriendCalendar('${escapeJs(p.id)}','${escapeJs(p.display_name)}')">
+onclick="openFriendCalendar('${p.id}','${escapeHtml(p.display_name)}')">
 تقویم
 </button>
 
-</div>
+<button
+class="small-btn purple-btn"
+onclick="openChat('${p.id}','${escapeHtml(p.display_name)}')">
+💬 چت
+${unread>0
+?`<span class="unread-badge">${unread}</span>`
+:""}
+</button>
 
 </div>
 
 </div>
 
+</div>
 `;
-
-}).join("");
-
+})
+.join("");
 }
+
+/* =========================
+دوستی
+========================= */
 
 async function acceptFriend(actorId){
 
@@ -2120,7 +2002,6 @@ return alert(error.message);
 alert("دوستی قبول شد.");
 
 await renderRequests();
-
 }
 
 async function rejectFriend(actorId){
@@ -2137,7 +2018,407 @@ return alert(error.message);
 alert("درخواست رد شد.");
 
 await renderRequests();
+}
 
+/* =====================================================
+چت واقعی
+===================================================== */
+
+function cleanupChatRealtime(){
+
+if(chatChannel){
+
+supabaseClient
+.removeChannel(chatChannel)
+.catch(e=>console.error(e));
+
+chatChannel=null;
+}
+}
+
+async function verifyFriendship(friendId){
+
+const{data,error}=await supabaseClient
+.from("friendships")
+.select("id")
+.eq("status","accepted")
+.or(
+`and(requester_id.eq.${currentUser.id},receiver_id.eq.${friendId}),and(requester_id.eq.${friendId},receiver_id.eq.${currentUser.id})`
+)
+.maybeSingle();
+
+if(error)throw error;
+
+return !!data;
+}
+
+async function openChat(friendId,friendName){
+
+cleanupChatRealtime();
+
+chatPartnerId=friendId;
+chatPartnerName=friendName;
+
+await goPage("chat");
+}
+
+async function renderChatPage(){
+
+const main=$("mainContent");
+
+if(!main)return;
+
+if(!chatPartnerId){
+
+await goPage("friends");
+return;
+}
+
+const isFriend=await verifyFriendship(chatPartnerId);
+
+if(!isFriend){
+
+alert("فقط با دوستان تأییدشده می‌تونی چت کنی.");
+
+await goPage("friends");
+
+return;
+}
+
+main.innerHTML=`
+
+<div class="card chat-card">
+
+<div class="chat-header">
+
+<button
+class="chat-back"
+onclick="goPage('friends')">
+›
+</button>
+
+<div class="chat-user-info">
+
+<div class="chat-user-name">
+${escapeHtml(chatPartnerName)}
+</div>
+
+<div class="chat-user-status">
+گفت‌وگوی خصوصی
+</div>
+
+</div>
+
+</div>
+
+<div id="chatMessages" class="chat-messages">
+
+<div class="chat-empty">
+در حال دریافت پیام‌ها...
+</div>
+
+</div>
+
+<div class="chat-input-row">
+
+<textarea
+id="chatInput"
+class="chat-input"
+placeholder="پیامت رو بنویس..."
+maxlength="2000"
+></textarea>
+
+<button
+id="chatSendButton"
+class="chat-send"
+onclick="sendChatMessage()">
+➤
+</button>
+
+</div>
+
+</div>
+`;
+
+$("chatInput")?.addEventListener("keydown",e=>{
+
+if(e.key==="Enter"&&!e.shiftKey){
+
+e.preventDefault();
+
+sendChatMessage();
+
+}
+});
+
+await loadChatMessages();
+
+await markChatMessagesRead();
+
+subscribeChatRealtime();
+
+setTimeout(scrollChatToBottom,100);
+}
+
+async function loadChatMessages(){
+
+const box=$("chatMessages");
+
+if(!box)return;
+
+const{data,error}=await supabaseClient
+.from("messages")
+.select(
+"id,sender_id,receiver_id,body,created_at,is_read"
+)
+.or(
+`and(sender_id.eq.${currentUser.id},receiver_id.eq.${chatPartnerId}),and(sender_id.eq.${chatPartnerId},receiver_id.eq.${currentUser.id})`
+)
+.order("created_at",{ascending:true});
+
+if(error){
+
+box.innerHTML=`
+<div class="chat-empty">
+${escapeHtml(error.message)}
+</div>
+`;
+
+return;
+}
+
+if(!data?.length){
+
+box.innerHTML=`
+<div class="chat-empty">
+هنوز پیامی بین شما رد و بدل نشده.<br>
+اولین پیام رو بفرست 👋
+</div>
+`;
+
+return;
+}
+
+renderChatMessages(data);
+}
+
+function renderChatMessages(messages){
+
+const box=$("chatMessages");
+
+if(!box)return;
+
+box.innerHTML="";
+
+let lastDay="";
+
+messages.forEach(message=>{
+
+const day=new Date(message.created_at)
+.toLocaleDateString("fa-IR");
+
+if(day!==lastDay){
+
+const dateEl=document.createElement("div");
+
+dateEl.className="chat-date";
+
+dateEl.textContent=day;
+
+box.appendChild(dateEl);
+
+lastDay=day;
+}
+
+appendChatMessage(message,false);
+});
+
+scrollChatToBottom();
+}
+
+function appendChatMessage(message,scroll=true){
+
+const box=$("chatMessages");
+
+if(!box)return;
+
+const empty=box.querySelector(".chat-empty");
+
+if(empty)
+empty.remove();
+
+const mine=
+message.sender_id===currentUser.id;
+
+const row=document.createElement("div");
+
+row.className=
+"chat-row "+
+(mine?"mine":"theirs");
+
+row.dataset.messageId=message.id;
+
+const bubble=document.createElement("div");
+
+bubble.className=
+"chat-bubble "+
+(mine?"mine":"theirs");
+
+bubble.innerHTML=`
+<div>${escapeHtml(message.body)}</div>
+<div class="chat-time">
+${chatTime(message.created_at)}
+</div>
+`;
+
+row.appendChild(bubble);
+
+box.appendChild(row);
+
+if(scroll)
+scrollChatToBottom();
+}
+
+function scrollChatToBottom(){
+
+const box=$("chatMessages");
+
+if(!box)return;
+
+requestAnimationFrame(()=>{
+box.scrollTop=box.scrollHeight;
+});
+}
+
+async function sendChatMessage(){
+
+const input=$("chatInput");
+const button=$("chatSendButton");
+
+if(!input||!chatPartnerId)return;
+
+const body=input.value.trim();
+
+if(!body)return;
+
+if(body.length>2000)
+return alert("پیام خیلی طولانیه.");
+
+button.disabled=true;
+
+try{
+
+const{data,error}=await supabaseClient
+.from("messages")
+.insert({
+sender_id:currentUser.id,
+receiver_id:chatPartnerId,
+body:body
+})
+.select(
+"id,sender_id,receiver_id,body,created_at,is_read"
+)
+.single();
+
+if(error)throw error;
+
+input.value="";
+
+appendChatMessage(data,true);
+
+}catch(e){
+
+console.error(e);
+
+alert(
+e.message||
+"پیام ارسال نشد."
+);
+
+}finally{
+
+button.disabled=false;
+
+input.focus();
+}
+}
+
+async function markChatMessagesRead(){
+
+if(!chatPartnerId||!currentUser)return;
+
+const{error}=await supabaseClient
+.from("messages")
+.update({
+is_read:true
+})
+.eq("receiver_id",currentUser.id)
+.eq("sender_id",chatPartnerId)
+.eq("is_read",false);
+
+if(error)
+console.error("mark chat read:",error);
+}
+
+function subscribeChatRealtime(){
+
+cleanupChatRealtime();
+
+if(!currentUser||!chatPartnerId)return;
+
+chatChannel=
+supabaseClient
+.channel(
+`chat:${currentUser.id}:${chatPartnerId}:${Date.now()}`
+)
+.on(
+"postgres_changes",
+{
+event:"INSERT",
+schema:"public",
+table:"messages",
+filter:`receiver_id=eq.${currentUser.id}`
+},
+async payload=>{
+
+const message=payload.new;
+
+if(
+message.sender_id!==chatPartnerId
+)
+return;
+
+if(
+document.visibilityState!=="visible"||
+currentPage!=="chat"
+){
+
+return;
+}
+
+if(
+document.querySelector(
+`[data-message-id="${message.id}"]`
+)
+){
+
+return;
+}
+
+appendChatMessage(message,true);
+
+await markChatMessagesRead();
+
+}
+)
+.subscribe(status=>{
+
+console.log(
+"Chat realtime status:",
+status
+);
+
+});
 }
 
 /* =====================================================
@@ -2156,7 +2437,6 @@ calendarYear=t.jy;
 calendarMonth=t.jm;
 
 await goPage("calendar");
-
 }
 
 function openMyCalendar(){
@@ -2171,7 +2451,6 @@ calendarYear=t.jy;
 calendarMonth=t.jm;
 
 goPage("calendar");
-
 }
 
 async function renderCalendarPage(){
@@ -2243,7 +2522,6 @@ class="empty">
 </div>
 
 </div>
-
 `;
 
 const t=todayJalali();
@@ -2252,7 +2530,6 @@ if(!calendarYear||!calendarMonth){
 
 calendarYear=t.jy;
 calendarMonth=t.jm;
-
 }
 
 try{
@@ -2268,23 +2545,15 @@ const grid=$("calendarGrid");
 if(grid){
 
 grid.innerHTML=`
-
 <div
 class="empty"
 style="grid-column:1/-1">
-
 خطا در ساخت تقویم.
-
 <br>
-
 <small>${escapeHtml(e.message||"")}</small>
-
 </div>
-
 `;
-
 }
-
 }
 
 setTimeout(()=>{
@@ -2298,19 +2567,14 @@ const box=$("appointmentsList");
 if(box){
 
 box.innerHTML=`
-
 <div class="empty">
 قرارهای این ماه فعلاً قابل دریافت نیست.
 </div>
-
 `;
-
 }
-
 });
 
 },0);
-
 }
 
 async function changeMonth(dir){
@@ -2321,14 +2585,12 @@ if(calendarMonth>12){
 
 calendarMonth=1;
 calendarYear++;
-
 }
 
 if(calendarMonth<1){
 
 calendarMonth=12;
 calendarYear--;
-
 }
 
 try{
@@ -2338,7 +2600,6 @@ renderCalendar();
 }catch(e){
 
 console.error(e);
-
 }
 
 setTimeout(()=>{
@@ -2352,19 +2613,14 @@ const box=$("appointmentsList");
 if(box){
 
 box.innerHTML=`
-
 <div class="empty">
 قرارهای این ماه قابل دریافت نیست.
 </div>
-
 `;
-
 }
-
 });
 
 },0);
-
 }
 
 function renderCalendar(){
@@ -2387,7 +2643,6 @@ ownCalendar
 "تقویم من"
 :
 `تقویم ${calendarOwnerName}`;
-
 }
 
 const first=
@@ -2450,15 +2705,12 @@ grid.insertAdjacentHTML(
 "beforeend",
 `<div class="day empty"></div>`
 );
-
 }
 
 const today=todayJalali();
 
 const startTime=
 Date.parse(first+"T00:00:00Z");
-
-window.calendarDayData={};
 
 for(let day=1;day<=days;day++){
 
@@ -2489,13 +2741,8 @@ today.jd===day
 el.dataset.date=iso;
 
 el.innerHTML=`
-
 <strong>${day}</strong>
-
-<small>
-آزاد
-</small>
-
+<small>آزاد</small>
 `;
 
 el.onclick=()=>openDate(
@@ -2505,8 +2752,9 @@ window.calendarDayData?.[iso]||null
 );
 
 grid.appendChild(el);
-
 }
+
+window.calendarDayData={};
 
 loadCalendarData(
 first,
@@ -2516,7 +2764,6 @@ nextMonth
 console.error("loadCalendarData:",e);
 
 });
-
 }
 
 async function loadCalendarData(first,nextMonth){
@@ -2539,7 +2786,6 @@ p_end_date:nextMonth
 ),
 
 10000
-
 );
 
 if(error)throw error;
@@ -2568,7 +2814,6 @@ supabaseClient
 .lt("date",nextMonth),
 
 10000
-
 );
 
 if(error)throw error;
@@ -2625,7 +2870,6 @@ today.jd===j.jd
 ){
 
 el.classList.add("today");
-
 }
 
 el.innerHTML=`
@@ -2647,33 +2891,6 @@ info?.is_wish
 }
 
 `;
-
-if(info?.is_booked){
-
-el.onclick=()=>openDate(
-iso,
-j.jd,
-info
-);
-
-}else if(info?.is_wish){
-
-el.onclick=()=>openDate(
-iso,
-j.jd,
-info
-);
-
-}else{
-
-el.onclick=()=>openDate(
-iso,
-j.jd,
-info
-);
-
-}
-
 });
 
 }catch(e){
@@ -2694,11 +2911,8 @@ warning.textContent=
 "اطلاعات قرارها فعلاً دریافت نشد؛ تقویم همچنان قابل استفاده است.";
 
 grid.appendChild(warning);
-
 }
-
 }
-
 }
 
 async function renderAppointments(){
@@ -2708,7 +2922,9 @@ const box=$("appointmentsList");
 if(!box)return;
 
 box.innerHTML=
-`<div class="empty">در حال دریافت...</div>`;
+`<div class="empty">
+در حال دریافت...
+</div>`;
 
 let todayISO;
 let nextISO;
@@ -2740,10 +2956,11 @@ calendarMonth+1,
 }catch(e){
 
 box.innerHTML=
-`<div class="empty">خطا در محاسبه تاریخ‌ها.</div>`;
+`<div class="empty">
+خطا در محاسبه تاریخ‌ها.
+</div>`;
 
 return;
-
 }
 
 try{
@@ -2759,7 +2976,6 @@ supabaseClient
 .order("date",{ascending:true}),
 
 8000
-
 );
 
 if(error)throw error;
@@ -2767,10 +2983,11 @@ if(error)throw error;
 if(!data?.length){
 
 box.innerHTML=
-`<div class="empty">برای این ماه قراری ثبت نشده.</div>`;
+`<div class="empty">
+برای این ماه قراری ثبت نشده.
+</div>`;
 
 return;
-
 }
 
 const ids=[
@@ -2793,13 +3010,11 @@ supabaseClient
 .in("id",ids),
 
 8000
-
 );
 
 if(profileError)throw profileError;
 
 profiles=p||[];
-
 }
 
 const map={};
@@ -2832,16 +3047,17 @@ p?.display_name||"کاربر"
 </div>
 
 <div class="appointment-status">
-${p?.username
+${
+p?.username
 ?
 "@"+escapeHtml(p.username)
 :
-""}
+""
+}
  · تأیید شده
 </div>
 
 </div>
-
 `;
 
 }).join("");
@@ -2857,9 +3073,7 @@ e.message||
 "دریافت قرارها انجام نشد."
 )}
 </div>`;
-
 }
-
 }
 
 /* =========================
@@ -2883,7 +3097,6 @@ ${j.jd}
 ${months[j.jm-1]}
 ${j.jy}
 </div>
-
 `;
 
 if(info?.is_booked){
@@ -2891,11 +3104,15 @@ if(info?.is_booked){
 html+=`
 
 <div class="date-info">
-
-این تاریخ رزرو شده است.
-
+این تاریخ با
+<b>
+${escapeHtml(
+info.partner_name||
+"یک دوست"
+)}
+</b>
+رزرو شده است.
 </div>
-
 `;
 
 }else if(ownCalendar){
@@ -2903,45 +3120,17 @@ html+=`
 html+=`
 
 <div class="date-info">
-
 این تاریخ آزاده.
 می‌تونی اعلام کنی که این روز دنبال هم‌قرار می‌گردی.
-
 </div>
 
 <br>
 
 <button
 class="primary"
-onclick="createWish('${escapeJs(iso)}')">
-
+onclick="createWish('${iso}')">
 می‌خوام این روز برم بیرون
-
 </button>
-
-`;
-
-}else if(info?.is_wish){
-
-html+=`
-
-<div class="date-info">
-
-${escapeHtml(calendarOwnerName)}
-برای این روز دنبال هم‌قرار می‌گرده.
-
-</div>
-
-<br>
-
-<button
-class="primary"
-onclick="respondWish('${escapeJs(calendarOwner)}','${escapeJs(iso)}',true)">
-
-می‌خوام باهاش برم
-
-</button>
-
 `;
 
 }else{
@@ -2949,25 +3138,19 @@ onclick="respondWish('${escapeJs(calendarOwner)}','${escapeJs(iso)}',true)">
 html+=`
 
 <div class="date-info">
-
 این تاریخ در تقویم
 ${escapeHtml(calendarOwnerName)}
 آزاد است.
-
 </div>
 
 <br>
 
 <button
 class="primary"
-onclick="sendHangoutRequest('${escapeJs(iso)}')">
-
+onclick="sendHangoutRequest('${iso}')">
 درخواست قرار برای این تاریخ
-
 </button>
-
 `;
-
 }
 
 p.innerHTML=html;
@@ -2976,7 +3159,6 @@ p.scrollIntoView({
 behavior:"smooth",
 block:"nearest"
 });
-
 }
 
 /* =========================
@@ -3005,7 +3187,6 @@ p_hangout_date:iso
 ),
 
 12000
-
 );
 
 if(error)throw error;
@@ -3022,9 +3203,7 @@ alert(
 e.message||
 "ارسال درخواست انجام نشد."
 );
-
 }
-
 }
 
 /* =========================
@@ -3052,7 +3231,6 @@ p_date:iso
 ),
 
 12000
-
 );
 
 if(error)throw error;
@@ -3073,9 +3251,7 @@ alert(
 e.message||
 "ثبت نشد."
 );
-
 }
-
 }
 
 /* =========================
@@ -3109,12 +3285,10 @@ $("mainContent").innerHTML=`
 </div>
 
 </div>
-
 `;
 
 await loadFriendRequests();
 await loadHangoutRequests();
-
 }
 
 async function loadFriendRequests(){
@@ -3168,22 +3342,20 @@ map[r.requester_id]?.username||""
 
 <button
 class="small-btn success-btn"
-onclick="acceptFriend('${escapeJs(r.requester_id)}')">
+onclick="acceptFriend('${r.requester_id}')">
 قبول
 </button>
 
 <button
 class="small-btn danger-btn"
-onclick="rejectFriend('${escapeJs(r.requester_id)}')">
+onclick="rejectFriend('${r.requester_id}')">
 رد
 </button>
 
 </div>
 
 </div>
-
 `).join("");
-
 }
 
 async function loadHangoutRequests(){
@@ -3242,22 +3414,20 @@ ${jalaliDateLabel(r.date)}
 
 <button
 class="small-btn success-btn"
-onclick="respondHangout('${escapeJs(r.id)}',true)">
+onclick="respondHangout('${r.id}',true)">
 قبول
 </button>
 
 <button
 class="small-btn danger-btn"
-onclick="respondHangout('${escapeJs(r.id)}',false)">
+onclick="respondHangout('${r.id}',false)">
 رد
 </button>
 
 </div>
 
 </div>
-
 `).join("");
-
 }
 
 async function respondHangout(requestId,accept){
@@ -3277,7 +3447,6 @@ accept_request:accept
 ),
 
 12000
-
 );
 
 if(error)throw error;
@@ -3302,9 +3471,7 @@ alert(
 e.message||
 "عملیات انجام نشد."
 );
-
 }
-
 }
 
 /* =====================================================
@@ -3339,20 +3506,18 @@ return`
 
 <button
 class="small-btn success-btn"
-onclick="respondHangout('${escapeJs(requestId)}',true)">
+onclick="respondHangout('${requestId}',true)">
 قبول
 </button>
 
 <button
 class="small-btn danger-btn"
-onclick="respondHangout('${escapeJs(requestId)}',false)">
+onclick="respondHangout('${requestId}',false)">
 رد
 </button>
 
 </div>
-
 `;
-
 }
 
 if(
@@ -3367,20 +3532,18 @@ return`
 
 <button
 class="small-btn success-btn"
-onclick="respondWish('${escapeJs(actorId)}','${escapeJs(wishDate)}',true)">
+onclick="respondWish('${actorId}','${wishDate}',true)">
 می‌خوام باهاش برم
 </button>
 
 <button
 class="small-btn danger-btn"
-onclick="respondWish('${escapeJs(actorId)}','${escapeJs(wishDate)}',false)">
+onclick="respondWish('${actorId}','${wishDate}',false)">
 نه
 </button>
 
 </div>
-
 `;
-
 }
 
 if(
@@ -3394,24 +3557,21 @@ return`
 
 <button
 class="small-btn success-btn"
-onclick="acceptFriend('${escapeJs(actorId)}')">
+onclick="acceptFriend('${actorId}')">
 قبول دوستی
 </button>
 
 <button
 class="small-btn danger-btn"
-onclick="rejectFriend('${escapeJs(actorId)}')">
+onclick="rejectFriend('${actorId}')">
 رد
 </button>
 
 </div>
-
 `;
-
 }
 
 return "";
-
 }
 
 async function renderNotifications(){
@@ -3429,7 +3589,6 @@ $("mainContent").innerHTML=`
 </div>
 
 </div>
-
 `;
 
 const{data,error}=await withTimeout(
@@ -3442,29 +3601,24 @@ supabaseClient
 .limit(50),
 
 12000
-
 );
 
 if(error)
 
 return $("notificationsList").innerHTML=
 `
-
 <div class="empty">
 ${escapeHtml(error.message)}
 </div>
-
 `;
 
 if(!data?.length)
 
 return $("notificationsList").innerHTML=
 `
-
 <div class="empty">
 اعلانی نداری.
 </div>
-
 `;
 
 $("notificationsList").innerHTML=
@@ -3495,11 +3649,9 @@ ${relativeTime(n.created_at)}
 ${notificationActions(n)}
 
 </div>
-
 `).join("");
 
 await markNotificationsRead();
-
 }
 
 async function markNotificationsRead(){
@@ -3509,7 +3661,6 @@ await supabaseClient
 .update({is_read:true})
 .eq("user_id",currentUser.id)
 .eq("is_read",false);
-
 }
 
 /* =========================
@@ -3534,7 +3685,6 @@ accept_request:accept
 ),
 
 12000
-
 );
 
 if(error)throw error;
@@ -3549,10 +3699,7 @@ accept
 "درخواست رد شد."
 );
 
-if(currentPage==="notifications")
 await renderNotifications();
-else
-await goPage("notifications");
 
 }catch(e){
 
@@ -3562,508 +3709,12 @@ alert(
 e.message||
 "عملیات انجام نشد."
 );
-
+}
 }
 
-}
-
-/* =====================================================
-چت واقعی
-===================================================== */
-
-function cleanupChatRealtime(){
-
-if(chatChannel){
-
-try{
-supabaseClient.removeChannel(chatChannel);
-}catch(e){
-console.error("Realtime cleanup:",e);
-}
-
-chatChannel=null;
-
-}
-
-}
-
-async function verifyChatFriendship(friendId){
-
-const{data,error}=await supabaseClient
-.from("friendships")
-.select("id")
-.eq("status","accepted")
-.or(
-`and(requester_id.eq.${currentUser.id},receiver_id.eq.${friendId}),and(requester_id.eq.${friendId},receiver_id.eq.${currentUser.id})`
-)
-.maybeSingle();
-
-if(error)throw error;
-
-return !!data;
-
-}
-
-async function openChat(friendId,friendName,friendUsername=""){
-
-chatPartnerId=friendId;
-chatPartnerName=friendName;
-chatPartnerUsername=friendUsername||"";
-
-await goPage("chat");
-
-}
-
-async function renderChatPage(){
-
-if(!chatPartnerId){
-
-await goPage("friends");
-return;
-
-}
-
-const isFriend=await verifyChatFriendship(chatPartnerId);
-
-if(!isFriend){
-
-alert("فقط با دوستان پذیرفته‌شده می‌تونی چت کنی.");
-
-chatPartnerId=null;
-chatPartnerName="";
-chatPartnerUsername="";
-
-await goPage("friends");
-
-return;
-
-}
-
-$("mainContent").innerHTML=`
-
-<div class="card">
-
-<div class="chat-header">
-
-<button
-class="chat-back"
-onclick="goPage('friends')">
-‹
-</button>
-
-<div class="chat-user">
-
-<div class="name">
-${escapeHtml(chatPartnerName)}
-</div>
-
-<div class="username">
-@${escapeHtml(chatPartnerUsername)}
-</div>
-
-<div class="chat-status">
-● چت خصوصی
-</div>
-
-</div>
-
-</div>
-
-<div
-id="chatMessages"
-class="chat-messages">
-
-<div class="chat-empty">
-در حال دریافت پیام‌ها...
-</div>
-
-</div>
-
-<div class="chat-input-wrap">
-
-<textarea
-id="chatInput"
-class="chat-input"
-placeholder="پیامت رو بنویس..."
-maxlength="4000"></textarea>
-
-<button
-id="chatSendButton"
-class="chat-send"
-onclick="sendChatMessage()">
-➤
-</button>
-
-</div>
-
-</div>
-
-`;
-
-$("chatInput")?.addEventListener("keydown",e=>{
-
-if(e.key==="Enter"&&!e.shiftKey){
-
-e.preventDefault();
-sendChatMessage();
-
-}
-
-});
-
-$("chatInput")?.addEventListener("input",e=>{
-
-e.target.style.height="46px";
-
-e.target.style.height=
-Math.min(e.target.scrollHeight,120)+"px";
-
-});
-
-await loadChatMessages();
-
-await markChatMessagesRead();
-
-subscribeChatRealtime();
-
-}
-
-async function loadChatMessages(){
-
-const box=$("chatMessages");
-
-if(!box)return;
-
-const{data,error}=await withTimeout(
-
-supabaseClient
-.from("messages")
-.select(
-"id,sender_id,receiver_id,body,created_at,is_read"
-)
-.or(
-`and(sender_id.eq.${currentUser.id},receiver_id.eq.${chatPartnerId}),and(sender_id.eq.${chatPartnerId},receiver_id.eq.${currentUser.id})`
-)
-.order("created_at",{ascending:true}),
-
-12000
-
-);
-
-if(error){
-
-box.innerHTML=`
-
-<div class="chat-empty">
-${escapeHtml(error.message)}
-</div>
-
-`;
-
-return;
-
-}
-
-chatMessages=data||[];
-
-renderChatMessages();
-
-}
-
-function renderChatMessages(){
-
-const box=$("chatMessages");
-
-if(!box)return;
-
-if(!chatMessages.length){
-
-box.innerHTML=`
-
-<div class="chat-empty">
-هنوز پیامی بین شما رد و بدل نشده.<br>
-اولین پیام رو تو بفرست 💜
-</div>
-
-`;
-
-return;
-
-}
-
-let lastDate="";
-
-box.innerHTML=chatMessages.map(m=>{
-
-const mine=m.sender_id===currentUser.id;
-
-const dateKey=
-new Date(m.created_at)
-.toLocaleDateString("fa-IR");
-
-let dateHtml="";
-
-if(dateKey!==lastDate){
-
-lastDate=dateKey;
-
-dateHtml=`
-
-<div class="chat-date">
-${dateKey}
-</div>
-
-`;
-
-}
-
-return`
-
-${dateHtml}
-
-<div class="chat-row ${mine?"mine":"theirs"}">
-
-<div class="chat-bubble ${mine?"mine":"theirs"}">
-
-${escapeHtml(m.body)}
-
-<div class="chat-meta">
-${formatMessageTime(m.created_at)}
-${mine?(m.is_read?" · دیده شد":" · ارسال شد"):""}
-</div>
-
-</div>
-
-</div>
-
-`;
-
-}).join("");
-
-box.scrollTop=box.scrollHeight;
-
-}
-
-async function sendChatMessage(){
-
-if(!chatPartnerId)return;
-
-const input=$("chatInput");
-
-if(!input)return;
-
-const body=input.value.trim();
-
-if(!body)return;
-
-const button=$("chatSendButton");
-
-if(button)button.disabled=true;
-
-try{
-
-const isFriend=await verifyChatFriendship(chatPartnerId);
-
-if(!isFriend)
-throw new Error("این کاربر دیگر در فهرست دوستانت نیست.");
-
-const{data,error}=await supabaseClient
-.from("messages")
-.insert({
-sender_id:currentUser.id,
-receiver_id:chatPartnerId,
-body:body
-})
-.select(
-"id,sender_id,receiver_id,body,created_at,is_read"
-)
-.single();
-
-if(error)throw error;
-
-input.value="";
-input.style.height="46px";
-
-if(data){
-
-const exists=chatMessages.some(
-m=>m.id===data.id
-);
-
-if(!exists){
-
-chatMessages.push(data);
-renderChatMessages();
-
-}
-
-}
-
-}catch(e){
-
-alert(
-e.message||
-"ارسال پیام انجام نشد."
-);
-
-}finally{
-
-if(button)button.disabled=false;
-
-}
-
-}
-
-async function markChatMessagesRead(){
-
-if(!chatPartnerId)return;
-
-const{error}=await supabaseClient
-.from("messages")
-.update({is_read:true})
-.eq("receiver_id",currentUser.id)
-.eq("sender_id",chatPartnerId)
-.eq("is_read",false);
-
-if(error)
-console.error("Mark chat read:",error);
-
-chatMessages=
-chatMessages.map(m=>
-m.sender_id===chatPartnerId
-?
-{...m,is_read:true}
-:
-m
-);
-
-renderChatMessages();
-
-}
-
-function subscribeChatRealtime(){
-
-cleanupChatRealtime();
-
-if(!currentUser||!chatPartnerId)return;
-
-const channelName=
-`chat-${currentUser.id}-${chatPartnerId}-${Date.now()}`;
-
-chatChannel=
-supabaseClient
-.channel(channelName)
-
-.on(
-"postgres_changes",
-{
-event:"INSERT",
-schema:"public",
-table:"messages",
-filter:`receiver_id=eq.${currentUser.id}`
-},
-async payload=>{
-
-const message=payload.new;
-
-if(
-!message||
-message.sender_id!==chatPartnerId
-){
-return;
-}
-
-if(
-chatMessages.some(m=>m.id===message.id)
-){
-return;
-}
-
-chatMessages.push(message);
-
-renderChatMessages();
-
-await markSingleMessageRead(message.id);
-
-}
-)
-
-.on(
-"postgres_changes",
-{
-event:"UPDATE",
-schema:"public",
-table:"messages",
-filter:`receiver_id=eq.${currentUser.id}`
-},
-payload=>{
-
-const message=payload.new;
-
-if(
-message?.sender_id===chatPartnerId
-){
-
-const index=
-chatMessages.findIndex(
-m=>m.id===message.id
-);
-
-if(index!==-1){
-
-chatMessages[index]={
-...chatMessages[index],
-...message
-};
-
-renderChatMessages();
-
-}
-
-}
-
-}
-)
-
-.subscribe(status=>{
-
-console.log(
-"Chat realtime:",
-status
-);
-
-});
-
-}
-
-async function markSingleMessageRead(messageId){
-
-const{error}=await supabaseClient
-.from("messages")
-.update({is_read:true})
-.eq("id",messageId)
-.eq("receiver_id",currentUser.id);
-
-if(error)
-console.error(error);
-
-const index=
-chatMessages.findIndex(
-m=>m.id===messageId
-);
-
-if(index!==-1){
-
-chatMessages[index].is_read=true;
-renderChatMessages();
-
-}
-
-}
-
-/* =====================================================
+/* =========================
 شروع برنامه
-===================================================== */
+========================= */
 
 async function start(){
 
@@ -4101,7 +3752,6 @@ renderApp();
 }else{
 
 renderAuth("login");
-
 }
 
 }catch(e){
@@ -4113,9 +3763,7 @@ showFatalError(e);
 }finally{
 
 hideLoading();
-
 }
-
 }
 
 start();
@@ -4123,4 +3771,4 @@ start();
 </script>
 
 </body>
-   </html>
+</html>
