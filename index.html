@@ -1,0 +1,3234 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>قرارمون</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
+
+:root{
+  --bg:#f7f5ff;
+  --white:#fff;
+  --purple:#7557d9;
+  --purple2:#9479ed;
+  --light:#eee9ff;
+  --soft:#f6f2ff;
+  --text:#24202f;
+  --muted:#918c9f;
+  --border:rgba(105,82,160,.10);
+  --green:#42ae78;
+  --green-bg:#e8f8ef;
+  --red:#dc5c69;
+  --red-bg:#fff0f2;
+  --shadow:0 18px 50px rgba(76,55,135,.10);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+html{scroll-behavior:smooth}
+
+body{
+  font-family:"Vazirmatn",Tahoma,sans-serif;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(153,125,235,.20),transparent 28%),
+    radial-gradient(circle at 0% 55%,rgba(210,196,255,.20),transparent 25%),
+    var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+
+button,input{font-family:inherit}
+button{cursor:pointer;border:0}
+.hidden{display:none!important}
+
+/* loading */
+.loading{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:rgba(247,245,255,.92);
+  backdrop-filter:blur(18px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.loading-box{
+  background:#fff;
+  padding:22px 28px;
+  border-radius:24px;
+  box-shadow:var(--shadow);
+  color:var(--purple);
+  font-size:14px;
+  font-weight:700;
+}
+
+/* error */
+.error-box{
+  width:min(90%,430px);
+  margin:100px auto;
+  padding:28px;
+  background:#fff;
+  border-radius:28px;
+  box-shadow:var(--shadow);
+  text-align:center;
+}
+
+.error-box h2{margin-bottom:12px}
+.error-box p{
+  color:#777;
+  line-height:1.9;
+  font-size:13px;
+  word-break:break-word;
+}
+
+/* auth */
+.auth-page{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+}
+
+.auth-box{
+  width:100%;
+  max-width:430px;
+  padding:34px 27px;
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(22px);
+  border:1px solid rgba(255,255,255,.95);
+  border-radius:32px;
+  box-shadow:0 25px 80px rgba(68,48,125,.13);
+}
+
+.logo{
+  text-align:center;
+  font-size:36px;
+  font-weight:800;
+  letter-spacing:-1.5px;
+  margin-bottom:7px;
+}
+
+.logo::after{
+  content:"•";
+  color:var(--purple);
+  margin-right:4px;
+}
+
+.subtitle{
+  text-align:center;
+  color:var(--muted);
+  margin-bottom:27px;
+  font-size:12px;
+  line-height:1.9;
+}
+
+.tabs{
+  display:flex;
+  gap:6px;
+  padding:5px;
+  margin-bottom:21px;
+  border-radius:17px;
+  background:#f1eef8;
+}
+
+.tab{
+  flex:1;
+  padding:11px;
+  border-radius:13px;
+  background:transparent;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:600;
+}
+
+.tab.active{
+  background:#fff;
+  color:var(--purple);
+  box-shadow:0 5px 18px rgba(70,50,120,.08);
+}
+
+.field{margin-bottom:15px}
+
+.field label{
+  display:block;
+  margin-bottom:7px;
+  font-size:11px;
+  color:#686274;
+  font-weight:600;
+}
+
+.field input,
+.search-row input{
+  width:100%;
+  padding:14px 15px;
+  border:1px solid var(--border);
+  border-radius:16px;
+  outline:none;
+  background:#faf9fd;
+  color:var(--text);
+  font-size:13px;
+}
+
+.field input:focus,
+.search-row input:focus{
+  background:#fff;
+  border-color:#a28be8;
+  box-shadow:0 0 0 4px rgba(117,87,217,.08);
+}
+
+.primary{
+  width:100%;
+  padding:14px;
+  border-radius:16px;
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
+  color:#fff;
+  font-size:13px;
+  font-weight:700;
+  box-shadow:0 12px 28px rgba(117,87,217,.25);
+}
+
+.secondary{
+  width:100%;
+  padding:13px;
+  border-radius:15px;
+  background:var(--light);
+  color:#694ab3;
+}
+
+.message{
+  margin-top:14px;
+  padding:11px 13px;
+  border-radius:13px;
+  background:var(--soft);
+  color:#684c88;
+  font-size:11px;
+  line-height:1.8;
+  display:none;
+}
+
+/* app */
+.app{
+  min-height:100vh;
+  padding-bottom:95px;
+}
+
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:100;
+  padding:15px 18px 13px;
+  background:rgba(247,245,255,.80);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(100,80,150,.06);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.brand{
+  font-size:23px;
+  font-weight:800;
+  letter-spacing:-1px;
+}
+
+.brand span{color:var(--purple)}
+
+.user-name{
+  margin-top:3px;
+  font-size:10px;
+  color:var(--muted);
+}
+
+.logout{
+  background:#fff;
+  color:#b14e59;
+  padding:8px 12px;
+  border-radius:12px;
+  font-size:10px;
+  border:1px solid rgba(190,80,95,.08);
+}
+
+.container{
+  width:min(calc(100% - 28px),760px);
+  margin:18px auto 100px;
+}
+
+.card{
+  background:rgba(255,255,255,.84);
+  backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,.95);
+  border-radius:27px;
+  padding:19px;
+  margin-bottom:15px;
+  box-shadow:var(--shadow);
+}
+
+.card-title{
+  font-size:16px;
+  font-weight:800;
+  margin-bottom:15px;
+}
+
+.card-subtitle{
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.8;
+}
+
+/* home */
+.home-hello{
+  padding:5px 2px 18px;
+}
+
+.home-hello h1{
+  font-size:25px;
+  font-weight:800;
+  margin-bottom:5px;
+}
+
+.home-hello p{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.home-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.home-menu{
+  min-height:145px;
+  padding:19px;
+  text-align:right;
+  border-radius:24px;
+  background:rgba(255,255,255,.88);
+  border:1px solid rgba(255,255,255,.95);
+  box-shadow:var(--shadow);
+  transition:.2s;
+  position:relative;
+}
+
+.home-menu:active{
+  transform:scale(.97);
+}
+
+.home-icon{
+  width:48px;
+  height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:17px;
+  background:var(--light);
+  font-size:23px;
+  margin-bottom:15px;
+}
+
+.home-menu h3{
+  font-size:14px;
+  margin-bottom:5px;
+}
+
+.home-menu p{
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.7;
+}
+
+/* notification badge */
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:18px;
+  height:18px;
+  padding:0 5px;
+  border-radius:20px;
+  background:var(--red);
+  color:#fff;
+  font-size:8px;
+  font-weight:800;
+  box-shadow:0 4px 10px rgba(220,92,105,.25);
+  vertical-align:middle;
+}
+
+.nav .badge{
+  position:absolute;
+  top:4px;
+  left:50%;
+  margin-left:6px;
+}
+
+.nav button{
+  position:relative;
+}
+
+.home-badge{
+  position:absolute;
+  top:13px;
+  left:13px;
+}
+
+/* calendar */
+.month-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
+}
+
+.month-head button{
+  width:40px;
+  height:40px;
+  border-radius:14px;
+  background:var(--light);
+  color:var(--purple);
+  font-size:23px;
+}
+
+.month-title{
+  font-size:15px;
+  font-weight:800;
+}
+
+.calendar-owner{
+  text-align:center;
+  color:var(--muted);
+  font-size:10px;
+  margin-top:-10px;
+  margin-bottom:14px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:7px;
+}
+
+.weekday{
+  text-align:center;
+  font-size:9px;
+  color:#aaa5b4;
+  padding:5px 0 8px;
+  font-weight:600;
+}
+
+.day{
+  min-height:57px;
+  border-radius:16px;
+  background:#f8f7fb;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  position:relative;
+  font-size:13px;
+  border:1px solid transparent;
+  transition:.18s;
+}
+
+.day.empty{background:transparent}
+.day.free{cursor:pointer}
+
+.day.free:active{
+  transform:scale(.93);
+  background:#f0ebff;
+}
+
+.day.booked{
+  background:var(--red-bg);
+  color:var(--red);
+  border-color:#ffdce1;
+}
+
+.day.wish{
+  background:#f2edff;
+  color:#7656bc;
+  border-color:#e0d4ff;
+}
+
+.day.today{
+  border-color:var(--purple);
+  box-shadow:0 0 0 2px rgba(117,87,217,.08);
+}
+
+.day strong{font-size:13px}
+
+.day small{
+  font-size:7px;
+  margin-top:3px;
+  opacity:.7;
+}
+
+.appointments{
+  margin-top:18px;
+  padding-top:17px;
+  border-top:1px solid var(--border);
+}
+
+.appointment{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px;
+  border-radius:17px;
+  background:#faf9fd;
+  border:1px solid var(--border);
+  margin-bottom:9px;
+}
+
+.appointment-date{
+  min-width:48px;
+  text-align:center;
+  padding:8px 5px;
+  border-radius:13px;
+  background:var(--light);
+  color:var(--purple);
+}
+
+.appointment-date strong{
+  display:block;
+  font-size:17px;
+}
+
+.appointment-date small{
+  font-size:8px;
+}
+
+.appointment-info{
+  flex:1;
+}
+
+.appointment-info strong{
+  display:block;
+  font-size:12px;
+  margin-bottom:4px;
+}
+
+.appointment-info span{
+  color:var(--muted);
+  font-size:10px;
+}
+
+/* friends */
+.search-row{
+  display:flex;
+  gap:8px;
+}
+
+.search-row input{flex:1;min-width:0}
+
+.search-row button{
+  padding:0 17px;
+  border-radius:15px;
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
+  color:#fff;
+  font-size:11px;
+  font-weight:600;
+}
+
+.friend-item,
+.request-item,
+.notification-item{
+  padding:14px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.72);
+  border-radius:19px;
+  margin-bottom:10px;
+}
+
+.row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.name{
+  font-size:13px;
+  font-weight:700;
+}
+
+.username{
+  color:#a19baa;
+  font-size:10px;
+  margin-top:4px;
+}
+
+.small-btn{
+  padding:8px 11px;
+  border-radius:11px;
+  font-size:10px;
+  font-weight:600;
+}
+
+.success-btn{
+  background:var(--green-bg);
+  color:#278159;
+}
+
+.danger-btn{
+  background:var(--red-bg);
+  color:#ad4551;
+}
+
+.purple-btn{
+  background:var(--light);
+  color:#6949ae;
+}
+
+/* notifications */
+.notification-item.unread{
+  border-color:#d9ccff;
+  background:#faf8ff;
+}
+
+.notification-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.notification-icon{
+  width:38px;
+  height:38px;
+  flex:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:13px;
+  background:var(--light);
+  font-size:17px;
+}
+
+.notification-content{
+  flex:1;
+}
+
+.notification-time{
+  color:#aaa5b4;
+  font-size:8px;
+  margin-top:4px;
+}
+
+.notification-body{
+  margin-top:7px;
+  color:#666;
+  font-size:11px;
+  line-height:1.9;
+}
+
+.notification-actions{
+  display:flex;
+  gap:7px;
+  margin-top:12px;
+}
+
+/* common */
+.date-info{
+  line-height:2;
+  font-size:12px;
+  color:#777181;
+}
+
+.empty{
+  text-align:center;
+  color:#aaa5b5;
+  padding:25px 10px;
+  font-size:12px;
+}
+
+/* bottom navigation */
+.nav{
+  position:fixed;
+  bottom:12px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:100;
+  width:min(calc(100% - 24px),520px);
+  padding:7px;
+  display:flex;
+  gap:5px;
+  background:rgba(255,255,255,.90);
+  backdrop-filter:blur(22px);
+  border:1px solid rgba(255,255,255,.95);
+  border-radius:24px;
+  box-shadow:0 15px 45px rgba(60,45,110,.18);
+}
+
+.nav button{
+  flex:1;
+  padding:10px 4px;
+  border-radius:17px;
+  background:transparent;
+  color:#aaa5b5;
+  font-size:9px;
+}
+
+.nav button.active{
+  background:var(--light);
+  color:var(--purple);
+  font-weight:700;
+}
+
+@media(max-width:430px){
+  .home-grid{gap:9px}
+  .home-menu{min-height:135px;padding:16px}
+  .day{min-height:51px}
+}
+
+@media(max-width:360px){
+  .container{width:calc(100% - 20px)}
+  .card{padding:16px}
+  .home-menu{min-height:125px}
+}
+</style>
+</head>
+
+<body>
+
+<div id="loading" class="loading">
+  <div class="loading-box">لطفاً صبر کن...</div>
+</div>
+
+<div id="root"></div>
+
+<script>
+
+/* =========================
+   SUPABASE
+========================= */
+
+const SUPABASE_URL =
+"https://cdjnziqrkmzqyfbqeuvk.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_-Zsn2pWcBLDOUJAeK2GlnA_Q_GBUmoU";
+
+let supabaseClient=null;
+
+let currentUser=null;
+let currentProfile=null;
+let currentPage="home";
+
+let calendarOwner=null;
+let calendarOwnerName="";
+let ownCalendar=true;
+
+let calendarYear=0;
+let calendarMonth=0;
+
+
+/* =========================
+   HELPERS
+========================= */
+
+const $=id=>document.getElementById(id);
+
+function showLoading(){
+  $("loading")?.classList.remove("hidden");
+}
+
+function hideLoading(){
+  $("loading")?.classList.add("hidden");
+}
+
+function escapeHtml(value){
+  return String(value??"")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function withTimeout(promise,ms=12000){
+  return Promise.race([
+    promise,
+    new Promise((_,reject)=>
+      setTimeout(
+        ()=>reject(
+          new Error("اتصال به سرور بیش از حد طول کشید.")
+        ),
+        ms
+      )
+    )
+  ]);
+}
+
+function showMessage(text){
+  const el=$("authMessage");
+  if(!el)return;
+  el.textContent=text;
+  el.style.display="block";
+}
+
+function hideMessage(){
+  const el=$("authMessage");
+  if(el)el.style.display="none";
+}
+
+
+/* =========================
+   REAL PERSIAN DATE
+   Uses browser Persian calendar
+========================= */
+
+const persianFormatter =
+  new Intl.DateTimeFormat(
+    "en-US-u-ca-persian",
+    {
+      year:"numeric",
+      month:"numeric",
+      day:"numeric"
+    }
+  );
+
+function getPersianParts(date){
+
+  const parts=persianFormatter.formatToParts(date);
+
+  const result={};
+
+  parts.forEach(p=>{
+    if(p.type==="year")
+      result.year=parseInt(p.value);
+
+    if(p.type==="month")
+      result.month=parseInt(p.value);
+
+    if(p.type==="day")
+      result.day=parseInt(p.value);
+  });
+
+  return result;
+}
+
+function localISO(date){
+
+  return [
+    date.getFullYear(),
+    String(date.getMonth()+1).padStart(2,"0"),
+    String(date.getDate()).padStart(2,"0")
+  ].join("-");
+}
+
+function todayPersian(){
+
+  return getPersianParts(new Date());
+
+}
+
+function getPersianMonthDays(year,month){
+
+  const result=[];
+
+  const approxGregorianYear=year+621;
+
+  const start=new Date(
+    approxGregorianYear,
+    1,
+    20
+  );
+
+  const end=new Date(
+    approxGregorianYear+1,
+    4,
+    1
+  );
+
+  for(
+    let d=new Date(start);
+    d<=end;
+    d.setDate(d.getDate()+1)
+  ){
+
+    const p=getPersianParts(d);
+
+    if(
+      p.year===year &&
+      p.month===month
+    ){
+
+      result.push({
+        day:p.day,
+        iso:localISO(d),
+        date:new Date(d)
+      });
+
+    }
+  }
+
+  return result;
+}
+
+function isoToPersian(iso){
+
+  const [y,m,d]=iso.split("-").map(Number);
+
+  return getPersianParts(
+    new Date(y,m-1,d)
+  );
+
+}
+
+function getMonthName(month){
+
+  return [
+    "فروردین",
+    "اردیبهشت",
+    "خرداد",
+    "تیر",
+    "مرداد",
+    "شهریور",
+    "مهر",
+    "آبان",
+    "آذر",
+    "دی",
+    "بهمن",
+    "اسفند"
+  ][month-1];
+
+}
+
+
+/* =========================
+   ERROR
+========================= */
+
+function showFatalError(error){
+
+  hideLoading();
+
+  $("root").innerHTML=`
+
+    <div class="error-box">
+
+      <h2>یه مشکلی پیش اومد</h2>
+
+      <p>
+        ${escapeHtml(
+          error?.message ||
+          String(error)
+        )}
+      </p>
+
+      <button
+        class="primary"
+        onclick="location.reload()">
+        تلاش دوباره
+      </button>
+
+    </div>
+
+  `;
+}
+
+window.addEventListener("error",e=>{
+  console.error(e.error||e.message);
+});
+
+window.addEventListener("unhandledrejection",e=>{
+  console.error(e.reason);
+});
+
+
+/* =========================
+   AUTH
+========================= */
+
+function renderAuth(mode="login"){
+
+  hideLoading();
+
+  $("root").innerHTML=`
+
+    <div class="auth-page">
+
+      <div class="auth-box">
+
+        <div class="logo">قرارمون</div>
+
+        <div class="subtitle">
+          یه جای ساده برای هماهنگ کردن قرار با آدمای خودت
+        </div>
+
+        <div class="tabs">
+
+          <button
+            class="tab ${mode==="login"?"active":""}"
+            onclick="renderAuth('login')">
+            ورود
+          </button>
+
+          <button
+            class="tab ${mode==="signup"?"active":""}"
+            onclick="renderAuth('signup')">
+            ثبت‌نام
+          </button>
+
+        </div>
+
+        ${
+          mode==="signup"
+          ?
+          `
+
+          <div class="field">
+            <label>اسم نمایشی</label>
+            <input
+              id="displayName"
+              placeholder="مثلاً محمد کیان">
+          </div>
+
+          <div class="field">
+            <label>نام کاربری</label>
+            <input
+              id="username"
+              placeholder="مثلاً kian">
+          </div>
+
+          <div class="field">
+            <label>رمز عبور</label>
+            <input
+              id="password"
+              type="password"
+              placeholder="رمز عبور">
+          </div>
+
+          <button
+            class="primary"
+            onclick="signup()">
+            ساخت حساب
+          </button>
+
+          `
+          :
+          `
+
+          <div class="field">
+            <label>نام کاربری</label>
+            <input
+              id="username"
+              placeholder="نام کاربری">
+          </div>
+
+          <div class="field">
+            <label>رمز عبور</label>
+            <input
+              id="password"
+              type="password"
+              placeholder="رمز عبور">
+          </div>
+
+          <button
+            class="primary"
+            onclick="login()">
+            ورود
+          </button>
+
+          `
+        }
+
+        <div
+          id="authMessage"
+          class="message">
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+}
+
+
+/* =========================
+   SIGNUP
+========================= */
+
+async function signup(){
+
+  hideMessage();
+
+  const displayName=$("displayName")?.value.trim();
+  const username=$("username")?.value.trim().toLowerCase();
+  const password=$("password")?.value;
+
+  if(!displayName||!username||!password){
+    showMessage("همه فیلدها رو کامل کن.");
+    return;
+  }
+
+  if(username.length<3){
+    showMessage("نام کاربری حداقل ۳ حرف باشه.");
+    return;
+  }
+
+  if(password.length<6){
+    showMessage("رمز عبور حداقل ۶ کاراکتر باشه.");
+    return;
+  }
+
+  showLoading();
+
+  try{
+
+    const fakeEmail=username+"@gharamoon.local";
+
+    const {data,error}=await withTimeout(
+      supabaseClient.auth.signUp({
+        email:fakeEmail,
+        password,
+        options:{
+          data:{
+            username,
+            display_name:displayName
+          }
+        }
+      })
+    );
+
+    if(error)throw error;
+
+    if(data.session&&data.user){
+
+      currentUser=data.user;
+
+      await loadProfile();
+
+      renderApp();
+
+      hideLoading();
+
+      return;
+    }
+
+    hideLoading();
+
+    renderAuth("login");
+
+    showMessage(
+      "ثبت‌نام انجام شد. حالا وارد حسابت شو."
+    );
+
+  }catch(error){
+
+    hideLoading();
+    renderAuth("signup");
+
+    showMessage(
+      error.message||"ثبت‌نام انجام نشد."
+    );
+  }
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+async function login(){
+
+  hideMessage();
+
+  const username=$("username")?.value.trim().toLowerCase();
+  const password=$("password")?.value;
+
+  if(!username||!password){
+    showMessage("نام کاربری و رمز عبور رو وارد کن.");
+    return;
+  }
+
+  showLoading();
+
+  try{
+
+    const {
+      data:emailData,
+      error:emailError
+    }=await withTimeout(
+      supabaseClient.rpc(
+        "get_login_email",
+        {p_username:username}
+      )
+    );
+
+    if(emailError)throw emailError;
+
+    if(!emailData)
+      throw new Error("نام کاربری پیدا نشد.");
+
+    const {data,error}=await withTimeout(
+      supabaseClient.auth.signInWithPassword({
+        email:emailData,
+        password
+      })
+    );
+
+    if(error)throw error;
+
+    currentUser=data.user;
+
+    await loadProfile();
+
+    renderApp();
+
+    hideLoading();
+
+  }catch(error){
+
+    hideLoading();
+    renderAuth("login");
+
+    showMessage(
+      error.message||"ورود انجام نشد."
+    );
+  }
+}
+
+
+/* =========================
+   PROFILE
+========================= */
+
+async function loadProfile(){
+
+  if(!currentUser)
+    throw new Error("کاربر وارد نشده است.");
+
+  const {data,error}=await withTimeout(
+    supabaseClient
+      .from("profiles")
+      .select("*")
+      .eq("id",currentUser.id)
+      .maybeSingle()
+  );
+
+  if(error)throw error;
+
+  if(!data)
+    throw new Error("پروفایل کاربر پیدا نشد.");
+
+  currentProfile=data;
+}
+
+
+/* =========================
+   APP / HOME
+========================= */
+
+function renderApp(){
+
+  $("root").innerHTML=`
+
+    <div class="app">
+
+      <header class="topbar">
+
+        <div>
+
+          <div class="brand">
+            <span>قرار</span>مون
+          </div>
+
+          <div class="user-name">
+            ${escapeHtml(currentProfile.display_name)}
+          </div>
+
+        </div>
+
+        <button
+          class="logout"
+          onclick="logout()">
+          خروج
+        </button>
+
+      </header>
+
+      <main
+        id="mainContent"
+        class="container">
+      </main>
+
+      <nav class="nav">
+
+        <button
+          id="navHome"
+          onclick="goPage('home')">
+          🏠<br>خانه
+        </button>
+
+        <button
+          id="navFriends"
+          onclick="goPage('friends')">
+          👥<br>دوستان
+        </button>
+
+        <button
+          id="navCalendar"
+          onclick="goPage('calendar')">
+          📅<br>تقویم
+        </button>
+
+        <button
+          id="navRequests"
+          onclick="goPage('requests')">
+          📩<br>درخواست‌ها
+          <span
+            id="requestBadge"
+            class="badge hidden">
+            0
+          </span>
+        </button>
+
+        <button
+          id="navNotifications"
+          onclick="goPage('notifications')">
+          🔔<br>اعلان‌ها
+          <span
+            id="notificationBadge"
+            class="badge hidden">
+            0
+          </span>
+        </button>
+
+      </nav>
+
+    </div>
+
+  `;
+
+  goPage("home");
+}
+
+async function logout(){
+
+  try{
+    await supabaseClient.auth.signOut();
+  }catch(e){
+    console.error(e);
+  }
+
+  currentUser=null;
+  currentProfile=null;
+
+  renderAuth("login");
+}
+
+
+/* =========================
+   BADGES
+========================= */
+
+async function updateBadges(){
+
+  if(!currentUser)return;
+
+  try{
+
+    const {
+      count:notificationCount
+    }=await supabaseClient
+      .from("notifications")
+      .select("*",{count:"exact",head:true})
+      .eq("user_id",currentUser.id)
+      .eq("is_read",false);
+
+
+    const {
+      count:hangoutCount
+    }=await supabaseClient
+      .from("hangout_requests")
+      .select("*",{count:"exact",head:true})
+      .eq("receiver_id",currentUser.id)
+      .eq("status","pending");
+
+
+    const {
+      count:friendCount
+    }=await supabaseClient
+      .from("friendships")
+      .select("*",{count:"exact",head:true})
+      .eq("receiver_id",currentUser.id)
+      .eq("status","pending");
+
+
+    const totalRequests=
+      (hangoutCount||0)+
+      (friendCount||0);
+
+
+    const notificationBadge=
+      $("notificationBadge");
+
+    if(notificationBadge){
+
+      if((notificationCount||0)>0){
+
+        notificationBadge.textContent=
+          notificationCount>99
+            ?"99+"
+            :notificationCount;
+
+        notificationBadge.classList.remove(
+          "hidden"
+        );
+
+      }else{
+
+        notificationBadge.classList.add(
+          "hidden"
+        );
+
+      }
+
+    }
+
+
+    const requestBadge=
+      $("requestBadge");
+
+    if(requestBadge){
+
+      if(totalRequests>0){
+
+        requestBadge.textContent=
+          totalRequests>99
+            ?"99+"
+            :totalRequests;
+
+        requestBadge.classList.remove(
+          "hidden"
+        );
+
+      }else{
+
+        requestBadge.classList.add(
+          "hidden"
+        );
+
+      }
+
+    }
+
+
+    const homeRequestBadge=
+      $("homeRequestBadge");
+
+    if(homeRequestBadge){
+
+      if(totalRequests>0){
+
+        homeRequestBadge.textContent=
+          totalRequests>99
+            ?"99+"
+            :totalRequests;
+
+        homeRequestBadge.classList.remove(
+          "hidden"
+        );
+
+      }else{
+
+        homeRequestBadge.classList.add(
+          "hidden"
+        );
+
+      }
+
+    }
+
+
+    const homeNotificationBadge=
+      $("homeNotificationBadge");
+
+    if(homeNotificationBadge){
+
+      if((notificationCount||0)>0){
+
+        homeNotificationBadge.textContent=
+          notificationCount>99
+            ?"99+"
+            :notificationCount;
+
+        homeNotificationBadge.classList.remove(
+          "hidden"
+        );
+
+      }else{
+
+        homeNotificationBadge.classList.add(
+          "hidden"
+        );
+
+      }
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "Badge error:",
+      error
+    );
+
+  }
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+async function goPage(page){
+
+  currentPage=page;
+
+  document
+    .querySelectorAll(".nav button")
+    .forEach(x=>
+      x.classList.remove("active")
+    );
+
+  const nav=$(
+    "nav"+
+    page.charAt(0).toUpperCase()+
+    page.slice(1)
+  );
+
+  if(nav)nav.classList.add("active");
+
+  if(page==="home")
+    await renderHome();
+
+  if(page==="friends")
+    await renderFriends();
+
+  if(page==="calendar")
+    await renderCalendarPage();
+
+  if(page==="requests")
+    await renderRequests();
+
+  if(page==="notifications")
+    await renderNotifications();
+
+  await updateBadges();
+}
+
+
+/* =========================
+   HOME
+========================= */
+
+async function renderHome(){
+
+  $("mainContent").innerHTML=`
+
+    <div class="home-hello">
+
+      <h1>
+        سلام ${escapeHtml(currentProfile.display_name)} 👋
+      </h1>
+
+      <p>
+        امروز برای چه قراری برنامه داری؟
+      </p>
+
+    </div>
+
+    <div class="home-grid">
+
+      <button
+        class="home-menu"
+        onclick="goPage('friends')">
+
+        <div class="home-icon">👥</div>
+
+        <h3>دوستان</h3>
+
+        <p>
+          دوست جدید پیدا کن و تقویم دوستانت رو ببین.
+        </p>
+
+      </button>
+
+      <button
+        class="home-menu"
+        onclick="goPage('calendar')">
+
+        <div class="home-icon">📅</div>
+
+        <h3>تقویم</h3>
+
+        <p>
+          روزهای آزاد و قرارهای ثبت‌شده‌ات.
+        </p>
+
+      </button>
+
+      <button
+        class="home-menu"
+        onclick="goPage('requests')">
+
+        <span
+          id="homeRequestBadge"
+          class="badge home-badge hidden">
+          0
+        </span>
+
+        <div class="home-icon">📩</div>
+
+        <h3>درخواست‌ها</h3>
+
+        <p>
+          درخواست‌های دوستی و قرار را مدیریت کن.
+        </p>
+
+      </button>
+
+      <button
+        class="home-menu"
+        onclick="goPage('notifications')">
+
+        <span
+          id="homeNotificationBadge"
+          class="badge home-badge hidden">
+          0
+        </span>
+
+        <div class="home-icon">🔔</div>
+
+        <h3>اعلان‌ها</h3>
+
+        <p>
+          ببین چه اتفاقی برای درخواست‌ها افتاده.
+        </p>
+
+      </button>
+
+    </div>
+
+  `;
+
+  await updateBadges();
+}
+
+
+/* =========================
+   CALENDAR PAGE
+========================= */
+
+async function renderCalendarPage(){
+
+  if(!calendarOwner){
+    ownCalendar=true;
+    calendarOwner=currentUser.id;
+  }
+
+  const today=todayPersian();
+
+  if(!calendarYear){
+    calendarYear=today.year;
+    calendarMonth=today.month;
+  }
+
+  $("mainContent").innerHTML=`
+
+    <div class="card">
+
+      <div class="month-head">
+
+        <button onclick="changeMonth(-1)">
+          ‹
+        </button>
+
+        <div
+          class="month-title"
+          id="monthTitle">
+        </div>
+
+        <button onclick="changeMonth(1)">
+          ›
+        </button>
+
+      </div>
+
+      <div
+        id="calendarOwnerText"
+        class="calendar-owner">
+      </div>
+
+      <div
+        id="calendarGrid"
+        class="grid">
+      </div>
+
+      <div
+        id="appointments"
+        class="appointments">
+      </div>
+
+    </div>
+
+    <div
+      id="datePanel"
+      class="card hidden">
+    </div>
+
+  `;
+
+  await renderCalendar();
+}
+
+async function changeMonth(direction){
+
+  calendarMonth+=direction;
+
+  if(calendarMonth>12){
+    calendarMonth=1;
+    calendarYear++;
+  }
+
+  if(calendarMonth<1){
+    calendarMonth=12;
+    calendarYear--;
+  }
+
+  await renderCalendar();
+}
+
+
+/* =========================
+   LOAD CALENDAR DATA
+========================= */
+
+async function renderCalendar(){
+
+  const title=$("monthTitle");
+  const grid=$("calendarGrid");
+  const appointments=$("appointments");
+  const ownerText=$("calendarOwnerText");
+
+  if(!title||!grid)return;
+
+  title.textContent=
+    `${getMonthName(calendarMonth)} ${calendarYear}`;
+
+  ownerText.textContent=
+    ownCalendar
+      ?"تقویم من"
+      :`تقویم ${calendarOwnerName}`;
+
+  grid.innerHTML=`
+
+    <div class="weekday">ش</div>
+    <div class="weekday">ی</div>
+    <div class="weekday">د</div>
+    <div class="weekday">س</div>
+    <div class="weekday">چ</div>
+    <div class="weekday">پ</div>
+    <div class="weekday">ج</div>
+
+  `;
+
+  const days=getPersianMonthDays(
+    calendarYear,
+    calendarMonth
+  );
+
+  if(!days.length){
+
+    grid.innerHTML+=`
+      <div
+        class="empty"
+        style="grid-column:1/-1">
+        تقویم این ماه پیدا نشد.
+      </div>
+    `;
+
+    return;
+  }
+
+  const firstDate=days[0].date;
+
+  const firstIndex=
+    (firstDate.getDay()+1)%7;
+
+  for(
+    let i=0;
+    i<firstIndex;
+    i++
+  ){
+
+    const empty=document.createElement("div");
+
+    empty.className="day empty";
+
+    grid.appendChild(empty);
+  }
+
+  let calendarData={};
+
+  try{
+
+    const start=days[0].iso;
+    const end=days[days.length-1].iso;
+
+    if(!ownCalendar){
+
+      const {data,error}=await withTimeout(
+        supabaseClient.rpc(
+          "get_friend_calendar",
+          {
+            p_friend_id:calendarOwner,
+            p_start_date:start,
+            p_end_date:end
+          }
+        )
+      );
+
+      if(error)throw error;
+
+      (data||[]).forEach(item=>{
+        calendarData[item.date]=item;
+      });
+
+    }else{
+
+      const {data,error}=await withTimeout(
+        supabaseClient
+          .from("bookings")
+          .select("date,partner_id")
+          .eq("user_id",currentUser.id)
+          .gte("date",start)
+          .lte("date",end)
+      );
+
+      if(error)throw error;
+
+      (data||[]).forEach(item=>{
+        calendarData[item.date]={
+          is_booked:true,
+          partner_id:item.partner_id
+        };
+      });
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    grid.innerHTML+=`
+      <div
+        class="empty"
+        style="grid-column:1/-1">
+        دریافت تقویم انجام نشد.
+      </div>
+    `;
+
+    return;
+  }
+
+  const today=todayPersian();
+
+  for(const item of days){
+
+    const info=calendarData[item.iso];
+
+    const el=document.createElement("div");
+
+    el.className="day";
+
+    if(
+      today.year===calendarYear &&
+      today.month===calendarMonth &&
+      today.day===item.day
+    ){
+      el.classList.add("today");
+    }
+
+    if(info?.is_booked)
+      el.classList.add("booked");
+    else
+      el.classList.add("free");
+
+    if(info?.is_wish)
+      el.classList.add("wish");
+
+    el.innerHTML=`
+
+      <strong>
+        ${item.day}
+      </strong>
+
+      ${
+        info?.is_booked
+        ?
+        `<small>قرار</small>`
+        :
+        info?.is_wish
+        ?
+        `<small>درخواست</small>`
+        :
+        `<small>آزاد</small>`
+      }
+
+    `;
+
+    el.onclick=()=>openDate(
+      item.iso,
+      item.day,
+      info
+    );
+
+    grid.appendChild(el);
+  }
+
+  await renderAppointments(
+    calendarData,
+    days
+  );
+}
+
+
+/* =========================
+   APPOINTMENTS UNDER CALENDAR
+========================= */
+
+async function renderAppointments(
+  calendarData,
+  days
+){
+
+  const box=$("appointments");
+
+  if(!box)return;
+
+  const booked=days
+    .filter(x=>calendarData[x.iso]?.is_booked)
+    .map(x=>({
+      ...x,
+      info:calendarData[x.iso]
+    }));
+
+  if(!booked.length){
+
+    box.innerHTML=`
+
+      <div class="card-title">
+        قرارهای این ماه
+      </div>
+
+      <div class="empty">
+        برای این ماه قراری ثبت نشده.
+      </div>
+
+    `;
+
+    return;
+  }
+
+  const ids=[
+    ...new Set(
+      booked
+        .map(x=>x.info.partner_id)
+        .filter(Boolean)
+    )
+  ];
+
+  let profiles=[];
+
+  if(ids.length){
+
+    const {data}=await supabaseClient
+      .from("profiles")
+      .select("id,display_name,username")
+      .in("id",ids);
+
+    profiles=data||[];
+  }
+
+  const map={};
+
+  profiles.forEach(p=>{
+    map[p.id]=p;
+  });
+
+  box.innerHTML=`
+
+    <div class="card-title">
+      قرارهای این ماه
+    </div>
+
+    ${
+      booked.map(item=>{
+
+        const person=
+          map[item.info.partner_id];
+
+        const name=
+          person?.display_name ||
+          "یک کاربر";
+
+        return `
+
+          <div class="appointment">
+
+            <div class="appointment-date">
+
+              <strong>
+                ${item.day}
+              </strong>
+
+              <small>
+                ${getMonthName(calendarMonth)}
+              </small>
+
+            </div>
+
+            <div class="appointment-info">
+
+              <strong>
+                با ${escapeHtml(name)} قرار داری
+              </strong>
+
+              <span>
+                ${
+                  person?.username
+                  ?"@"+escapeHtml(person.username)
+                  :"قرار ثبت‌شده"
+                }
+              </span>
+
+            </div>
+
+          </div>
+
+        `;
+
+      }).join("")
+    }
+
+  `;
+}
+
+
+/* =========================
+   DATE DETAIL
+========================= */
+
+function openDate(
+  iso,
+  day,
+  info
+){
+
+  const panel=$("datePanel");
+
+  if(!panel)return;
+
+  panel.classList.remove("hidden");
+
+  const j=isoToPersian(iso);
+
+  let html=`
+
+    <div class="card-title">
+      ${j.day} ${getMonthName(j.month)} ${j.year}
+    </div>
+
+  `;
+
+  if(info?.is_booked){
+
+    html+=`
+
+      <div class="date-info">
+        این تاریخ برای یک قرار ثبت شده است.
+      </div>
+
+    `;
+
+  }else if(ownCalendar){
+
+    html+=`
+
+      <div class="date-info">
+
+        این روز آزاده.
+        <br>
+        اگر دوست داری اعلام کنی که این روز
+        دنبال هم‌قرار می‌گردی:
+
+      </div>
+
+      <br>
+
+      <button
+        class="primary"
+        onclick="createWish('${iso}')">
+
+        می‌خوام این روز برم بیرون
+
+      </button>
+
+    `;
+
+  }else{
+
+    html+=`
+
+      <div class="date-info">
+
+        این تاریخ در تقویم دوستت آزاد است.
+
+        <br>
+
+        می‌تونی برای این روز درخواست قرار بفرستی.
+
+      </div>
+
+      <br>
+
+      <button
+        class="primary"
+        onclick="sendHangoutRequest('${iso}')">
+
+        درخواست قرار برای این تاریخ
+
+      </button>
+
+    `;
+
+  }
+
+  panel.innerHTML=html;
+
+  panel.scrollIntoView({
+    behavior:"smooth",
+    block:"nearest"
+  });
+}
+
+
+/* =========================
+   SEND HANGOUT
+========================= */
+
+async function sendHangoutRequest(iso){
+
+  if(!calendarOwner)return;
+
+  if(!confirm(
+    "برای این تاریخ درخواست قرار ارسال شود؟"
+  ))return;
+
+  showLoading();
+
+  try{
+
+    const {error}=await withTimeout(
+      supabaseClient.rpc(
+        "create_hangout_request",
+        {
+          p_receiver_id:calendarOwner,
+          p_hangout_date:iso
+        }
+      )
+    );
+
+    if(error)throw error;
+
+    hideLoading();
+
+    alert("درخواست قرار ارسال شد.");
+
+  }catch(error){
+
+    hideLoading();
+
+    alert(
+      error.message||
+      "ارسال درخواست انجام نشد."
+    );
+  }
+}
+
+
+/* =========================
+   FRIENDS
+========================= */
+
+async function renderFriends(){
+
+  $("mainContent").innerHTML=`
+
+    <div class="card">
+
+      <div class="card-title">
+        پیدا کردن دوست
+      </div>
+
+      <div class="card-subtitle">
+        نام کاربری دوستت رو وارد کن.
+      </div>
+
+      <br>
+
+      <div class="search-row">
+
+        <input
+          id="friendSearch"
+          placeholder="مثلاً kian">
+
+        <button onclick="searchFriend()">
+          جستجو
+        </button>
+
+      </div>
+
+      <div id="friendSearchResult"></div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-title">
+        دوستان من
+      </div>
+
+      <div id="friendsList">
+        در حال دریافت...
+      </div>
+
+    </div>
+
+  `;
+
+  await loadFriends();
+}
+
+async function searchFriend(){
+
+  const username=$("friendSearch")
+    .value.trim()
+    .toLowerCase();
+
+  if(!username)return;
+
+  const box=$("friendSearchResult");
+
+  box.innerHTML=
+    `<div class="empty">در حال جستجو...</div>`;
+
+  const {data,error}=await supabaseClient
+    .from("profiles")
+    .select("id,display_name,username")
+    .eq("username",username)
+    .maybeSingle();
+
+  if(error){
+
+    box.innerHTML=
+      `<div class="empty">${escapeHtml(error.message)}</div>`;
+
+    return;
+  }
+
+  if(!data){
+
+    box.innerHTML=
+      `<div class="empty">کاربری پیدا نشد.</div>`;
+
+    return;
+  }
+
+  if(data.id===currentUser.id){
+
+    box.innerHTML=
+      `<div class="empty">این خودتی 😄</div>`;
+
+    return;
+  }
+
+  const {data:existing}=await supabaseClient
+    .from("friendships")
+    .select("*")
+    .or(
+      `and(requester_id.eq.${currentUser.id},receiver_id.eq.${data.id}),and(requester_id.eq.${data.id},receiver_id.eq.${currentUser.id})`
+    )
+    .maybeSingle();
+
+  let action="";
+
+  if(!existing){
+
+    action=`
+      <button
+        class="small-btn purple-btn"
+        onclick="sendFriendRequest('${data.id}')">
+        افزودن
+      </button>
+    `;
+
+  }else if(existing.status==="accepted"){
+
+    action=`
+      <span class="username">
+        دوست شماست
+      </span>
+    `;
+
+  }else if(existing.requester_id===currentUser.id){
+
+    action=`
+      <span class="username">
+        درخواست ارسال شده
+      </span>
+    `;
+
+  }else{
+
+    action=`
+
+      <button
+        class="small-btn success-btn"
+        onclick="acceptFriend('${data.id}')">
+        قبول
+      </button>
+
+      <button
+        class="small-btn danger-btn"
+        onclick="rejectFriend('${data.id}')">
+        رد
+      </button>
+
+    `;
+  }
+
+  box.innerHTML=`
+
+    <div class="friend-item">
+
+      <div class="row">
+
+        <div>
+
+          <div class="name">
+            ${escapeHtml(data.display_name)}
+          </div>
+
+          <div class="username">
+            @${escapeHtml(data.username)}
+          </div>
+
+        </div>
+
+        <div>
+          ${action}
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+}
+
+async function sendFriendRequest(receiverId){
+
+  const {error}=await supabaseClient
+    .from("friendships")
+    .insert({
+      requester_id:currentUser.id,
+      receiver_id:receiverId,
+      status:"pending"
+    });
+
+  if(error){
+
+    alert(
+      error.message||
+      "ارسال درخواست انجام نشد."
+    );
+
+    return;
+  }
+
+  alert("درخواست دوستی ارسال شد.");
+
+  await renderFriends();
+}
+
+async function loadFriends(){
+
+  const box=$("friendsList");
+
+  const {data,error}=await supabaseClient
+    .from("friendships")
+    .select("*")
+    .eq("status","accepted")
+    .or(
+      `requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`
+    );
+
+  if(error){
+
+    box.innerHTML=
+      `<div class="empty">${escapeHtml(error.message)}</div>`;
+
+    return;
+  }
+
+  if(!data?.length){
+
+    box.innerHTML=
+      `<div class="empty">
+        هنوز دوستی نداری.
+      </div>`;
+
+    return;
+  }
+
+  const ids=data.map(f=>
+    f.requester_id===currentUser.id
+      ?f.receiver_id
+      :f.requester_id
+  );
+
+  const {data:profiles}=await supabaseClient
+    .from("profiles")
+    .select("id,display_name,username")
+    .in("id",ids);
+
+  box.innerHTML=(profiles||[]).map(p=>`
+
+    <div class="friend-item">
+
+      <div class="row">
+
+        <div>
+
+          <div class="name">
+            ${escapeHtml(p.display_name)}
+          </div>
+
+          <div class="username">
+            @${escapeHtml(p.username)}
+          </div>
+
+        </div>
+
+        <button
+          class="small-btn purple-btn"
+          onclick="openFriendCalendar(
+            '${p.id}',
+            '${escapeHtml(p.display_name)}'
+          )">
+
+          تقویم
+
+        </button>
+
+      </div>
+
+    </div>
+
+  `).join("");
+}
+
+
+/* =========================
+   FRIEND ACCEPT / REJECT
+========================= */
+
+async function acceptFriend(actorId){
+
+  const {error}=await supabaseClient
+    .from("friendships")
+    .update({status:"accepted"})
+    .eq("requester_id",actorId)
+    .eq("receiver_id",currentUser.id);
+
+  if(error){
+
+    alert(error.message);
+    return;
+  }
+
+  alert("دوستی قبول شد.");
+
+  await renderFriends();
+}
+
+async function rejectFriend(actorId){
+
+  const {error}=await supabaseClient
+    .from("friendships")
+    .delete()
+    .eq("requester_id",actorId)
+    .eq("receiver_id",currentUser.id);
+
+  if(error){
+
+    alert(error.message);
+    return;
+  }
+
+  alert("درخواست رد شد.");
+
+  await renderFriends();
+}
+
+
+/* =========================
+   FRIEND CALENDAR
+========================= */
+
+async function openFriendCalendar(
+  friendId,
+  friendName
+){
+
+  calendarOwner=friendId;
+  calendarOwnerName=friendName;
+  ownCalendar=false;
+
+  const t=todayPersian();
+
+  calendarYear=t.year;
+  calendarMonth=t.month;
+
+  await goPage("calendar");
+}
+
+
+/* =========================
+   MY CALENDAR
+========================= */
+
+function openMyCalendar(){
+
+  ownCalendar=true;
+  calendarOwner=currentUser.id;
+
+  const t=todayPersian();
+
+  calendarYear=t.year;
+  calendarMonth=t.month;
+
+  renderCalendarPage();
+}
+
+
+/* =========================
+   WISH
+========================= */
+
+async function createWish(iso){
+
+  if(!confirm(
+    "می‌خوای برای این تاریخ اعلام کنی که دنبال هم‌قرار می‌گردی؟"
+  ))return;
+
+  showLoading();
+
+  try{
+
+    const {error}=await withTimeout(
+      supabaseClient
+        .from("outing_wishes")
+        .insert({
+          user_id:currentUser.id,
+          date:iso
+        })
+    );
+
+    if(error)throw error;
+
+    hideLoading();
+
+    alert(
+      "اعلامت ثبت شد و برای دوست‌های پذیرفته‌شده‌ات اطلاع‌رسانی می‌شود."
+    );
+
+    await renderCalendar();
+
+  }catch(error){
+
+    hideLoading();
+
+    alert(
+      error.message||
+      "ثبت نشد."
+    );
+  }
+}
+
+
+/* =========================
+   REQUESTS
+========================= */
+
+async function renderRequests(){
+
+  $("mainContent").innerHTML=`
+
+    <div class="card">
+
+      <div class="card-title">
+        درخواست‌ها
+      </div>
+
+      <div class="card-subtitle">
+        درخواست‌های قرار و دوستی اینجا نمایش داده می‌شوند.
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-title">
+        درخواست‌های قرار
+      </div>
+
+      <div id="requestsList">
+        در حال دریافت...
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-title">
+        درخواست‌های دوستی
+      </div>
+
+      <div id="friendRequestsList">
+        در حال دریافت...
+      </div>
+
+    </div>
+
+  `;
+
+  await loadHangoutRequests();
+  await loadFriendRequests();
+}
+
+
+/* =========================
+   HANGOUT REQUESTS
+========================= */
+
+async function loadHangoutRequests(){
+
+  const box=$("requestsList");
+
+  const {data,error}=await supabaseClient
+    .from("hangout_requests")
+    .select("*")
+    .eq("receiver_id",currentUser.id)
+    .eq("status","pending")
+    .order("created_at",{ascending:false});
+
+  if(error){
+
+    box.innerHTML=
+      `<div class="empty">${escapeHtml(error.message)}</div>`;
+
+    return;
+  }
+
+  if(!data?.length){
+
+    box.innerHTML=
+      `<div class="empty">
+        درخواست قرار جدیدی نداری.
+      </div>`;
+
+    return;
+  }
+
+  const ids=data.map(x=>x.requester_id);
+
+  const {data:profiles}=await supabaseClient
+    .from("profiles")
+    .select("id,display_name,username")
+    .in("id",ids);
+
+  const map={};
+
+  (profiles||[]).forEach(p=>map[p.id]=p);
+
+  box.innerHTML=data.map(r=>{
+
+    const p=map[r.requester_id];
+    const j=isoToPersian(r.date);
+
+    return `
+
+      <div class="request-item">
+
+        <div class="name">
+          ${escapeHtml(p?.display_name||"کاربر")}
+        </div>
+
+        <div class="username">
+          @${escapeHtml(p?.username||"")}
+        </div>
+
+        <div class="date-info">
+
+          ${j.day}
+          ${getMonthName(j.month)}
+          ${j.year}
+
+          <br>
+
+          درخواست قرار برای این تاریخ
+
+        </div>
+
+        <div class="notification-actions">
+
+          <button
+            class="small-btn success-btn"
+            onclick="respondHangout(
+              '${r.id}',
+              true
+            )">
+            قبول
+          </button>
+
+          <button
+            class="small-btn danger-btn"
+            onclick="respondHangout(
+              '${r.id}',
+              false
+            )">
+            رد
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+  }).join("");
+}
+
+
+/* =========================
+   FRIEND REQUESTS
+========================= */
+
+async function loadFriendRequests(){
+
+  const box=$("friendRequestsList");
+
+  const {data,error}=await supabaseClient
+    .from("friendships")
+    .select("*")
+    .eq("receiver_id",currentUser.id)
+    .eq("status","pending");
+
+  if(error){
+
+    box.innerHTML=
+      `<div class="empty">${escapeHtml(error.message)}</div>`;
+
+    return;
+  }
+
+  if(!data?.length){
+
+    box.innerHTML=
+      `<div class="empty">
+        درخواست دوستی جدیدی نداری.
+      </div>`;
+
+    return;
+  }
+
+  const ids=data.map(x=>x.requester_id);
+
+  const {data:profiles}=await supabaseClient
+    .from("profiles")
+    .select("id,display_name,username")
+    .in("id",ids);
+
+  const map={};
+
+  (profiles||[]).forEach(p=>map[p.id]=p);
+
+  box.innerHTML=data.map(r=>{
+
+    const p=map[r.requester_id];
+
+    return `
+
+      <div class="request-item">
+
+        <div class="name">
+          ${escapeHtml(p?.display_name||"کاربر")}
+        </div>
+
+        <div class="username">
+          @${escapeHtml(p?.username||"")}
+        </div>
+
+        <div class="date-info">
+          برایت درخواست دوستی فرستاده.
+        </div>
+
+        <div class="notification-actions">
+
+          <button
+            class="small-btn success-btn"
+            onclick="acceptFriend('${r.requester_id}')">
+            قبول
+          </button>
+
+          <button
+            class="small-btn danger-btn"
+            onclick="rejectFriend('${r.requester_id}')">
+            رد
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+  }).join("");
+}
+
+
+/* =========================
+   RESPOND HANGOUT
+========================= */
+
+async function respondHangout(
+  requestId,
+  accept
+){
+
+  showLoading();
+
+  try{
+
+    const {error}=await withTimeout(
+      supabaseClient.rpc(
+        "respond_to_hangout",
+        {
+          request_id:requestId,
+          accept_request:accept
+        }
+      )
+    );
+
+    if(error)throw error;
+
+    hideLoading();
+
+    alert(
+      accept
+        ?"قرار قبول شد ❤️"
+        :"درخواست رد شد."
+    );
+
+    await renderRequests();
+
+  }catch(error){
+
+    hideLoading();
+
+    alert(
+      error.message||
+      "عملیات انجام نشد."
+    );
+  }
+}
+
+
+/* =========================
+   NOTIFICATIONS
+========================= */
+
+function notificationIcon(type){
+
+  if(type==="friend_request")
+    return "👥";
+
+  if(type==="hangout_request")
+    return "📅";
+
+  if(type==="hangout_accepted")
+    return "💜";
+
+  if(type==="hangout_rejected")
+    return "❌";
+
+  if(type==="outing_wish")
+    return "✨";
+
+  return "🔔";
+}
+
+function formatNotificationTime(date){
+
+  if(!date)return "";
+
+  const d=new Date(date);
+
+  const diff=
+    Math.floor(
+      (Date.now()-d.getTime())/60000
+    );
+
+  if(diff<1)return "همین الان";
+  if(diff<60)return `${diff} دقیقه پیش`;
+
+  const hours=Math.floor(diff/60);
+
+  if(hours<24)return `${hours} ساعت پیش`;
+
+  const days=Math.floor(hours/24);
+
+  if(days<7)return `${days} روز پیش`;
+
+  return d.toLocaleDateString("fa-IR");
+}
+
+async function renderNotifications(){
+
+  $("mainContent").innerHTML=`
+
+    <div class="card">
+
+      <div class="card-title">
+        اعلان‌ها 🔔
+      </div>
+
+      <div class="card-subtitle">
+        اتفاقات مربوط به دوستی‌ها و قرارها اینجا ثبت می‌شوند.
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div id="notificationsList">
+        در حال دریافت...
+      </div>
+
+    </div>
+
+  `;
+
+  const {data,error}=await supabaseClient
+    .from("notifications")
+    .select("*")
+    .eq("user_id",currentUser.id)
+    .order("created_at",{ascending:false})
+    .limit(50);
+
+  if(error){
+
+    $("notificationsList").innerHTML=
+      `<div class="empty">${escapeHtml(error.message)}</div>`;
+
+    return;
+  }
+
+  if(!data?.length){
+
+    $("notificationsList").innerHTML=
+      `<div class="empty">
+        هنوز اعلانی نداری.
+      </div>`;
+
+    return;
+  }
+
+  $("notificationsList").innerHTML=
+    data.map(n=>`
+
+      <div
+        class="notification-item ${
+          n.is_read?"":"unread"
+        }">
+
+        <div class="notification-top">
+
+          <div class="notification-icon">
+            ${notificationIcon(n.type)}
+          </div>
+
+          <div class="notification-content">
+
+            <div class="name">
+              ${escapeHtml(n.title||"اعلان")}
+            </div>
+
+            <div class="notification-time">
+              ${formatNotificationTime(n.created_at)}
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="notification-body">
+          ${escapeHtml(n.body||"")}
+        </div>
+
+        ${notificationActions(n)}
+
+      </div>
+
+    `).join("");
+
+  await markNotificationsRead();
+
+  await updateBadges();
+}
+
+function notificationActions(n){
+
+  if(
+    n.type==="hangout_request" &&
+    n.related_request_id
+  ){
+
+    return `
+
+      <div class="notification-actions">
+
+        <button
+          class="small-btn success-btn"
+          onclick="respondHangout(
+            '${n.related_request_id}',
+            true
+          )">
+          قبول
+        </button>
+
+        <button
+          class="small-btn danger-btn"
+          onclick="respondHangout(
+            '${n.related_request_id}',
+            false
+          )">
+          رد
+        </button>
+
+      </div>
+
+    `;
+  }
+
+  if(
+    n.type==="outing_wish" &&
+    n.actor_id &&
+    n.date
+  ){
+
+    return `
+
+      <div class="notification-actions">
+
+        <button
+          class="small-btn success-btn"
+          onclick="respondWish(
+            '${n.actor_id}',
+            '${n.date}',
+            true
+          )">
+          می‌خوام باهاش برم
+        </button>
+
+        <button
+          class="small-btn danger-btn"
+          onclick="respondWish(
+            '${n.actor_id}',
+            '${n.date}',
+            false
+          )">
+          نه
+        </button>
+
+      </div>
+
+    `;
+  }
+
+  if(
+    n.type==="friend_request" &&
+    n.actor_id
+  ){
+
+    return `
+
+      <div class="notification-actions">
+
+        <button
+          class="small-btn success-btn"
+          onclick="acceptFriend(
+            '${n.actor_id}'
+          )">
+          قبول دوستی
+        </button>
+
+        <button
+          class="small-btn danger-btn"
+          onclick="rejectFriend(
+            '${n.actor_id}'
+          )">
+          رد
+        </button>
+
+      </div>
+
+    `;
+  }
+
+  return "";
+}
+
+async function markNotificationsRead(){
+
+  await supabaseClient
+    .from("notifications")
+    .update({is_read:true})
+    .eq("user_id",currentUser.id)
+    .eq("is_read",false);
+}
+
+
+/* =========================
+   RESPOND WISH
+========================= */
+
+async function respondWish(
+  ownerId,
+  wishDate,
+  accept
+){
+
+  showLoading();
+
+  try{
+
+    const {error}=await withTimeout(
+      supabaseClient.rpc(
+        "respond_to_outing_wish",
+        {
+          owner_id:ownerId,
+          wish_date:wishDate,
+          accept_request:accept
+        }
+      )
+    );
+
+    if(error)throw error;
+
+    hideLoading();
+
+    alert(
+      accept
+        ?"قرار ثبت شد ❤️"
+        :"درخواست رد شد."
+    );
+
+    await renderNotifications();
+
+  }catch(error){
+
+    hideLoading();
+
+    alert(
+      error.message||
+      "عملیات انجام نشد."
+    );
+  }
+}
+
+
+/* =========================
+   START
+========================= */
+
+async function start(){
+
+  showLoading();
+
+  try{
+
+    if(!window.supabase){
+
+      throw new Error(
+        "کتابخانه Supabase بارگذاری نشده. اینترنت را بررسی کن."
+      );
+
+    }
+
+    supabaseClient=
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+    const {data,error}=await withTimeout(
+      supabaseClient.auth.getSession()
+    );
+
+    if(error)throw error;
+
+    if(data?.session?.user){
+
+      currentUser=data.session.user;
+
+      await loadProfile();
+
+      renderApp();
+
+    }else{
+
+      renderAuth("login");
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    showFatalError(error);
+
+  }finally{
+
+    hideLoading();
+
+  }
+}
+
+start();
+
+</script>
+
+</body>
+</html>
