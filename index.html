@@ -2540,22 +2540,24 @@ async function createWish(iso){
 
   if(!confirm(
     "می‌خوای برای این تاریخ اعلام کنی که دنبال هم‌قرار می‌گردی؟"
-  ))return;
+  )) return;
 
   showLoading();
 
   try{
 
-    const {error}=await withTimeout(
-      supabaseClient
-        .from("outing_wishes")
-        .insert({
-          user_id:currentUser.id,
-          date:iso
-        })
+    const {
+      error
+    } = await withTimeout(
+      supabaseClient.rpc(
+        "set_outing_wish",
+        {
+          p_date: iso
+        }
+      )
     );
 
-    if(error)throw error;
+    if(error) throw error;
 
     hideLoading();
 
@@ -2570,11 +2572,8 @@ async function createWish(iso){
     hideLoading();
 
     alert(
-      error.message||
+      error.message ||
       "ثبت نشد."
-    );
-  }
-}
 
 
 /* =========================
