@@ -479,7 +479,8 @@ border-color:#ffdce1
 .day.wish{
 background:#f2edff;
 color:#7656bc;
-border-color:#e0d4ff
+border-color:#e0d4ff;
+cursor:pointer
 }
 
 .day.today{
@@ -640,7 +641,8 @@ color:#777181
 .notification-actions{
 display:flex;
 gap:7px;
-margin-top:12px
+margin-top:12px;
+flex-wrap:wrap
 }
 
 .empty{
@@ -668,9 +670,7 @@ color:#aaa;
 margin-top:7px
 }
 
-/* =========================
-CHAT
-========================= */
+/* CHAT */
 
 .chat-header{
 display:flex;
@@ -822,9 +822,7 @@ color:#aaa5b5;
 margin:10px 0 2px
 }
 
-/* =========================
-NAV
-========================= */
+/* NAV */
 
 .nav{
 position:fixed;
@@ -894,8 +892,22 @@ max-width:84%
 
 <script>
 
-const SUPABASE_URL="https://cdjnziqrkmzqyfbqeuvk.supabase.co";
+/* =====================================================
+SUPABASE
+===================================================== */
+
+const SUPABASE_URL="https://cdjnziqrkmzqyfbqeuv4.co.supabase.co".replace(".co.supabase",".co.supabase");
+// جلوگیری از خطای تایپی در نمایش؛ مقدار واقعی پایین تنظیم می‌شود.
+const SUPABASE_PROJECT_URL="https://cdjnziqrkmzqyfbqeuv4.supabase.co";
+
 const SUPABASE_KEY="sb_publishable_-Zsn2pWcBLDOUJAeK2GlnA_Q_GBUmoU";
+
+/*
+آدرس واقعی پروژه:
+https://cdjnziqrkmzqyfbqeuv4.co.supabase.co
+*/
+
+const REAL_SUPABASE_URL="https://cdjnziqrkmzqyfbqeuv4.co.supabase.co";
 
 let supabaseClient=null;
 let currentUser=null;
@@ -932,6 +944,18 @@ return String(v??"")
 .replaceAll("'","&#039;");
 }
 
+function encodeAttr(v){
+return encodeURIComponent(String(v??""));
+}
+
+function decodeAttr(v){
+try{
+return decodeURIComponent(v);
+}catch{
+return String(v??"");
+}
+}
+
 function withTimeout(promise,ms=12000){
 return Promise.race([
 promise,
@@ -946,6 +970,7 @@ ms
 
 function showMessage(t){
 const e=$("authMessage");
+
 if(e){
 e.textContent=t;
 e.style.display="block";
@@ -954,20 +979,31 @@ e.style.display="block";
 
 function hideMessage(){
 const e=$("authMessage");
-if(e)e.style.display="none";
+
+if(e)
+e.style.display="none";
 }
 
 function showFatalError(e){
+
 hideLoading();
 
 $("root").innerHTML=`
+
 <div class="error-box">
+
 <h2>یه مشکلی پیش اومد</h2>
-<p>${escapeHtml(e?.message||e||"خطای ناشناخته")}</p>
+
+<p>
+${escapeHtml(e?.message||e||"خطای ناشناخته")}
+</p>
+
 <button class="primary" onclick="location.reload()">
 تلاش دوباره
 </button>
+
 </div>
+
 `;
 }
 
@@ -979,9 +1015,9 @@ window.addEventListener("unhandledrejection",e=>{
 console.error(e.reason);
 });
 
-/* =========================
+/* =====================================================
 تاریخ شمسی
-========================= */
+===================================================== */
 
 const faCalendar=
 new Intl.DateTimeFormat(
@@ -1084,10 +1120,10 @@ return gregorianToJalali(y,m,d);
 
 function jalaliMonthDays(y,m){
 
-if(m>=1 && m<=6)
+if(m>=1&&m<=6)
 return 31;
 
-if(m>=7 && m<=11)
+if(m>=7&&m<=11)
 return 30;
 
 const a=jalaliDateToISO(y,12,1);
@@ -1137,7 +1173,8 @@ return `${j.jd} ${months[j.jm-1]} ${j.jy}`;
 
 function relativeTime(iso){
 
-if(!iso)return "";
+if(!iso)
+return "";
 
 const d=new Date(iso);
 
@@ -1146,7 +1183,8 @@ Math.floor(
 (Date.now()-d.getTime())/1000
 );
 
-if(s<60)return "همین الان";
+if(s<60)
+return "همین الان";
 
 if(s<3600)
 return `${Math.floor(s/60)} دقیقه پیش`;
@@ -1164,19 +1202,23 @@ function chatTime(iso){
 
 const d=new Date(iso);
 
-return d.toLocaleTimeString("fa-IR",{
+return d.toLocaleTimeString(
+"fa-IR",
+{
 hour:"2-digit",
 minute:"2-digit"
-});
+}
+);
 }
 
-/* =========================
+/* =====================================================
 ورود / ثبت نام
-========================= */
+===================================================== */
 
 function renderAuth(mode="login"){
 
 $("root").innerHTML=`
+
 <div class="auth-page">
 
 <div class="auth-box">
@@ -1207,40 +1249,71 @@ ${
 mode==="signup"
 ?
 `
+
 <div class="field">
+
 <label>اسم نمایشی</label>
-<input id="displayName" placeholder="مثلاً محمد کیان">
+
+<input
+id="displayName"
+placeholder="مثلاً محمد کیان">
+
 </div>
 
 <div class="field">
+
 <label>نام کاربری</label>
-<input id="username" placeholder="مثلاً kian">
+
+<input
+id="username"
+placeholder="مثلاً kian">
+
 </div>
 
 <div class="field">
+
 <label>رمز عبور</label>
-<input id="password" type="password" placeholder="رمز عبور">
+
+<input
+id="password"
+type="password"
+placeholder="رمز عبور">
+
 </div>
 
 <button class="primary" onclick="signup()">
 ساخت حساب
 </button>
+
 `
 :
 `
+
 <div class="field">
+
 <label>نام کاربری</label>
-<input id="username" placeholder="نام کاربری">
+
+<input
+id="username"
+placeholder="نام کاربری">
+
 </div>
 
 <div class="field">
+
 <label>رمز عبور</label>
-<input id="password" type="password" placeholder="رمز عبور">
+
+<input
+id="password"
+type="password"
+placeholder="رمز عبور">
+
 </div>
 
 <button class="primary" onclick="login()">
 ورود
 </button>
+
 `
 }
 
@@ -1248,6 +1321,7 @@ mode==="signup"
 
 </div>
 </div>
+
 `;
 }
 
@@ -1285,7 +1359,8 @@ display_name:displayName
 })
 );
 
-if(error)throw error;
+if(error)
+throw error;
 
 if(data.session&&data.user){
 
@@ -1304,7 +1379,9 @@ hideLoading();
 
 renderAuth("login");
 
-showMessage("ثبت‌نام انجام شد. حالا وارد حسابت شو.");
+showMessage(
+"ثبت‌نام انجام شد. حالا وارد حسابت شو."
+);
 
 }catch(e){
 
@@ -1312,7 +1389,10 @@ hideLoading();
 
 renderAuth("signup");
 
-showMessage(e.message||"ثبت‌نام انجام نشد.");
+showMessage(
+e.message||
+"ثبت‌نام انجام نشد."
+);
 }
 }
 
@@ -1324,22 +1404,33 @@ const username=$("username")?.value.trim().toLowerCase();
 const password=$("password")?.value;
 
 if(!username||!password)
-return showMessage("نام کاربری و رمز عبور رو وارد کن.");
+return showMessage(
+"نام کاربری و رمز عبور رو وارد کن."
+);
 
 showLoading();
 
 try{
 
-const{data:emailData,error:emailError}=await withTimeout(
-supabaseClient.rpc("get_login_email",{
+const{
+data:emailData,
+error:emailError
+}=await withTimeout(
+supabaseClient.rpc(
+"get_login_email",
+{
 p_username:username
-})
+}
+)
 );
 
-if(emailError)throw emailError;
+if(emailError)
+throw emailError;
 
 if(!emailData)
-throw new Error("نام کاربری پیدا نشد.");
+throw new Error(
+"نام کاربری پیدا نشد."
+);
 
 const{data,error}=await withTimeout(
 supabaseClient.auth.signInWithPassword({
@@ -1348,7 +1439,8 @@ password
 })
 );
 
-if(error)throw error;
+if(error)
+throw error;
 
 currentUser=data.user;
 
@@ -1364,14 +1456,19 @@ hideLoading();
 
 renderAuth("login");
 
-showMessage(e.message||"ورود انجام نشد.");
+showMessage(
+e.message||
+"ورود انجام نشد."
+);
 }
 }
 
 async function loadProfile(){
 
 if(!currentUser)
-throw new Error("کاربر وارد نشده است.");
+throw new Error(
+"کاربر وارد نشده است."
+);
 
 const{data,error}=await withTimeout(
 supabaseClient
@@ -1381,10 +1478,13 @@ supabaseClient
 .maybeSingle()
 );
 
-if(error)throw error;
+if(error)
+throw error;
 
 if(!data)
-throw new Error("پروفایل کاربر پیدا نشد.");
+throw new Error(
+"پروفایل کاربر پیدا نشد."
+);
 
 currentProfile=data;
 }
@@ -1407,9 +1507,9 @@ chatPartnerName="";
 renderAuth("login");
 }
 
-/* =========================
+/* =====================================================
 اپ
-========================= */
+===================================================== */
 
 function renderApp(){
 
@@ -1442,11 +1542,15 @@ ${escapeHtml(currentProfile.display_name)}
 
 <nav class="nav">
 
-<button id="navHome" onclick="goPage('home')">
+<button
+id="navHome"
+onclick="goPage('home')">
 ⌂<br>خانه
 </button>
 
-<button id="navNotifications" onclick="goPage('notifications')">
+<button
+id="navNotifications"
+onclick="goPage('notifications')">
 ♡<br>اعلان‌ها
 </button>
 
@@ -1460,15 +1564,16 @@ goPage("home");
 
 async function goPage(page){
 
-if(currentPage==="chat" && page!=="chat"){
+if(currentPage==="chat"&&page!=="chat")
 cleanupChatRealtime();
-}
 
 currentPage=page;
 
 document
 .querySelectorAll(".nav button")
-.forEach(x=>x.classList.remove("active"));
+.forEach(x=>
+x.classList.remove("active")
+);
 
 const n=$(
 "nav"+
@@ -1476,7 +1581,8 @@ page.charAt(0).toUpperCase()+
 page.slice(1)
 );
 
-if(n)n.classList.add("active");
+if(n)
+n.classList.add("active");
 
 try{
 
@@ -1500,26 +1606,39 @@ await renderChatPage();
 
 }catch(e){
 
-console.error("goPage error:",e);
+console.error(
+"goPage error:",
+e
+);
 
 if($("mainContent")){
 
 $("mainContent").innerHTML=`
+
 <div class="card">
+
 <div class="empty">
+
 خطایی در باز کردن این بخش رخ داد.
+
 <br><br>
-${escapeHtml(e?.message||"خطای ناشناخته")}
+
+${escapeHtml(
+e?.message||
+"خطای ناشناخته"
+)}
+
 </div>
+
 </div>
 `;
 }
 }
 }
 
-/* =========================
+/* =====================================================
 خانه
-========================= */
+===================================================== */
 
 async function renderHome(){
 
@@ -1542,7 +1661,9 @@ $("mainContent").innerHTML=`
 <div class="card home-hero">
 
 <div class="home-hello">
-سلام ${escapeHtml(currentProfile.display_name)} 👋
+سلام ${escapeHtml(
+currentProfile.display_name
+)} 👋
 </div>
 
 <div class="home-sub">
@@ -1553,7 +1674,9 @@ $("mainContent").innerHTML=`
 
 <div class="home-grid">
 
-<button class="home-menu" onclick="goPage('friends')">
+<button
+class="home-menu"
+onclick="goPage('friends')">
 
 <div class="home-icon">👥</div>
 
@@ -1569,7 +1692,9 @@ ${friendsCount} دوست
 
 </button>
 
-<button class="home-menu" onclick="goPage('calendar')">
+<button
+class="home-menu"
+onclick="goPage('calendar')">
 
 <div class="home-icon">📅</div>
 
@@ -1585,7 +1710,9 @@ ${months[t.jm-1]} ${t.jy}
 
 </button>
 
-<button class="home-menu" onclick="goPage('requests')">
+<button
+class="home-menu"
+onclick="goPage('requests')">
 
 <div class="home-icon">📩</div>
 
@@ -1601,7 +1728,9 @@ ${reqCount} جدید
 
 </button>
 
-<button class="home-menu" onclick="goPage('notifications')">
+<button
+class="home-menu"
+onclick="goPage('notifications')">
 
 <div class="home-icon">🔔</div>
 
@@ -1623,24 +1752,37 @@ ${
 chatUnread>0
 ?
 `
+
 <div class="card" style="margin-top:15px">
+
 <div class="row">
+
 <div>
-<div class="name">💬 پیام جدید داری</div>
+
+<div class="name">
+💬 پیام جدید داری
+</div>
+
 <div class="username">
 ${chatUnread} پیام خوانده‌نشده
 </div>
+
 </div>
-<button class="small-btn purple-btn" onclick="goPage('friends')">
+
+<button
+class="small-btn purple-btn"
+onclick="goPage('friends')">
 دیدن چت‌ها
 </button>
+
 </div>
+
 </div>
+
 `
 :
 ""
 }
-
 `;
 }
 
@@ -1666,13 +1808,19 @@ const[
 
 supabaseClient
 .from("friendships")
-.select("id",{count:"exact",head:true})
+.select("id",{
+count:"exact",
+head:true
+})
 .eq("receiver_id",currentUser.id)
 .eq("status","pending"),
 
 supabaseClient
 .from("hangout_requests")
-.select("id",{count:"exact",head:true})
+.select("id",{
+count:"exact",
+head:true
+})
 .eq("receiver_id",currentUser.id)
 .eq("status","pending")
 
@@ -1705,7 +1853,10 @@ return data?.length||0;
 
 async function getUnreadFromFriend(friendId){
 
-const{data,error}=await supabaseClient
+const{
+data,
+error
+}=await supabaseClient
 .from("messages")
 .select("id")
 .eq("receiver_id",currentUser.id)
@@ -1713,16 +1864,18 @@ const{data,error}=await supabaseClient
 .eq("is_read",false);
 
 if(error){
+
 console.error(error);
+
 return 0;
 }
 
 return data?.length||0;
 }
 
-/* =========================
+/* =====================================================
 دوستان
-========================= */
+===================================================== */
 
 async function renderFriends(){
 
@@ -1768,16 +1921,24 @@ await loadFriends();
 
 async function searchFriend(){
 
-const username=$("friendSearch").value.trim().toLowerCase();
+const username=
+$("friendSearch")
+.value
+.trim()
+.toLowerCase();
 
-if(!username)return;
+if(!username)
+return;
 
 const box=$("friendSearchResult");
 
 box.innerHTML=
 `<div class="empty">در حال جستجو...</div>`;
 
-const{data,error}=await supabaseClient
+const{
+data,
+error
+}=await supabaseClient
 .from("profiles")
 .select("id,display_name,username")
 .eq("username",username)
@@ -1785,7 +1946,9 @@ const{data,error}=await supabaseClient
 
 if(error)
 return box.innerHTML=
-`<div class="empty">${escapeHtml(error.message)}</div>`;
+`<div class="empty">${escapeHtml(
+error.message
+)}</div>`;
 
 if(!data)
 return box.innerHTML=
@@ -1795,7 +1958,9 @@ if(data.id===currentUser.id)
 return box.innerHTML=
 `<div class="empty">این خودتی 😄</div>`;
 
-const{data:existing}=await supabaseClient
+const{
+data:existing
+}=await supabaseClient
 .from("friendships")
 .select("*")
 .or(
@@ -1808,32 +1973,41 @@ let action;
 if(!existing){
 
 action=`
+
 <button
 class="small-btn purple-btn"
 onclick="sendFriendRequest('${data.id}')">
 افزودن
 </button>
+
 `;
 
 }else if(existing.status==="accepted"){
 
 action=`
+
 <span class="username">
 دوست شماست
 </span>
+
 `;
 
-}else if(existing.requester_id===currentUser.id){
+}else if(
+existing.requester_id===currentUser.id
+){
 
 action=`
+
 <span class="username">
 درخواست ارسال شده
 </span>
+
 `;
 
 }else{
 
 action=`
+
 <button
 class="small-btn success-btn"
 onclick="acceptFriend('${data.id}')">
@@ -1845,6 +2019,7 @@ class="small-btn danger-btn"
 onclick="rejectFriend('${data.id}')">
 رد
 </button>
+
 `;
 }
 
@@ -1887,7 +2062,10 @@ status:"pending"
 });
 
 if(error)
-return alert(error.message||"ارسال درخواست انجام نشد.");
+return alert(
+error.message||
+"ارسال درخواست انجام نشد."
+);
 
 alert("درخواست دوستی ارسال شد.");
 
@@ -1898,7 +2076,10 @@ async function loadFriends(){
 
 const box=$("friendsList");
 
-const{data,error}=await supabaseClient
+const{
+data,
+error
+}=await supabaseClient
 .from("friendships")
 .select("*")
 .eq("status","accepted")
@@ -1908,19 +2089,26 @@ const{data,error}=await supabaseClient
 
 if(error)
 return box.innerHTML=
-`<div class="empty">${escapeHtml(error.message)}</div>`;
+`<div class="empty">${escapeHtml(
+error.message
+)}</div>`;
 
 if(!data?.length)
 return box.innerHTML=
 `<div class="empty">هنوز دوستی نداری.</div>`;
 
 const ids=data.map(
-f=>f.requester_id===currentUser.id
-?f.receiver_id
-:f.requester_id
+f=>
+f.requester_id===currentUser.id
+?
+f.receiver_id
+:
+f.requester_id
 );
 
-const{data:profiles}=await supabaseClient
+const{
+data:profiles
+}=await supabaseClient
 .from("profiles")
 .select("id,display_name,username")
 .in("id",ids);
@@ -1929,7 +2117,8 @@ const unreadMap={};
 
 await Promise.all(
 (ids||[]).map(async id=>{
-unreadMap[id]=await getUnreadFromFriend(id);
+unreadMap[id]=
+await getUnreadFromFriend(id);
 })
 );
 
@@ -1937,7 +2126,11 @@ box.innerHTML=
 (profiles||[])
 .map(p=>{
 
-const unread=unreadMap[p.id]||0;
+const unread=
+unreadMap[p.id]||0;
+
+const id=encodeAttr(p.id);
+const name=encodeAttr(p.display_name);
 
 return`
 
@@ -1961,17 +2154,21 @@ ${escapeHtml(p.display_name)}
 
 <button
 class="small-btn purple-btn"
-onclick="openFriendCalendar('${p.id}','${escapeHtml(p.display_name)}')">
-تقویم
+onclick="openChat('${id}','${name}')">
+💬 چت
+${
+unread>0
+?
+`<span class="unread-badge">${unread}</span>`
+:
+""
+}
 </button>
 
 <button
 class="small-btn purple-btn"
-onclick="openChat('${p.id}','${escapeHtml(p.display_name)}')">
-💬 چت
-${unread>0
-?`<span class="unread-badge">${unread}</span>`
-:""}
+onclick="openFriendCalendar('${id}','${name}')">
+تقویم
 </button>
 
 </div>
@@ -1980,19 +2177,22 @@ ${unread>0
 
 </div>
 `;
+
 })
 .join("");
 }
 
-/* =========================
+/* =====================================================
 دوستی
-========================= */
+===================================================== */
 
 async function acceptFriend(actorId){
 
 const{error}=await supabaseClient
 .from("friendships")
-.update({status:"accepted"})
+.update({
+status:"accepted"
+})
 .eq("requester_id",actorId)
 .eq("receiver_id",currentUser.id);
 
@@ -2001,6 +2201,9 @@ return alert(error.message);
 
 alert("دوستی قبول شد.");
 
+if(currentPage==="notifications")
+await renderNotifications();
+else
 await renderRequests();
 }
 
@@ -2017,6 +2220,9 @@ return alert(error.message);
 
 alert("درخواست رد شد.");
 
+if(currentPage==="notifications")
+await renderNotifications();
+else
 await renderRequests();
 }
 
@@ -2038,7 +2244,10 @@ chatChannel=null;
 
 async function verifyFriendship(friendId){
 
-const{data,error}=await supabaseClient
+const{
+data,
+error
+}=await supabaseClient
 .from("friendships")
 .select("id")
 .eq("status","accepted")
@@ -2047,7 +2256,8 @@ const{data,error}=await supabaseClient
 )
 .maybeSingle();
 
-if(error)throw error;
+if(error)
+throw error;
 
 return !!data;
 }
@@ -2056,8 +2266,8 @@ async function openChat(friendId,friendName){
 
 cleanupChatRealtime();
 
-chatPartnerId=friendId;
-chatPartnerName=friendName;
+chatPartnerId=decodeAttr(friendId);
+chatPartnerName=decodeAttr(friendName);
 
 await goPage("chat");
 }
@@ -2066,19 +2276,24 @@ async function renderChatPage(){
 
 const main=$("mainContent");
 
-if(!main)return;
+if(!main)
+return;
 
 if(!chatPartnerId){
 
 await goPage("friends");
+
 return;
 }
 
-const isFriend=await verifyFriendship(chatPartnerId);
+const isFriend=
+await verifyFriendship(chatPartnerId);
 
 if(!isFriend){
 
-alert("فقط با دوستان تأییدشده می‌تونی چت کنی.");
+alert(
+"فقط با دوستان تأییدشده می‌تونی چت کنی."
+);
 
 await goPage("friends");
 
@@ -2111,7 +2326,9 @@ ${escapeHtml(chatPartnerName)}
 
 </div>
 
-<div id="chatMessages" class="chat-messages">
+<div
+id="chatMessages"
+class="chat-messages">
 
 <div class="chat-empty">
 در حال دریافت پیام‌ها...
@@ -2125,8 +2342,7 @@ ${escapeHtml(chatPartnerName)}
 id="chatInput"
 class="chat-input"
 placeholder="پیامت رو بنویس..."
-maxlength="2000"
-></textarea>
+maxlength="2000"></textarea>
 
 <button
 id="chatSendButton"
@@ -2140,16 +2356,22 @@ onclick="sendChatMessage()">
 </div>
 `;
 
-$("chatInput")?.addEventListener("keydown",e=>{
+$("chatInput")?.addEventListener(
+"keydown",
+e=>{
 
-if(e.key==="Enter"&&!e.shiftKey){
+if(
+e.key==="Enter"&&
+!e.shiftKey
+){
 
 e.preventDefault();
 
 sendChatMessage();
+}
 
 }
-});
+);
 
 await loadChatMessages();
 
@@ -2157,16 +2379,23 @@ await markChatMessagesRead();
 
 subscribeChatRealtime();
 
-setTimeout(scrollChatToBottom,100);
+setTimeout(
+scrollChatToBottom,
+100
+);
 }
 
 async function loadChatMessages(){
 
 const box=$("chatMessages");
 
-if(!box)return;
+if(!box)
+return;
 
-const{data,error}=await supabaseClient
+const{
+data,
+error
+}=await supabaseClient
 .from("messages")
 .select(
 "id,sender_id,receiver_id,body,created_at,is_read"
@@ -2174,13 +2403,21 @@ const{data,error}=await supabaseClient
 .or(
 `and(sender_id.eq.${currentUser.id},receiver_id.eq.${chatPartnerId}),and(sender_id.eq.${chatPartnerId},receiver_id.eq.${currentUser.id})`
 )
-.order("created_at",{ascending:true});
+.order(
+"created_at",
+{
+ascending:true
+}
+);
 
 if(error){
 
 box.innerHTML=`
+
 <div class="chat-empty">
+
 ${escapeHtml(error.message)}
+
 </div>
 `;
 
@@ -2190,9 +2427,13 @@ return;
 if(!data?.length){
 
 box.innerHTML=`
+
 <div class="chat-empty">
-هنوز پیامی بین شما رد و بدل نشده.<br>
+
+هنوز پیامی بین شما رد و بدل نشده.
+<br>
 اولین پیام رو بفرست 👋
+
 </div>
 `;
 
@@ -2206,7 +2447,8 @@ function renderChatMessages(messages){
 
 const box=$("chatMessages");
 
-if(!box)return;
+if(!box)
+return;
 
 box.innerHTML="";
 
@@ -2214,12 +2456,14 @@ let lastDay="";
 
 messages.forEach(message=>{
 
-const day=new Date(message.created_at)
+const day=
+new Date(message.created_at)
 .toLocaleDateString("fa-IR");
 
 if(day!==lastDay){
 
-const dateEl=document.createElement("div");
+const dateEl=
+document.createElement("div");
 
 dateEl.className="chat-date";
 
@@ -2230,42 +2474,64 @@ box.appendChild(dateEl);
 lastDay=day;
 }
 
-appendChatMessage(message,false);
+appendChatMessage(
+message,
+false
+);
 });
 
 scrollChatToBottom();
 }
 
-function appendChatMessage(message,scroll=true){
+function appendChatMessage(
+message,
+scroll=true
+){
 
 const box=$("chatMessages");
 
-if(!box)return;
+if(!box)
+return;
 
-const empty=box.querySelector(".chat-empty");
+const empty=
+box.querySelector(".chat-empty");
 
 if(empty)
 empty.remove();
 
+if(
+box.querySelector(
+`[data-message-id="${message.id}"]`
+)
+)
+return;
+
 const mine=
 message.sender_id===currentUser.id;
 
-const row=document.createElement("div");
+const row=
+document.createElement("div");
 
 row.className=
 "chat-row "+
 (mine?"mine":"theirs");
 
-row.dataset.messageId=message.id;
+row.dataset.messageId=
+message.id;
 
-const bubble=document.createElement("div");
+const bubble=
+document.createElement("div");
 
 bubble.className=
 "chat-bubble "+
 (mine?"mine":"theirs");
 
 bubble.innerHTML=`
-<div>${escapeHtml(message.body)}</div>
+
+<div>
+${escapeHtml(message.body)}
+</div>
+
 <div class="chat-time">
 ${chatTime(message.created_at)}
 </div>
@@ -2283,10 +2549,12 @@ function scrollChatToBottom(){
 
 const box=$("chatMessages");
 
-if(!box)return;
+if(!box)
+return;
 
 requestAnimationFrame(()=>{
-box.scrollTop=box.scrollHeight;
+box.scrollTop=
+box.scrollHeight;
 });
 }
 
@@ -2295,20 +2563,28 @@ async function sendChatMessage(){
 const input=$("chatInput");
 const button=$("chatSendButton");
 
-if(!input||!chatPartnerId)return;
+if(!input||!chatPartnerId)
+return;
 
-const body=input.value.trim();
+const body=
+input.value.trim();
 
-if(!body)return;
+if(!body)
+return;
 
 if(body.length>2000)
-return alert("پیام خیلی طولانیه.");
+return alert(
+"پیام خیلی طولانیه."
+);
 
 button.disabled=true;
 
 try{
 
-const{data,error}=await supabaseClient
+const{
+data,
+error
+}=await supabaseClient
 .from("messages")
 .insert({
 sender_id:currentUser.id,
@@ -2320,11 +2596,15 @@ body:body
 )
 .single();
 
-if(error)throw error;
+if(error)
+throw error;
 
 input.value="";
 
-appendChatMessage(data,true);
+appendChatMessage(
+data,
+true
+);
 
 }catch(e){
 
@@ -2345,32 +2625,55 @@ input.focus();
 
 async function markChatMessagesRead(){
 
-if(!chatPartnerId||!currentUser)return;
+if(
+!chatPartnerId||
+!currentUser
+)
+return;
 
-const{error}=await supabaseClient
+const{
+error
+}=await supabaseClient
 .from("messages")
 .update({
 is_read:true
 })
-.eq("receiver_id",currentUser.id)
-.eq("sender_id",chatPartnerId)
-.eq("is_read",false);
+.eq(
+"receiver_id",
+currentUser.id
+)
+.eq(
+"sender_id",
+chatPartnerId
+)
+.eq(
+"is_read",
+false
+);
 
 if(error)
-console.error("mark chat read:",error);
+console.error(
+"mark chat read:",
+error
+);
 }
 
 function subscribeChatRealtime(){
 
 cleanupChatRealtime();
 
-if(!currentUser||!chatPartnerId)return;
+if(
+!currentUser||
+!chatPartnerId
+)
+return;
+
+const channelName=
+`chat:${currentUser.id}:${chatPartnerId}:${Date.now()}`;
 
 chatChannel=
 supabaseClient
-.channel(
-`chat:${currentUser.id}:${chatPartnerId}:${Date.now()}`
-)
+.channel(channelName)
 .on(
 "postgres_changes",
 {
@@ -2381,7 +2684,8 @@ filter:`receiver_id=eq.${currentUser.id}`
 },
 async payload=>{
 
-const message=payload.new;
+const message=
+payload.new;
 
 if(
 message.sender_id!==chatPartnerId
@@ -2389,23 +2693,26 @@ message.sender_id!==chatPartnerId
 return;
 
 if(
-document.visibilityState!=="visible"||
 currentPage!=="chat"
-){
-
+)
 return;
-}
+
+if(
+document.visibilityState!=="visible"
+)
+return;
 
 if(
 document.querySelector(
 `[data-message-id="${message.id}"]`
 )
-){
-
+)
 return;
-}
 
-appendChatMessage(message,true);
+appendChatMessage(
+message,
+true
+);
 
 await markChatMessagesRead();
 
@@ -2425,10 +2732,17 @@ status
 تقویم
 ===================================================== */
 
-async function openFriendCalendar(friendId,friendName){
+async function openFriendCalendar(
+friendId,
+friendName
+){
 
-calendarOwner=friendId;
-calendarOwnerName=friendName;
+calendarOwner=
+decodeAttr(friendId);
+
+calendarOwnerName=
+decodeAttr(friendName);
+
 ownCalendar=false;
 
 const t=todayJalali();
@@ -2442,7 +2756,10 @@ await goPage("calendar");
 function openMyCalendar(){
 
 ownCalendar=true;
-calendarOwner=currentUser.id;
+
+calendarOwner=
+currentUser.id;
+
 calendarOwnerName="";
 
 const t=todayJalali();
@@ -2457,7 +2774,8 @@ async function renderCalendarPage(){
 
 const main=$("mainContent");
 
-if(!main)return;
+if(!main)
+return;
 
 main.innerHTML=`
 
@@ -2526,7 +2844,10 @@ class="empty">
 
 const t=todayJalali();
 
-if(!calendarYear||!calendarMonth){
+if(
+!calendarYear||
+!calendarMonth
+){
 
 calendarYear=t.jy;
 calendarMonth=t.jm;
@@ -2538,19 +2859,29 @@ renderCalendar();
 
 }catch(e){
 
-console.error("Calendar render error:",e);
+console.error(
+"Calendar render error:",
+e
+);
 
 const grid=$("calendarGrid");
 
 if(grid){
 
 grid.innerHTML=`
+
 <div
 class="empty"
 style="grid-column:1/-1">
+
 خطا در ساخت تقویم.
+
 <br>
-<small>${escapeHtml(e.message||"")}</small>
+
+<small>
+${escapeHtml(e.message||"")}
+</small>
+
 </div>
 `;
 }
@@ -2558,20 +2889,27 @@ style="grid-column:1/-1">
 
 setTimeout(()=>{
 
-renderAppointments().catch(e=>{
+renderAppointments()
+.catch(e=>{
 
-console.error("Appointments error:",e);
+console.error(
+"Appointments error:",
+e
+);
 
-const box=$("appointmentsList");
+const box=
+$("appointmentsList");
 
 if(box){
 
 box.innerHTML=`
+
 <div class="empty">
 قرارهای این ماه فعلاً قابل دریافت نیست.
 </div>
 `;
 }
+
 });
 
 },0);
@@ -2604,20 +2942,24 @@ console.error(e);
 
 setTimeout(()=>{
 
-renderAppointments().catch(e=>{
+renderAppointments()
+.catch(e=>{
 
 console.error(e);
 
-const box=$("appointmentsList");
+const box=
+$("appointmentsList");
 
 if(box){
 
 box.innerHTML=`
+
 <div class="empty">
 قرارهای این ماه قابل دریافت نیست.
 </div>
 `;
 }
+
 });
 
 },0);
@@ -2626,7 +2968,8 @@ box.innerHTML=`
 function renderCalendar(){
 
 const title=$("monthTitle");
-const ownerLabel=$("calendarOwnerLabel");
+const ownerLabel=
+$("calendarOwnerLabel");
 const grid=$("calendarGrid");
 
 if(!title||!grid)
@@ -2676,9 +3019,11 @@ calendarMonth
 grid.innerHTML=
 weekdays
 .map(x=>`
+
 <div class="weekday">
 ${x}
 </div>
+
 `)
 .join("");
 
@@ -2686,7 +3031,9 @@ const[
 gy,
 gm,
 gd
-]=first.split("-").map(Number);
+]=first
+.split("-")
+.map(Number);
 
 const saturdayIndex=
 (
@@ -2699,7 +3046,11 @@ gd
 ).getUTCDay()+1
 )%7;
 
-for(let i=0;i<saturdayIndex;i++){
+for(
+let i=0;
+i<saturdayIndex;
+i++
+){
 
 grid.insertAdjacentHTML(
 "beforeend",
@@ -2707,12 +3058,19 @@ grid.insertAdjacentHTML(
 );
 }
 
-const today=todayJalali();
+const today=
+todayJalali();
 
 const startTime=
-Date.parse(first+"T00:00:00Z");
+Date.parse(
+first+"T00:00:00Z"
+);
 
-for(let day=1;day<=days;day++){
+for(
+let day=1;
+day<=days;
+day++
+){
 
 const date=
 new Date(
@@ -2721,7 +3079,9 @@ startTime+
 );
 
 const iso=
-date.toISOString().slice(0,10);
+date
+.toISOString()
+.slice(0,10);
 
 const el=
 document.createElement("div");
@@ -2729,8 +3089,8 @@ document.createElement("div");
 el.className=
 "day free"+
 (
-today.jy===calendarYear &&
-today.jm===calendarMonth &&
+today.jy===calendarYear&&
+today.jm===calendarMonth&&
 today.jd===day
 ?
 " today"
@@ -2741,11 +3101,18 @@ today.jd===day
 el.dataset.date=iso;
 
 el.innerHTML=`
-<strong>${day}</strong>
-<small>آزاد</small>
+
+<strong>
+${day}
+</strong>
+
+<small>
+آزاد
+</small>
 `;
 
-el.onclick=()=>openDate(
+el.onclick=()=>
+openDate(
 iso,
 day,
 window.calendarDayData?.[iso]||null
@@ -2759,22 +3126,35 @@ window.calendarDayData={};
 loadCalendarData(
 first,
 nextMonth
-).catch(e=>{
+)
+.catch(e=>{
 
-console.error("loadCalendarData:",e);
+console.error(
+"loadCalendarData:",
+e
+);
 
 });
 }
 
-async function loadCalendarData(first,nextMonth){
+async function loadCalendarData(
+first,
+nextMonth
+){
 
 let data={};
 
 try{
 
-if(!ownCalendar&&calendarOwner){
+if(
+!ownCalendar&&
+calendarOwner
+){
 
-const{data:d,error}=await withTimeout(
+const{
+data:d,
+error
+}=await withTimeout(
 
 supabaseClient.rpc(
 "get_friend_calendar",
@@ -2788,11 +3168,14 @@ p_end_date:nextMonth
 10000
 );
 
-if(error)throw error;
+if(error)
+throw error;
 
 (d||[]).forEach(x=>{
 
-const date=String(x.date).slice(0,10);
+const date=
+String(x.date)
+.slice(0,10);
 
 data[date]={
 ...x,
@@ -2804,23 +3187,40 @@ is_wish:!!x.is_wish
 
 }else{
 
-const{data:d,error}=await withTimeout(
+const{
+data:d,
+error
+}=await withTimeout(
 
 supabaseClient
 .from("bookings")
-.select("date,partner_id")
-.eq("user_id",currentUser.id)
-.gte("date",first)
-.lt("date",nextMonth),
+.select(
+"date,partner_id"
+)
+.eq(
+"user_id",
+currentUser.id
+)
+.gte(
+"date",
+first
+)
+.lt(
+"date",
+nextMonth
+),
 
 10000
 );
 
-if(error)throw error;
+if(error)
+throw error;
 
 (d||[]).forEach(x=>{
 
-const date=String(x.date).slice(0,10);
+const date=
+String(x.date)
+.slice(0,10);
 
 data[date]={
 is_booked:true,
@@ -2829,7 +3229,6 @@ partner_id:x.partner_id
 };
 
 });
-
 }
 
 window.calendarDayData=data;
@@ -2841,7 +3240,8 @@ document.querySelector(
 `.day[data-date="${iso}"]`
 );
 
-if(!el)return;
+if(!el)
+return;
 
 const info=data[iso];
 
@@ -2859,13 +3259,15 @@ info?.is_wish
 "free"
 );
 
-const j=isoToJalali(iso);
+const j=
+isoToJalali(iso);
 
-const today=todayJalali();
+const today=
+todayJalali();
 
 if(
-today.jy===j.jy &&
-today.jm===j.jm &&
+today.jy===j.jy&&
+today.jm===j.jm&&
 today.jd===j.jd
 ){
 
@@ -2891,13 +3293,18 @@ info?.is_wish
 }
 
 `;
+
 });
 
 }catch(e){
 
-console.error("Calendar data:",e);
+console.error(
+"Calendar data:",
+e
+);
 
-const grid=$("calendarGrid");
+const grid=
+$("calendarGrid");
 
 if(grid){
 
@@ -2917,14 +3324,18 @@ grid.appendChild(warning);
 
 async function renderAppointments(){
 
-const box=$("appointmentsList");
+const box=
+$("appointmentsList");
 
-if(!box)return;
+if(!box)
+return;
 
-box.innerHTML=
-`<div class="empty">
+box.innerHTML=`
+
+<div class="empty">
 در حال دریافت...
-</div>`;
+</div>
+`;
 
 let todayISO;
 let nextISO;
@@ -2955,37 +3366,61 @@ calendarMonth+1,
 
 }catch(e){
 
-box.innerHTML=
-`<div class="empty">
+box.innerHTML=`
+
+<div class="empty">
 خطا در محاسبه تاریخ‌ها.
-</div>`;
+</div>
+`;
 
 return;
 }
 
 try{
 
-const{data,error}=await withTimeout(
+const{
+data,
+error
+}=await withTimeout(
 
 supabaseClient
 .from("bookings")
-.select("date,partner_id")
-.eq("user_id",currentUser.id)
-.gte("date",todayISO)
-.lt("date",nextISO)
-.order("date",{ascending:true}),
+.select(
+"date,partner_id"
+)
+.eq(
+"user_id",
+currentUser.id
+)
+.gte(
+"date",
+todayISO
+)
+.lt(
+"date",
+nextISO
+)
+.order(
+"date",
+{
+ascending:true
+}
+),
 
 8000
 );
 
-if(error)throw error;
+if(error)
+throw error;
 
 if(!data?.length){
 
-box.innerHTML=
-`<div class="empty">
+box.innerHTML=`
+
+<div class="empty">
 برای این ماه قراری ثبت نشده.
-</div>`;
+</div>
+`;
 
 return;
 }
@@ -3002,17 +3437,26 @@ let profiles=[];
 
 if(ids.length){
 
-const{data:p,error:profileError}=await withTimeout(
+const{
+data:p,
+error:profileError
+}=await withTimeout(
 
 supabaseClient
 .from("profiles")
-.select("id,display_name,username")
-.in("id",ids),
+.select(
+"id,display_name,username"
+)
+.in(
+"id",
+ids
+),
 
 8000
 );
 
-if(profileError)throw profileError;
+if(profileError)
+throw profileError;
 
 profiles=p||[];
 }
@@ -3026,7 +3470,8 @@ p=>map[p.id]=p
 box.innerHTML=
 data.map(x=>{
 
-const p=map[x.partner_id];
+const p=
+map[x.partner_id];
 
 return`
 
@@ -3037,16 +3482,22 @@ ${jalaliDateLabel(x.date)}
 </div>
 
 <div class="appointment-text">
+
 با
+
 <b>
 ${escapeHtml(
-p?.display_name||"کاربر"
+p?.display_name||
+"کاربر"
 )}
 </b>
+
 قرار داری.
+
 </div>
 
 <div class="appointment-status">
+
 ${
 p?.username
 ?
@@ -3054,7 +3505,9 @@ p?.username
 :
 ""
 }
+
  · تأیید شده
+
 </div>
 
 </div>
@@ -3066,36 +3519,46 @@ p?.username
 
 console.error(e);
 
-box.innerHTML=
-`<div class="empty">
+box.innerHTML=`
+
+<div class="empty">
 ${escapeHtml(
 e.message||
 "دریافت قرارها انجام نشد."
 )}
-</div>`;
+</div>
+`;
 }
 }
 
-/* =========================
+/* =====================================================
 انتخاب تاریخ
-========================= */
+===================================================== */
 
-function openDate(iso,day,info){
+function openDate(
+iso,
+day,
+info
+){
 
 const p=$("datePanel");
 
-if(!p)return;
+if(!p)
+return;
 
 p.classList.remove("hidden");
 
-const j=isoToJalali(iso);
+const j=
+isoToJalali(iso);
 
 let html=`
 
 <div class="card-title">
+
 ${j.jd}
 ${months[j.jm-1]}
 ${j.jy}
+
 </div>
 `;
 
@@ -3104,15 +3567,49 @@ if(info?.is_booked){
 html+=`
 
 <div class="date-info">
+
+${
+ownCalendar
+?
+`
 این تاریخ با
-<b>
-${escapeHtml(
-info.partner_name||
-"یک دوست"
-)}
-</b>
+<b>یک دوست</b>
 رزرو شده است.
+`
+:
+`
+این تاریخ برای
+<b>${escapeHtml(calendarOwnerName)}</b>
+رزرو شده است.
+`
+}
+
 </div>
+`;
+
+}else if(
+!ownCalendar&&
+info?.is_wish
+){
+
+html+=`
+
+<div class="date-info">
+
+${escapeHtml(calendarOwnerName)}
+برای این روز دنبال هم‌قرار می‌گرده.
+
+</div>
+
+<br>
+
+<button
+class="primary"
+onclick="sendWishResponse('${iso}')">
+
+می‌خوام باهاش برم
+
+</button>
 `;
 
 }else if(ownCalendar){
@@ -3120,8 +3617,11 @@ info.partner_name||
 html+=`
 
 <div class="date-info">
+
 این تاریخ آزاده.
+
 می‌تونی اعلام کنی که این روز دنبال هم‌قرار می‌گردی.
+
 </div>
 
 <br>
@@ -3129,7 +3629,9 @@ html+=`
 <button
 class="primary"
 onclick="createWish('${iso}')">
+
 می‌خوام این روز برم بیرون
+
 </button>
 `;
 
@@ -3138,9 +3640,11 @@ onclick="createWish('${iso}')">
 html+=`
 
 <div class="date-info">
+
 این تاریخ در تقویم
 ${escapeHtml(calendarOwnerName)}
 آزاد است.
+
 </div>
 
 <br>
@@ -3148,7 +3652,9 @@ ${escapeHtml(calendarOwnerName)}
 <button
 class="primary"
 onclick="sendHangoutRequest('${iso}')">
+
 درخواست قرار برای این تاریخ
+
 </button>
 `;
 }
@@ -3161,22 +3667,27 @@ block:"nearest"
 });
 }
 
-/* =========================
+/* =====================================================
 درخواست قرار
-========================= */
+===================================================== */
 
 async function sendHangoutRequest(iso){
 
-if(!calendarOwner)return;
+if(!calendarOwner)
+return;
 
-if(!confirm("برای این تاریخ درخواست قرار ارسال شود؟"))
+if(!confirm(
+"برای این تاریخ درخواست قرار ارسال شود؟"
+))
 return;
 
 showLoading();
 
 try{
 
-const{error}=await withTimeout(
+const{
+error
+}=await withTimeout(
 
 supabaseClient.rpc(
 "create_hangout_request",
@@ -3189,11 +3700,14 @@ p_hangout_date:iso
 12000
 );
 
-if(error)throw error;
+if(error)
+throw error;
 
 hideLoading();
 
-alert("درخواست قرار ارسال شد.");
+alert(
+"درخواست قرار ارسال شد."
+);
 
 }catch(e){
 
@@ -3206,9 +3720,9 @@ e.message||
 }
 }
 
-/* =========================
+/* =====================================================
 اعلام هم‌قرار
-========================= */
+===================================================== */
 
 async function createWish(iso){
 
@@ -3221,7 +3735,9 @@ showLoading();
 
 try{
 
-const{error}=await withTimeout(
+const{
+error
+}=await withTimeout(
 
 supabaseClient.rpc(
 "set_outing_wish",
@@ -3233,7 +3749,8 @@ p_date:iso
 12000
 );
 
-if(error)throw error;
+if(error)
+throw error;
 
 hideLoading();
 
@@ -3254,9 +3771,63 @@ e.message||
 }
 }
 
-/* =========================
+async function sendWishResponse(iso){
+
+if(
+!calendarOwner||
+!iso
+)
+return;
+
+if(!confirm(
+"می‌خوای باهاش برای این روز قرار بذاری؟"
+))
+return;
+
+showLoading();
+
+try{
+
+const{
+error
+}=await withTimeout(
+
+supabaseClient.rpc(
+"respond_to_outing_wish",
+{
+owner_id:calendarOwner,
+wish_date:iso,
+accept_request:true
+}
+),
+
+12000
+);
+
+if(error)
+throw error;
+
+hideLoading();
+
+alert(
+"قرار ثبت شد ❤️"
+);
+
+await renderCalendar();
+
+}catch(e){
+
+hideLoading();
+
+alert(
+e.message||
+"عملیات انجام نشد."
+);
+}
+
+/* =====================================================
 درخواست‌ها
-========================= */
+===================================================== */
 
 async function renderRequests(){
 
@@ -3293,33 +3864,70 @@ await loadHangoutRequests();
 
 async function loadFriendRequests(){
 
-const box=$("friendRequestsList");
+const box=
+$("friendRequestsList");
 
-const{data,error}=await supabaseClient
+const{
+data,
+error
+}=await supabaseClient
 .from("friendships")
-.select("id,requester_id,created_at")
-.eq("receiver_id",currentUser.id)
-.eq("status","pending")
-.order("created_at",{ascending:false});
+.select(
+"id,requester_id,created_at"
+)
+.eq(
+"receiver_id",
+currentUser.id
+)
+.eq(
+"status",
+"pending"
+)
+.order(
+"created_at",
+{
+ascending:false
+}
+);
 
 if(error)
-return box.innerHTML=
-`<div class="empty">${escapeHtml(error.message)}</div>`;
+return box.innerHTML=`
+
+<div class="empty">
+${escapeHtml(error.message)}
+</div>
+`;
 
 if(!data?.length)
-return box.innerHTML=
-`<div class="empty">درخواست دوستی جدیدی نداری.</div>`;
+return box.innerHTML=`
 
-const ids=data.map(x=>x.requester_id);
+<div class="empty">
+درخواست دوستی جدیدی نداری.
+</div>
+`;
 
-const{data:p}=await supabaseClient
+const ids=
+data.map(
+x=>x.requester_id
+);
+
+const{
+data:p
+}=await supabaseClient
 .from("profiles")
-.select("id,display_name,username")
-.in("id",ids);
+.select(
+"id,display_name,username"
+)
+.in(
+"id",
+ids
+);
 
 const map={};
 
-(p||[]).forEach(x=>map[x.id]=x);
+(p||[]).forEach(
+x=>map[x.id]=x
+);
 
 box.innerHTML=
 data.map(r=>`
@@ -3328,13 +3936,17 @@ data.map(r=>`
 
 <div class="name">
 ${escapeHtml(
-map[r.requester_id]?.display_name||"کاربر"
+map[r.requester_id]
+?.display_name||
+"کاربر"
 )}
 </div>
 
 <div class="username">
 @${escapeHtml(
-map[r.requester_id]?.username||""
+map[r.requester_id]
+?.username||
+""
 )}
 </div>
 
@@ -3355,38 +3967,74 @@ onclick="rejectFriend('${r.requester_id}')">
 </div>
 
 </div>
+
 `).join("");
 }
 
 async function loadHangoutRequests(){
 
-const box=$("requestsList");
+const box=
+$("requestsList");
 
-const{data,error}=await supabaseClient
+const{
+data,
+error
+}=await supabaseClient
 .from("hangout_requests")
 .select("*")
-.eq("receiver_id",currentUser.id)
-.eq("status","pending")
-.order("created_at",{ascending:false});
+.eq(
+"receiver_id",
+currentUser.id
+)
+.eq(
+"status",
+"pending"
+)
+.order(
+"created_at",
+{
+ascending:false
+}
+);
 
 if(error)
-return box.innerHTML=
-`<div class="empty">${escapeHtml(error.message)}</div>`;
+return box.innerHTML=`
+
+<div class="empty">
+${escapeHtml(error.message)}
+</div>
+`;
 
 if(!data?.length)
-return box.innerHTML=
-`<div class="empty">درخواست قرار جدیدی نداری.</div>`;
+return box.innerHTML=`
 
-const ids=data.map(x=>x.requester_id);
+<div class="empty">
+درخواست قرار جدیدی نداری.
+</div>
+`;
 
-const{data:p}=await supabaseClient
+const ids=
+data.map(
+x=>x.requester_id
+);
+
+const{
+data:p
+}=await supabaseClient
 .from("profiles")
-.select("id,display_name,username")
-.in("id",ids);
+.select(
+"id,display_name,username"
+)
+.in(
+"id",
+ids
+);
 
 const map={};
 
-(p||[]).forEach(x=>map[x.id]=x);
+(p||[]).forEach(
+x=>map[x.id]=x
+);
 
 box.innerHTML=
 data.map(r=>`
@@ -3395,19 +4043,26 @@ data.map(r=>`
 
 <div class="name">
 ${escapeHtml(
-map[r.requester_id]?.display_name||"کاربر"
+map[r.requester_id]
+?.display_name||
+"کاربر"
 )}
 </div>
 
 <div class="username">
 @${escapeHtml(
-map[r.requester_id]?.username||""
+map[r.requester_id]
+?.username||
+""
 )}
 </div>
 
 <div class="date-info">
+
 درخواست قرار برای
+
 ${jalaliDateLabel(r.date)}
+
 </div>
 
 <div class="notification-actions">
@@ -3427,16 +4082,22 @@ onclick="respondHangout('${r.id}',false)">
 </div>
 
 </div>
+
 `).join("");
 }
 
-async function respondHangout(requestId,accept){
+async function respondHangout(
+requestId,
+accept
+){
 
 showLoading();
 
 try{
 
-const{error}=await withTimeout(
+const{
+error
+}=await withTimeout(
 
 supabaseClient.rpc(
 "respond_to_hangout",
@@ -3449,7 +4110,8 @@ accept_request:accept
 12000
 );
 
-if(error)throw error;
+if(error)
+throw error;
 
 hideLoading();
 
@@ -3461,6 +4123,9 @@ accept
 "درخواست رد شد."
 );
 
+if(currentPage==="notifications")
+await renderNotifications();
+else
 await renderRequests();
 
 }catch(e){
@@ -3471,7 +4136,6 @@ alert(
 e.message||
 "عملیات انجام نشد."
 );
-}
 }
 
 /* =====================================================
@@ -3496,7 +4160,7 @@ n.related_user_id||
 null;
 
 if(
-n.type==="hangout_request" &&
+n.type==="hangout_request"&&
 requestId
 ){
 
@@ -3521,8 +4185,8 @@ onclick="respondHangout('${requestId}',false)">
 }
 
 if(
-n.type==="outing_wish" &&
-actorId &&
+n.type==="outing_wish"&&
+actorId&&
 wishDate
 ){
 
@@ -3547,7 +4211,7 @@ onclick="respondWish('${actorId}','${wishDate}',false)">
 }
 
 if(
-n.type==="friend_request" &&
+n.type==="friend_request"&&
 actorId
 ){
 
@@ -3591,13 +4255,24 @@ $("mainContent").innerHTML=`
 </div>
 `;
 
-const{data,error}=await withTimeout(
+const{
+data,
+error
+}=await withTimeout(
 
 supabaseClient
 .from("notifications")
 .select("*")
-.eq("user_id",currentUser.id)
-.order("created_at",{ascending:false})
+.eq(
+"user_id",
+currentUser.id
+)
+.order(
+"created_at",
+{
+ascending:false
+}
+)
 .limit(50),
 
 12000
@@ -3605,8 +4280,8 @@ supabaseClient
 
 if(error)
 
-return $("notificationsList").innerHTML=
-`
+return $("notificationsList").innerHTML=`
+
 <div class="empty">
 ${escapeHtml(error.message)}
 </div>
@@ -3614,8 +4289,8 @@ ${escapeHtml(error.message)}
 
 if(!data?.length)
 
-return $("notificationsList").innerHTML=
-`
+return $("notificationsList").innerHTML=`
+
 <div class="empty">
 اعلانی نداری.
 </div>
@@ -3625,10 +4300,15 @@ $("notificationsList").innerHTML=
 data.map(n=>`
 
 <div
-class="notification-item ${n.is_read?"":"unread"}">
+class="notification-item ${
+n.is_read?"":"unread"
+}">
 
 <div class="name">
-${escapeHtml(n.title||"اعلان")}
+${escapeHtml(
+n.title||
+"اعلان"
+)}
 </div>
 
 <div
@@ -3638,7 +4318,10 @@ color:#666;
 font-size:12px;
 line-height:1.9">
 
-${escapeHtml(n.body||"")}
+${escapeHtml(
+n.body||
+""
+)}
 
 </div>
 
@@ -3649,6 +4332,7 @@ ${relativeTime(n.created_at)}
 ${notificationActions(n)}
 
 </div>
+
 `).join("");
 
 await markNotificationsRead();
@@ -3658,22 +4342,36 @@ async function markNotificationsRead(){
 
 await supabaseClient
 .from("notifications")
-.update({is_read:true})
-.eq("user_id",currentUser.id)
-.eq("is_read",false);
+.update({
+is_read:true
+})
+.eq(
+"user_id",
+currentUser.id
+)
+.eq(
+"is_read",
+false
+);
 }
 
-/* =========================
+/* =====================================================
 پاسخ به اعلام هم‌قرار
-========================= */
+===================================================== */
 
-async function respondWish(ownerId,wishDate,accept){
+async function respondWish(
+ownerId,
+wishDate,
+accept
+){
 
 showLoading();
 
 try{
 
-const{error}=await withTimeout(
+const{
+error
+}=await withTimeout(
 
 supabaseClient.rpc(
 "respond_to_outing_wish",
@@ -3687,7 +4385,8 @@ accept_request:accept
 12000
 );
 
-if(error)throw error;
+if(error)
+throw error;
 
 hideLoading();
 
@@ -3710,11 +4409,10 @@ e.message||
 "عملیات انجام نشد."
 );
 }
-}
 
-/* =========================
+/* =====================================================
 شروع برنامه
-========================= */
+===================================================== */
 
 async function start(){
 
@@ -3730,20 +4428,25 @@ throw new Error(
 
 supabaseClient=
 window.supabase.createClient(
-SUPABASE_URL,
+REAL_SUPABASE_URL,
 SUPABASE_KEY
 );
 
-const{data,error}=await withTimeout(
+const{
+data,
+error
+}=await withTimeout(
 supabaseClient.auth.getSession(),
 12000
 );
 
-if(error)throw error;
+if(error)
+throw error;
 
 if(data?.session?.user){
 
-currentUser=data.session.user;
+currentUser=
+data.session.user;
 
 await loadProfile();
 
@@ -3771,4 +4474,4 @@ start();
 </script>
 
 </body>
-</html>
+ </html>
