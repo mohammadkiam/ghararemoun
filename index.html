@@ -2631,7 +2631,12 @@ return`
     
 <div style="display:flex;align-items:center;gap:10px;min-width:0">    
     
-${avatarHtml(p)}    
+<div
+onclick="openFriendProfile('${attrValue(p.id)}')"
+style="cursor:pointer;flex-shrink:0"
+>
+${avatarHtml(p)}
+</div>    
     
  <div style="min-width:0;flex:1">
 
