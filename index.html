@@ -2648,35 +2648,6 @@ ${escapeHtml(p.display_name)}
 @${escapeHtml(p.username)}
 </div>
 
-<div class="button-group">
-
-<button
-class="small-btn purple-btn"
-onclick="openFriendCalendar(
-'${attrValue(p.id)}',
-'${attrValue(p.display_name)}'
-)">
-تقویم
-</button>
-
-<button
-class="small-btn purple-btn"
-onclick="openChat(
-'${attrValue(p.id)}',
-'${attrValue(p.display_name)}'
-)">
-💬 چت
-${
-unread>0
-?
-`<span class="unread-badge">${unread}</span>`
-:
-""
-}
-</button>
-
-</div>
-
 </div>
 
 </div>
