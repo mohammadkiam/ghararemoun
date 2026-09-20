@@ -2112,24 +2112,45 @@ return 0;
 return data?.length||0;    
 }    
     
-async function getUnreadMessagesCount(){    
-    
-const{    
-data,    
-error    
-}=await supabaseClient    
-.from("messages")    
-.select("id")    
-.eq("receiver_id",currentUser.id)    
-.eq("is_read",false);    
-    
-if(error){    
-console.error(error);    
-return 0;    
-}    
-    
-return data?.length||0;    
-}    
+async function getUnreadCount(){
+
+const{
+data,
+error
+}=await supabaseClient
+.from("notifications")
+.select("id")
+.eq("user_id",currentUser.id)
+.eq("is_read",false);
+
+if(error){
+console.error(error);
+return 0;
+}
+
+const count=data?.length||0;
+
+const badge=$("notificationBadge");
+
+if(badge){
+
+if(count>0){
+
+badge.textContent=count>99?"99+":count;
+badge.style.display="inline-flex";
+
+}else{
+
+badge.textContent="";
+badge.style.display="none";
+
+}
+
+}
+
+return count;
+
+    }
     
 async function getUnreadFromFriend(friendId){    
     
