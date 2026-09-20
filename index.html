@@ -3257,7 +3257,7 @@ return;
 chatChannel=
 supabaseClient
 .channel(
-chat:${currentUser.id}:${chatPartnerId}:${Date.now()}
+`chat:${currentUser.id}:${chatPartnerId}:${Date.now()}`
 )
 .on(
 "postgres_changes",
@@ -3265,7 +3265,7 @@ chat:${currentUser.id}:${chatPartnerId}:${Date.now()}
 event:"INSERT",
 schema:"public",
 table:"messages",
-filter:receiver_id=eq.${currentUser.id}
+filter:`receiver_id=eq.${currentUser.id}`
 },
 async payload=>{
 
@@ -3283,7 +3283,7 @@ return;
 
 if(
 document.querySelector(
-[data-message-id="${message.id}"]
+`[data-message-id="${message.id}"]`
 )
 )
 return;
@@ -3361,7 +3361,7 @@ chat.profile?.display_name||
 ${
 chat.unread>0
 ?
-<span class="unread-badge">${chat.unread}</span>
+`<span class="unread-badge">${chat.unread}</span>`
 :
 ""
 }
@@ -3591,7 +3591,7 @@ if(!title||!grid)
 return;
 
 title.textContent=
-${months[calendarMonth-1]} ${calendarYear};
+`${months[calendarMonth-1]} ${calendarYear}`;
 
 if(ownerLabel){
 
@@ -3600,7 +3600,7 @@ ownCalendar
 ?
 "تقویم من"
 :
-تقویم ${calendarOwnerName};
+`تقویم ${calendarOwnerName}`;
 
 }
 
@@ -3664,7 +3664,7 @@ for(let i=0;i<saturdayIndex;i++){
 
 grid.insertAdjacentHTML(
 "beforeend",
-<div class="day empty"></div>
+`<div class="day empty"></div>`
 );
 }
 
@@ -3876,7 +3876,7 @@ iso=>{
 
 const el=
 document.querySelector(
-.day[data-date="${iso}"]
+`.day[data-date="${iso}"]`
 );
 
 if(!el)return;
