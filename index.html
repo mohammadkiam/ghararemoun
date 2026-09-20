@@ -11,64 +11,61 @@
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
 
 :root{
---bg:#f7f5ff;
---white:#fff;
+--bg:#ffffff;
+--white:#ffffff;
 --purple:#7557d9;
 --purple2:#9479ed;
 --light:#eee9ff;
---soft:#f6f2ff;
+--soft:#f7f5ff;
 --text:#24202f;
 --muted:#918c9f;
---border:rgba(105,82,160,.1);
+--border:rgba(105,82,160,.10);
 --green:#42ae78;
 --greenbg:#e8f8ef;
 --red:#dc5c69;
 --redbg:#fff0f2;
---shadow:0 18px 50px rgba(76,55,135,.1)
+--shadow:0 18px 50px rgba(76,55,135,.08);
 }
 
 *{
 box-sizing:border-box;
 margin:0;
-padding:0
+padding:0;
 }
 
 html{
-scroll-behavior:smooth
+scroll-behavior:smooth;
 }
 
 body{
 font-family:Vazirmatn,Tahoma,Arial,sans-serif;
-background:
-radial-gradient(circle at 100% 0%,rgba(153,125,235,.2),transparent 28%),
-radial-gradient(circle at 0 55%,rgba(210,196,255,.2),transparent 25%),
-var(--bg);
+background:#fff;
 color:var(--text);
-min-height:100vh
+min-height:100vh;
 }
 
-button,input,textarea{
-font-family:inherit
+button,input,textarea,select{
+font-family:inherit;
 }
 
 button{
 cursor:pointer;
-border:0
+border:0;
 }
 
 .hidden{
-display:none!important
+display:none!important;
 }
 
 .loading{
 position:fixed;
 inset:0;
 z-index:9999;
-background:rgba(247,245,255,.92);
+background:rgba(255,255,255,.92);
 backdrop-filter:blur(18px);
 display:flex;
 align-items:center;
-justify-content:center
+justify-content:center;
 }
 
 .loading-box{
@@ -78,7 +75,7 @@ border-radius:24px;
 box-shadow:var(--shadow);
 color:var(--purple);
 font-size:14px;
-font-weight:700
+font-weight:700;
 }
 
 .loading-box:before{
@@ -91,11 +88,11 @@ border-top-color:var(--purple);
 border-radius:50%;
 margin-left:9px;
 vertical-align:-1px;
-animation:spin .7s linear infinite
+animation:spin .7s linear infinite;
 }
 
 @keyframes spin{
-to{transform:rotate(360deg)}
+to{transform:rotate(360deg);}
 }
 
 .error-box{
@@ -105,22 +102,22 @@ padding:28px;
 background:#fff;
 border-radius:28px;
 box-shadow:var(--shadow);
-text-align:center
+text-align:center;
 }
 
 .error-box h2{
-margin-bottom:12px
+margin-bottom:12px;
 }
 
 .error-box p{
 color:#777;
 line-height:1.9;
 font-size:13px;
-word-break:break-word
+word-break:break-word;
 }
 
 .error-box .primary{
-margin-top:18px
+margin-top:18px;
 }
 
 .auth-page{
@@ -128,18 +125,18 @@ min-height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-padding:22px
+padding:22px;
+background:#fff;
 }
 
 .auth-box{
 width:100%;
 max-width:430px;
 padding:34px 27px;
-background:rgba(255,255,255,.86);
-backdrop-filter:blur(22px);
-border:1px solid rgba(255,255,255,.95);
+background:#fff;
+border:1px solid rgba(105,82,160,.08);
 border-radius:32px;
-box-shadow:0 25px 80px rgba(68,48,125,.13)
+box-shadow:0 25px 80px rgba(68,48,125,.10);
 }
 
 .logo{
@@ -148,13 +145,13 @@ font-size:36px;
 font-weight:800;
 letter-spacing:-1.5px;
 color:var(--text);
-margin-bottom:7px
+margin-bottom:7px;
 }
 
 .logo:after{
 content:"•";
 color:var(--purple);
-margin-right:4px
+margin-right:4px;
 }
 
 .subtitle{
@@ -162,7 +159,7 @@ text-align:center;
 color:var(--muted);
 margin-bottom:27px;
 font-size:12px;
-line-height:1.9
+line-height:1.9;
 }
 
 .tabs{
@@ -171,7 +168,7 @@ gap:6px;
 padding:5px;
 margin-bottom:21px;
 border-radius:17px;
-background:#f1eef8
+background:#f1eef8;
 }
 
 .tab{
@@ -181,17 +178,17 @@ border-radius:13px;
 background:transparent;
 color:var(--muted);
 font-size:12px;
-font-weight:600
+font-weight:600;
 }
 
 .tab.active{
 background:#fff;
 color:var(--purple);
-box-shadow:0 5px 18px rgba(70,50,120,.08)
+box-shadow:0 5px 18px rgba(70,50,120,.08);
 }
 
 .field{
-margin-bottom:15px
+margin-bottom:15px;
 }
 
 .field label{
@@ -199,10 +196,11 @@ display:block;
 margin-bottom:7px;
 font-size:11px;
 color:#686274;
-font-weight:600
+font-weight:600;
 }
 
-.field input{
+.field input,
+.field select{
 width:100%;
 padding:14px 15px;
 border:1px solid var(--border);
@@ -210,13 +208,14 @@ border-radius:16px;
 outline:none;
 background:#faf9fd;
 color:var(--text);
-font-size:13px
+font-size:13px;
 }
 
-.field input:focus{
+.field input:focus,
+.field select:focus{
 background:#fff;
 border-color:#a28be8;
-box-shadow:0 0 0 4px rgba(117,87,217,.08)
+box-shadow:0 0 0 4px rgba(117,87,217,.08);
 }
 
 .primary{
@@ -227,7 +226,7 @@ background:linear-gradient(135deg,var(--purple),var(--purple2));
 color:#fff;
 font-size:13px;
 font-weight:700;
-box-shadow:0 12px 28px rgba(117,87,217,.25)
+box-shadow:0 12px 28px rgba(117,87,217,.20);
 }
 
 .secondary{
@@ -235,7 +234,7 @@ width:100%;
 padding:13px;
 border-radius:15px;
 background:var(--light);
-color:#694ab3
+color:#694ab3;
 }
 
 .message{
@@ -246,82 +245,121 @@ background:var(--soft);
 color:#684c88;
 font-size:11px;
 line-height:1.8;
-display:none
+display:none;
 }
 
 .app{
 min-height:100vh;
-padding-bottom:90px
+padding-bottom:100px;
+background:#fff;
 }
 
 .topbar{
 position:sticky;
 top:0;
 z-index:100;
-padding:15px 18px 13px;
-background:rgba(247,245,255,.78);
-backdrop-filter:blur(20px);
+padding:13px 18px;
+background:rgba(255,255,255,.82);
+backdrop-filter:blur(22px);
 border-bottom:1px solid rgba(100,80,150,.06);
 display:flex;
 align-items:center;
-justify-content:space-between
+justify-content:space-between;
 }
 
 .brand{
 font-size:23px;
 font-weight:800;
-letter-spacing:-1px
+letter-spacing:-1px;
 }
 
 .brand span:first-child{
-color:var(--purple)
+color:var(--purple);
 }
 
 .brand span:last-child{
-color:var(--text)
+color:var(--text);
 }
 
 .user-name{
 margin-top:3px;
 font-size:10px;
-color:var(--muted)
+color:var(--muted);
 }
 
-.logout{
-background:#fff;
-color:#b14e59;
-padding:8px 12px;
-border-radius:12px;
+.profile-top-btn{
+display:flex;
+align-items:center;
+gap:7px;
+padding:5px 8px 5px 10px;
+border-radius:16px;
+background:#f8f6ff;
+color:var(--purple);
+border:1px solid rgba(117,87,217,.08);
+}
+
+.profile-top-btn span{
 font-size:10px;
-border:1px solid rgba(190,80,95,.08)
+font-weight:700;
+}
+
+.avatar{
+width:38px;
+height:38px;
+border-radius:50%;
+background:linear-gradient(135deg,#eee8ff,#d9d0ff);
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+flex-shrink:0;
+color:var(--purple);
+font-size:17px;
+font-weight:800;
+}
+
+.avatar img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.avatar.large{
+width:92px;
+height:92px;
+font-size:32px;
+}
+
+.avatar.small{
+width:42px;
+height:42px;
 }
 
 .container{
 width:min(100% - 28px,760px);
-margin:18px auto 100px
+margin:18px auto 100px;
 }
 
 .card{
-background:rgba(255,255,255,.82);
-backdrop-filter:blur(18px);
-border:1px solid rgba(255,255,255,.95);
+background:#fff;
+border:1px solid rgba(105,82,160,.08);
 border-radius:27px;
 padding:19px;
 margin-bottom:15px;
-box-shadow:var(--shadow)
+box-shadow:var(--shadow);
 }
 
 .card-title{
 font-size:16px;
 font-weight:800;
-margin-bottom:15px
+margin-bottom:15px;
 }
 
 .home-hero{
 padding:24px;
 background:linear-gradient(135deg,#fff,#f0ebff);
 position:relative;
-overflow:hidden
+overflow:hidden;
 }
 
 .home-hero:after{
@@ -331,39 +369,39 @@ left:25px;
 top:18px;
 color:#c5b5ff;
 font-size:42px;
-opacity:.5
+opacity:.5;
 }
 
 .home-hello{
 font-size:23px;
 font-weight:800;
-margin-bottom:5px
+margin-bottom:5px;
 }
 
 .home-sub{
 font-size:12px;
 color:var(--muted);
-line-height:1.9
+line-height:1.9;
 }
 
 .home-grid{
 display:grid;
 grid-template-columns:repeat(2,1fr);
-gap:12px
+gap:12px;
 }
 
 .home-menu{
-background:rgba(255,255,255,.9);
+background:#fff;
 border:1px solid var(--border);
 border-radius:22px;
 padding:20px 15px;
 text-align:right;
-box-shadow:0 8px 25px rgba(76,55,135,.06);
-transition:.18s
+box-shadow:0 8px 25px rgba(76,55,135,.05);
+transition:.18s;
 }
 
 .home-menu:active{
-transform:scale(.97)
+transform:scale(.97);
 }
 
 .home-icon{
@@ -375,11 +413,11 @@ display:flex;
 align-items:center;
 justify-content:center;
 font-size:21px;
-margin-bottom:12px
+margin-bottom:12px;
 }
 
 .home-menu b{
-font-size:14px
+font-size:14px;
 }
 
 .home-menu small{
@@ -387,7 +425,7 @@ display:block;
 color:var(--muted);
 font-size:10px;
 margin-top:5px;
-line-height:1.7
+line-height:1.7;
 }
 
 .home-count{
@@ -397,14 +435,76 @@ background:#f5f1ff;
 color:var(--purple);
 padding:4px 8px;
 border-radius:9px;
-font-size:9px
+font-size:9px;
+}
+
+.chat-preview-card{
+padding:18px;
+margin-top:15px;
+}
+
+.chat-preview-head{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:13px;
+}
+
+.chat-preview-title{
+font-size:16px;
+font-weight:800;
+}
+
+.chat-preview-link{
+font-size:10px;
+color:var(--purple);
+background:var(--light);
+padding:7px 10px;
+border-radius:11px;
+}
+
+.chat-preview-row{
+display:flex;
+align-items:center;
+gap:10px;
+padding:12px 4px;
+border-bottom:1px solid rgba(105,82,160,.07);
+cursor:pointer;
+}
+
+.chat-preview-row:last-child{
+border-bottom:0;
+}
+
+.chat-preview-info{
+flex:1;
+min-width:0;
+}
+
+.chat-preview-name{
+font-size:12px;
+font-weight:700;
+}
+
+.chat-preview-message{
+font-size:10px;
+color:var(--muted);
+margin-top:4px;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+.chat-preview-time{
+font-size:8px;
+color:#aaa;
 }
 
 .month-head{
 display:flex;
 align-items:center;
 justify-content:space-between;
-margin-bottom:18px
+margin-bottom:18px;
 }
 
 .month-head button{
@@ -413,12 +513,12 @@ height:40px;
 border-radius:14px;
 background:var(--light);
 color:var(--purple);
-font-size:23px
+font-size:23px;
 }
 
 .month-title{
 font-size:15px;
-font-weight:800
+font-weight:800;
 }
 
 .calendar-owner{
@@ -426,13 +526,13 @@ font-size:10px;
 color:var(--muted);
 text-align:center;
 margin-top:-10px;
-margin-bottom:13px
+margin-bottom:13px;
 }
 
 .grid{
 display:grid;
 grid-template-columns:repeat(7,1fr);
-gap:7px
+gap:7px;
 }
 
 .weekday{
@@ -440,7 +540,7 @@ text-align:center;
 font-size:9px;
 color:#aaa5b4;
 padding:5px 0 8px;
-font-weight:600
+font-weight:600;
 }
 
 .day{
@@ -454,54 +554,54 @@ flex-direction:column;
 position:relative;
 font-size:13px;
 border:1px solid transparent;
-transition:.18s
+transition:.18s;
 }
 
 .day.empty{
-background:transparent
+background:transparent;
 }
 
 .day.free{
-cursor:pointer
+cursor:pointer;
 }
 
 .day.free:active{
 transform:scale(.93);
-background:#f0ebff
+background:#f0ebff;
 }
 
 .day.booked{
 background:var(--redbg);
 color:var(--red);
-border-color:#ffdce1
+border-color:#ffdce1;
 }
 
 .day.wish{
 background:#f2edff;
 color:#7656bc;
 border-color:#e0d4ff;
-cursor:pointer
+cursor:pointer;
 }
 
 .day.today{
 border-color:var(--purple);
-box-shadow:0 0 0 2px rgba(117,87,217,.08)
+box-shadow:0 0 0 2px rgba(117,87,217,.08);
 }
 
 .day strong{
-font-size:13px
+font-size:13px;
 }
 
 .day small{
 font-size:7px;
 margin-top:3px;
-opacity:.7
+opacity:.7;
 }
 
 .appointments-title{
 display:flex;
 align-items:center;
-justify-content:space-between
+justify-content:space-between;
 }
 
 .appointment{
@@ -509,25 +609,25 @@ padding:14px;
 border:1px solid var(--border);
 background:#fff;
 border-radius:18px;
-margin-bottom:9px
+margin-bottom:9px;
 }
 
 .appointment-date{
 color:var(--purple);
 font-size:11px;
 font-weight:800;
-margin-bottom:5px
+margin-bottom:5px;
 }
 
 .appointment-text{
 font-size:12px;
-line-height:1.8
+line-height:1.8;
 }
 
 .appointment-status{
 font-size:9px;
 color:var(--muted);
-margin-top:5px
+margin-top:5px;
 }
 
 .friend-item,
@@ -535,56 +635,56 @@ margin-top:5px
 .notification-item{
 padding:14px;
 border:1px solid var(--border);
-background:rgba(255,255,255,.72);
+background:#fff;
 border-radius:19px;
-margin-bottom:10px
+margin-bottom:10px;
 }
 
 .row{
 display:flex;
 align-items:center;
 justify-content:space-between;
-gap:10px
+gap:10px;
 }
 
 .name{
 font-size:13px;
-font-weight:700
+font-weight:700;
 }
 
 .username{
 color:#a19baa;
 font-size:10px;
-margin-top:4px
+margin-top:4px;
 }
 
 .small-btn{
 padding:8px 11px;
 border-radius:11px;
 font-size:10px;
-font-weight:600
+font-weight:600;
 }
 
 .success-btn{
 background:var(--greenbg);
-color:#278159
+color:#278159;
 }
 
 .danger-btn{
 background:var(--redbg);
-color:#ad4551
+color:#ad4551;
 }
 
 .purple-btn{
 background:var(--light);
-color:#6949ae
+color:#6949ae;
 }
 
 .button-group{
 display:flex;
 align-items:center;
 gap:7px;
-flex-wrap:wrap
+flex-wrap:wrap;
 }
 
 .unread-badge{
@@ -599,12 +699,12 @@ background:var(--red);
 color:#fff;
 font-size:8px;
 font-weight:800;
-margin-right:4px
+margin-right:4px;
 }
 
 .search-row{
 display:flex;
-gap:8px
+gap:8px;
 }
 
 .search-row input{
@@ -615,12 +715,12 @@ border:1px solid var(--border);
 border-radius:15px;
 outline:none;
 background:#faf9fd;
-font-size:12px
+font-size:12px;
 }
 
 .search-row input:focus{
 background:#fff;
-border-color:#a18ae8
+border-color:#a18ae8;
 }
 
 .search-row button{
@@ -629,45 +729,122 @@ border-radius:15px;
 background:linear-gradient(135deg,var(--purple),var(--purple2));
 color:#fff;
 font-size:11px;
-font-weight:600
+font-weight:600;
 }
 
 .date-info{
 line-height:2;
 font-size:12px;
-color:#777181
+color:#777181;
 }
 
 .notification-actions{
 display:flex;
 gap:7px;
 margin-top:12px;
-flex-wrap:wrap
+flex-wrap:wrap;
 }
 
 .empty{
 text-align:center;
 color:#aaa5b5;
 padding:25px 10px;
-font-size:12px
+font-size:12px;
 }
 
 .section-label{
 font-size:11px;
 color:var(--muted);
 font-weight:700;
-margin:4px 2px 10px
+margin:4px 2px 10px;
 }
 
 .notification-item.unread{
 border-color:#d9ccff;
-background:#fbf9ff
+background:#fbf9ff;
 }
 
 .notification-time{
 font-size:9px;
 color:#aaa;
-margin-top:7px
+margin-top:7px;
+}
+
+/* PROFILE */
+
+.profile-head{
+display:flex;
+flex-direction:column;
+align-items:center;
+text-align:center;
+padding:10px 0 22px;
+}
+
+.profile-avatar-wrap{
+position:relative;
+margin-bottom:13px;
+}
+
+.avatar-upload-btn{
+position:absolute;
+bottom:-2px;
+left:-2px;
+width:30px;
+height:30px;
+border-radius:50%;
+background:var(--purple);
+color:#fff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:14px;
+border:3px solid #fff;
+}
+
+.profile-name{
+font-size:19px;
+font-weight:800;
+}
+
+.profile-username{
+font-size:11px;
+color:var(--muted);
+margin-top:4px;
+}
+
+.profile-info-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+margin-top:17px;
+}
+
+.profile-info-box{
+background:#faf9fd;
+border:1px solid var(--border);
+border-radius:17px;
+padding:13px;
+}
+
+.profile-info-label{
+font-size:9px;
+color:#aaa5b4;
+margin-bottom:5px;
+}
+
+.profile-info-value{
+font-size:12px;
+font-weight:700;
+}
+
+.profile-actions{
+display:flex;
+gap:8px;
+margin-top:15px;
+}
+
+.profile-actions button{
+flex:1;
 }
 
 /* CHAT */
@@ -676,7 +853,7 @@ margin-top:7px
 display:flex;
 align-items:center;
 gap:10px;
-margin-bottom:15px
+margin-bottom:15px;
 }
 
 .chat-back{
@@ -686,26 +863,26 @@ border-radius:14px;
 background:var(--light);
 color:var(--purple);
 font-size:20px;
-flex-shrink:0
+flex-shrink:0;
 }
 
 .chat-user-info{
-flex:1
+flex:1;
 }
 
 .chat-user-name{
 font-size:15px;
-font-weight:800
+font-weight:800;
 }
 
 .chat-user-status{
 font-size:9px;
 color:var(--muted);
-margin-top:3px
+margin-top:3px;
 }
 
 .chat-card{
-padding:14px
+padding:14px;
 }
 
 .chat-messages{
@@ -715,7 +892,7 @@ padding:8px 4px 15px;
 display:flex;
 flex-direction:column;
 gap:8px;
-scroll-behavior:smooth
+scroll-behavior:smooth;
 }
 
 .chat-empty{
@@ -726,20 +903,20 @@ justify-content:center;
 color:#aaa5b5;
 font-size:11px;
 text-align:center;
-padding:30px
+padding:30px;
 }
 
 .chat-row{
 display:flex;
-width:100%
+width:100%;
 }
 
 .chat-row.mine{
-justify-content:flex-start
+justify-content:flex-start;
 }
 
 .chat-row.theirs{
-justify-content:flex-end
+justify-content:flex-end;
 }
 
 .chat-bubble{
@@ -749,26 +926,26 @@ border-radius:18px;
 font-size:12px;
 line-height:1.8;
 word-break:break-word;
-white-space:pre-wrap
+white-space:pre-wrap;
 }
 
 .chat-bubble.mine{
 background:linear-gradient(135deg,var(--purple),var(--purple2));
 color:#fff;
-border-bottom-left-radius:6px
+border-bottom-left-radius:6px;
 }
 
 .chat-bubble.theirs{
 background:#f1eef8;
 color:var(--text);
-border-bottom-right-radius:6px
+border-bottom-right-radius:6px;
 }
 
 .chat-time{
 font-size:7px;
 opacity:.65;
 margin-top:4px;
-text-align:left
+text-align:left;
 }
 
 .chat-input-row{
@@ -776,7 +953,7 @@ display:flex;
 gap:8px;
 align-items:flex-end;
 border-top:1px solid var(--border);
-padding-top:12px
+padding-top:12px;
 }
 
 .chat-input{
@@ -791,13 +968,13 @@ border:1px solid var(--border);
 outline:none;
 background:#faf9fd;
 font-size:12px;
-color:var(--text)
+color:var(--text);
 }
 
 .chat-input:focus{
 background:#fff;
 border-color:#a18ae8;
-box-shadow:0 0 0 4px rgba(117,87,217,.06)
+box-shadow:0 0 0 4px rgba(117,87,217,.06);
 }
 
 .chat-send{
@@ -807,19 +984,61 @@ border-radius:15px;
 background:linear-gradient(135deg,var(--purple),var(--purple2));
 color:#fff;
 font-size:17px;
-flex-shrink:0
+flex-shrink:0;
 }
 
 .chat-send:disabled{
 opacity:.5;
-cursor:not-allowed
+cursor:not-allowed;
 }
 
 .chat-date{
 text-align:center;
 font-size:8px;
 color:#aaa5b5;
-margin:10px 0 2px
+margin:10px 0 2px;
+}
+
+.chat-list-item{
+display:flex;
+align-items:center;
+gap:11px;
+padding:13px 4px;
+border-bottom:1px solid rgba(105,82,160,.07);
+cursor:pointer;
+}
+
+.chat-list-item:last-child{
+border-bottom:0;
+}
+
+.chat-list-info{
+flex:1;
+min-width:0;
+}
+
+.chat-list-name{
+font-size:12px;
+font-weight:700;
+}
+
+.chat-list-last{
+font-size:10px;
+color:var(--muted);
+margin-top:4px;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+.chat-list-side{
+text-align:left;
+}
+
+.chat-list-time{
+font-size:8px;
+color:#aaa;
+margin-bottom:5px;
 }
 
 /* NAV */
@@ -830,52 +1049,57 @@ bottom:12px;
 left:50%;
 transform:translateX(-50%);
 z-index:100;
-width:min(calc(100% - 24px),520px);
+width:min(calc(100% - 24px),560px);
 padding:7px;
 display:flex;
 gap:5px;
-background:rgba(255,255,255,.88);
-backdrop-filter:blur(22px);
+background:rgba(255,255,255,.70);
+backdrop-filter:blur(24px);
+-webkit-backdrop-filter:blur(24px);
 border:1px solid rgba(255,255,255,.95);
-border-radius:24px;
-box-shadow:0 15px 45px rgba(60,45,110,.18)
+border-radius:25px;
+box-shadow:0 15px 45px rgba(60,45,110,.15);
 }
 
 .nav button{
 flex:1;
-padding:10px 4px;
+padding:9px 4px;
 border-radius:17px;
 background:transparent;
 color:#aaa5b5;
-font-size:9px
+font-size:9px;
 }
 
 .nav button.active{
 background:var(--light);
 color:var(--purple);
-font-weight:700
+font-weight:700;
 }
 
 @media(max-width:380px){
 
 .auth-box{
-padding:28px 20px
+padding:28px 20px;
 }
 
 .day{
-min-height:51px
+min-height:51px;
 }
 
 .container{
-width:min(100% - 20px,760px)
+width:min(100% - 20px,760px);
 }
 
 .card{
-padding:16px
+padding:16px;
 }
 
 .chat-bubble{
-max-width:84%
+max-width:84%;
+}
+
+.profile-info-grid{
+grid-template-columns:1fr 1fr;
 }
 
 }
@@ -978,6 +1202,7 @@ hideLoading();
 $("root").innerHTML=`
 
 <div class="error-box">
+
 <h2>یه مشکلی پیش اومد</h2>
 
 <p>
@@ -1106,10 +1331,10 @@ return gregorianToJalali(y,m,d);
 
 function jalaliMonthDays(y,m){
 
-if(m>=1 && m<=6)
+if(m>=1&&m<=6)
 return 31;
 
-if(m>=7 && m<=11)
+if(m>=7&&m<=11)
 return 30;
 
 const a=jalaliDateToISO(y,12,1);
@@ -1191,6 +1416,41 @@ return d.toLocaleTimeString("fa-IR",{
 hour:"2-digit",
 minute:"2-digit"
 });
+}
+
+/* =========================
+آواتار
+========================= */
+
+function avatarHtml(profile,size=""){
+const cls=size?`avatar ${size}`:"avatar";
+
+if(profile?.avatar_url){
+
+return`
+
+<div class="${cls}">
+<img
+src="${escapeHtml(profile.avatar_url)}"
+alt=""
+onerror="this.style.display='none';this.parentElement.textContent='${escapeHtml(
+(profile.display_name||"?").slice(0,1)
+)}'">
+</div>
+
+`;
+
+}
+
+return`
+
+<div class="${cls}">
+${escapeHtml(
+(profile?.display_name||"?").slice(0,1)
+)}
+</div>
+
+`;
 }
 
 /* =========================
@@ -1303,7 +1563,10 @@ showLoading();
 
 try{
 
-const{data,error}=await withTimeout(
+const{
+data,
+error
+}=await withTimeout(
 supabaseClient.auth.signUp({
 email:username+"@gharamoon.local",
 password,
@@ -1484,8 +1747,14 @@ ${escapeHtml(currentProfile.display_name)}
 
 </div>
 
-<button class="logout" onclick="logout()">
-خروج
+<button
+class="profile-top-btn"
+onclick="goPage('profile')">
+
+${avatarHtml(currentProfile,"small")}
+
+<span>پروفایل</span>
+
 </button>
 
 </div>
@@ -1505,9 +1774,23 @@ onclick="goPage('home')">
 </button>
 
 <button
+id="navFriends"
+onclick="goPage('friends')">
+👥<br>
+دوستان
+</button>
+
+<button
+id="navCalendar"
+onclick="goPage('calendar')">
+📅<br>
+تقویم
+</button>
+
+<button
 id="navNotifications"
 onclick="goPage('notifications')">
-♡<br>
+🔔<br>
 اعلان‌ها
 </button>
 
@@ -1532,11 +1815,12 @@ document
 .querySelectorAll(".nav button")
 .forEach(x=>x.classList.remove("active"));
 
-const n=$(
+const navId=
 "nav"+
 page.charAt(0).toUpperCase()+
-page.slice(1)
-);
+page.slice(1);
+
+const n=$(navId);
 
 if(n)n.classList.add("active");
 
@@ -1559,6 +1843,12 @@ await renderNotifications();
 
 if(page==="chat")
 await renderChatPage();
+
+if(page==="chatList")
+await renderChatListPage();
+
+if(page==="profile")
+await renderProfilePage();
 
 }catch(e){
 
@@ -1707,43 +1997,34 @@ ${notifCount} خوانده‌نشده
 
 </div>
 
-${
-chatUnread>0
-?
-`
+<div
+id="homeChats"
+class="card chat-preview-card">
 
-<div class="card" style="margin-top:15px">
+<div class="chat-preview-head">
 
-<div class="row">
-
-<div>
-
-<div class="name">
-💬 پیام جدید داری
-</div>
-
-<div class="username">
-${chatUnread} پیام خوانده‌نشده
-</div>
-
+<div class="chat-preview-title">
+💬 چت‌ها
 </div>
 
 <button
-class="small-btn purple-btn"
-onclick="goPage('friends')">
-دیدن چت‌ها
+class="chat-preview-link"
+onclick="goPage('chatList')">
+همه چت‌ها
 </button>
 
 </div>
 
+<div id="homeChatList">
+در حال دریافت...
 </div>
 
-`
-:
-""
-}
+</div>
 
 `;
+
+await renderHomeChatPreview();
+
 }
 
 async function getFriendsCount(){
@@ -1850,6 +2131,178 @@ return data?.length||0;
 }
 
 /* =========================
+چت‌ها در خانه
+========================= */
+
+async function getChatSummaries(){
+
+const{
+data:messages,
+error
+}=await supabaseClient
+.from("messages")
+.select(
+"id,sender_id,receiver_id,body,created_at,is_read"
+)
+.or(
+`sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`
+)
+.order(
+"created_at",
+{
+ascending:false
+}
+)
+.limit(100);
+
+if(error)throw error;
+
+const map={};
+
+for(const message of messages||[]){
+
+const partnerId=
+message.sender_id===currentUser.id
+?
+message.receiver_id
+:
+message.sender_id;
+
+if(!map[partnerId]){
+map[partnerId]={
+...message,
+partnerId
+};
+}
+}
+
+const ids=Object.keys(map);
+
+if(!ids.length)
+return [];
+
+const{
+data:profiles,
+error:profileError
+}=await supabaseClient
+.from("profiles")
+.select("id,display_name,username,avatar_url")
+.in("id",ids);
+
+if(profileError)throw profileError;
+
+const profileMap={};
+
+(profiles||[]).forEach(
+p=>profileMap[p.id]=p
+);
+
+const result=[];
+
+for(const id of ids){
+
+const summary=map[id];
+
+const unread=
+await getUnreadFromFriend(id);
+
+result.push({
+...summary,
+profile:profileMap[id],
+unread
+});
+}
+
+return result;
+}
+
+async function renderHomeChatPreview(){
+
+const box=$("homeChatList");
+
+if(!box)return;
+
+try{
+
+const chats=await getChatSummaries();
+
+if(!chats.length){
+
+box.innerHTML=`
+
+<div class="empty">
+هنوز چتی نداری.
+<br>
+از بخش دوستان با یکی از دوستات شروع کن 💜
+</div>
+
+`;
+
+return;
+}
+
+box.innerHTML=
+chats
+.slice(0,4)
+.map(chat=>`
+
+<div
+class="chat-preview-row"
+onclick="openChat(
+'${attrValue(chat.partnerId)}',
+'${attrValue(chat.profile?.display_name||"کاربر")}'
+)">
+
+${avatarHtml(chat.profile)}
+
+<div class="chat-preview-info">
+
+<div class="chat-preview-name">
+${escapeHtml(
+chat.profile?.display_name||
+"کاربر"
+)}
+
+${
+chat.unread>0
+?
+`<span class="unread-badge">${chat.unread}</span>`
+:
+""
+}
+
+</div>
+
+<div class="chat-preview-message">
+${escapeHtml(chat.body||"")}
+</div>
+
+</div>
+
+<div class="chat-preview-time">
+${relativeTime(chat.created_at)}
+</div>
+
+</div>
+
+`)
+.join("");
+
+}catch(e){
+
+console.error(e);
+
+box.innerHTML=`
+
+<div class="empty">
+چت‌ها فعلاً قابل دریافت نیستند.
+</div>
+
+`;
+}
+}
+
+/* =========================
 دوستان
 ========================= */
 
@@ -1918,7 +2371,7 @@ data,
 error
 }=await supabaseClient
 .from("profiles")
-.select("id,display_name,username")
+.select("id,display_name,username,avatar_url")
 .eq("username",username)
 .maybeSingle();
 
@@ -2029,6 +2482,10 @@ box.innerHTML=`
 
 <div class="row">
 
+<div style="display:flex;align-items:center;gap:10px">
+
+${avatarHtml(data)}
+
 <div>
 
 <div class="name">
@@ -2037,6 +2494,8 @@ ${escapeHtml(data.display_name)}
 
 <div class="username">
 @${escapeHtml(data.username)}
+</div>
+
 </div>
 
 </div>
@@ -2132,7 +2591,7 @@ data:profiles,
 error:profileError
 }=await supabaseClient
 .from("profiles")
-.select("id,display_name,username")
+.select("id,display_name,username,avatar_url")
 .in("id",ids);
 
 if(profileError){
@@ -2168,6 +2627,10 @@ return`
 
 <div class="row">
 
+<div style="display:flex;align-items:center;gap:10px;min-width:0">
+
+${avatarHtml(p)}
+
 <div>
 
 <div class="name">
@@ -2176,6 +2639,8 @@ ${escapeHtml(p.display_name)}
 
 <div class="username">
 @${escapeHtml(p.username)}
+</div>
+
 </div>
 
 </div>
@@ -2346,6 +2811,20 @@ await goPage("friends");
 return;
 }
 
+let partnerProfile=null;
+
+const{
+data:partner
+}=await supabaseClient
+.from("profiles")
+.select("id,display_name,username,avatar_url")
+.eq("id",chatPartnerId)
+.maybeSingle();
+
+partnerProfile=partner||{
+display_name:chatPartnerName
+};
+
 main.innerHTML=`
 
 <div class="card chat-card">
@@ -2358,10 +2837,14 @@ onclick="goPage('friends')">
 ›
 </button>
 
+${avatarHtml(partnerProfile)}
+
 <div class="chat-user-info">
 
 <div class="chat-user-name">
-${escapeHtml(chatPartnerName)}
+${escapeHtml(
+partnerProfile.display_name||chatPartnerName
+)}
 </div>
 
 <div class="chat-user-status">
@@ -2731,6 +3214,116 @@ status
 );
 }
 );
+}
+
+/* =========================
+لیست چت‌ها
+========================= */
+
+async function renderChatListPage(){
+
+const main=$("mainContent");
+
+main.innerHTML=`
+
+<div class="card">
+
+<div class="card-title">
+💬 چت‌ها
+</div>
+
+<div id="fullChatList">
+در حال دریافت...
+</div>
+
+</div>
+
+`;
+
+const box=$("fullChatList");
+
+try{
+
+const chats=await getChatSummaries();
+
+if(!chats.length){
+
+box.innerHTML=`
+
+<div class="empty">
+هنوز چتی نداری.
+<br>
+از بخش دوستان با یکی از دوستات شروع کن 💜
+</div>
+
+`;
+
+return;
+}
+
+box.innerHTML=
+chats
+.map(chat=>`
+
+<div
+class="chat-list-item"
+onclick="openChat(
+'${attrValue(chat.partnerId)}',
+'${attrValue(chat.profile?.display_name||"کاربر")}'
+)">
+
+${avatarHtml(chat.profile)}
+
+<div class="chat-list-info">
+
+<div class="chat-list-name">
+
+${escapeHtml(
+chat.profile?.display_name||
+"کاربر"
+)}
+
+${
+chat.unread>0
+?
+`<span class="unread-badge">${chat.unread}</span>`
+:
+""
+}
+
+</div>
+
+<div class="chat-list-last">
+${escapeHtml(chat.body||"")}
+</div>
+
+</div>
+
+<div class="chat-list-side">
+
+<div class="chat-list-time">
+${relativeTime(chat.created_at)}
+</div>
+
+</div>
+
+</div>
+
+`)
+.join("");
+
+}catch(e){
+
+console.error(e);
+
+box.innerHTML=`
+
+<div class="empty">
+${escapeHtml(e.message||"چت‌ها قابل دریافت نیستند.")}
+</div>
+
+`;
+}
 }
 
 /* =====================================================
@@ -3597,6 +4190,8 @@ ${j.jy}
 
 if(info?.is_booked){
 
+if(ownCalendar){
+
 html+=`
 
 <div class="date-info">
@@ -3615,6 +4210,18 @@ info.partner_name||
 </div>
 
 `;
+
+}else{
+
+html+=`
+
+<div class="date-info">
+این تاریخ رزرو شده است.
+</div>
+
+`;
+
+}
 
 }else if(
 !ownCalendar&&
@@ -3949,7 +4556,7 @@ data:p
 }=await supabaseClient
 .from("profiles")
 .select(
-"id,display_name,username"
+"id,display_name,username,avatar_url"
 )
 .in(
 "id",
@@ -3970,6 +4577,12 @@ data
 
 <div class="request-item">
 
+<div style="display:flex;align-items:center;gap:10px">
+
+${avatarHtml(map[r.requester_id])}
+
+<div>
+
 <div class="name">
 ${escapeHtml(
 map[r.requester_id]
@@ -3984,6 +4597,10 @@ map[r.requester_id]
 ?.username||
 ""
 )}
+</div>
+
+</div>
+
 </div>
 
 <div class="notification-actions">
@@ -4073,7 +4690,7 @@ data:p
 }=await supabaseClient
 .from("profiles")
 .select(
-"id,display_name,username"
+"id,display_name,username,avatar_url"
 )
 .in(
 "id",
@@ -4094,6 +4711,12 @@ data
 
 <div class="request-item">
 
+<div style="display:flex;align-items:center;gap:10px">
+
+${avatarHtml(map[r.requester_id])}
+
+<div>
+
 <div class="name">
 ${escapeHtml(
 map[r.requester_id]
@@ -4108,6 +4731,10 @@ map[r.requester_id]
 ?.username||
 ""
 )}
+</div>
+
+</div>
+
 </div>
 
 <div class="date-info">
@@ -4515,8 +5142,406 @@ e.message||
 }
 }
 
+/* =====================================================
+پروفایل
+===================================================== */
+
+async function renderProfilePage(){
+
+const p=currentProfile||{};
+
+$("mainContent").innerHTML=`
+
+<div class="card">
+
+<div class="profile-head">
+
+<div class="profile-avatar-wrap">
+
+<div id="profileAvatarPreview">
+${avatarHtml(p,"large")}
+</div>
+
+<label
+class="avatar-upload-btn"
+for="avatarInput">
+✎
+</label>
+
+<input
+id="avatarInput"
+type="file"
+accept="image/*"
+style="display:none"
+onchange="uploadAvatar(this.files[0])">
+
+</div>
+
+<div class="profile-name">
+${escapeHtml(p.display_name||"بدون نام")}
+</div>
+
+<div class="profile-username">
+@${escapeHtml(p.username||"")}
+</div>
+
+</div>
+
+<div class="profile-info-grid">
+
+<div class="profile-info-box">
+
+<div class="profile-info-label">
+نام
+</div>
+
+<div class="profile-info-value">
+${escapeHtml(p.display_name||"—")}
+</div>
+
+</div>
+
+<div class="profile-info-box">
+
+<div class="profile-info-label">
+نام کاربری
+</div>
+
+<div class="profile-info-value">
+@${escapeHtml(p.username||"—")}
+</div>
+
+</div>
+
+<div class="profile-info-box">
+
+<div class="profile-info-label">
+شهر
+</div>
+
+<div class="profile-info-value">
+${escapeHtml(p.city||"ثبت نشده")}
+</div>
+
+</div>
+
+<div class="profile-info-box">
+
+<div class="profile-info-label">
+استان
+</div>
+
+<div class="profile-info-value">
+${escapeHtml(p.province||"ثبت نشده")}
+</div>
+
+</div>
+
+<div class="profile-info-box">
+
+<div class="profile-info-label">
+سن
+</div>
+
+<div class="profile-info-value">
+${p.age?escapeHtml(p.age):"ثبت نشده"}
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="card-title">
+ویرایش پروفایل
+</div>
+
+<div class="field">
+
+<label>
+اسم نمایشی
+</label>
+
+<input
+id="profileDisplayName"
+value="${escapeHtml(p.display_name||"")}"
+maxlength="80">
+
+</div>
+
+<div class="field">
+
+<label>
+شهر
+</label>
+
+<input
+id="profileCity"
+value="${escapeHtml(p.city||"")}"
+placeholder="مثلاً خرمشهر"
+maxlength="80">
+
+</div>
+
+<div class="field">
+
+<label>
+استان
+</label>
+
+<input
+id="profileProvince"
+value="${escapeHtml(p.province||"")}"
+placeholder="مثلاً خوزستان"
+maxlength="80">
+
+</div>
+
+<div class="field">
+
+<label>
+سن
+</label>
+
+<input
+id="profileAge"
+type="number"
+min="1"
+max="120"
+value="${p.age||""}"
+placeholder="مثلاً ۱۸">
+
+</div>
+
+<button
+class="primary"
+onclick="saveProfile()">
+ذخیره تغییرات
+</button>
+
+<div
+id="profileMessage"
+class="message">
+</div>
+
+</div>
+
+<div class="card">
+
+<button
+class="secondary"
+onclick="logout()">
+خروج از حساب
+</button>
+
+</div>
+
+`;
+}
+
+async function uploadAvatar(file){
+
+if(!file)
+return;
+
+if(!file.type.startsWith("image/"))
+return alert("لطفاً یک فایل تصویری انتخاب کن.");
+
+if(file.size>5*1024*1024)
+return alert("حجم عکس باید کمتر از ۵ مگابایت باشد.");
+
+showLoading();
+
+try{
+
+const ext=
+(
+file.name.split(".").pop()||
+"jpg"
+)
+.toLowerCase()
+.replace(/[^a-z0-9]/g,"");
+
+const path=
+`${currentUser.id}/avatar-${Date.now()}.${ext}`;
+
+const{
+error:uploadError
+}=await supabaseClient
+.storage
+.from("avatars")
+.upload(
+path,
+file,
+{
+upsert:true,
+contentType:file.type
+}
+);
+
+if(uploadError)
+throw uploadError;
+
+const{
+data:urlData
+}=supabaseClient
+.storage
+.from("avatars")
+.getPublicUrl(path);
+
+const avatarUrl=urlData?.publicUrl;
+
+if(!avatarUrl)
+throw new Error(
+"آدرس عکس ساخته نشد."
+);
+
+const{
+error:updateError
+}=await supabaseClient
+.from("profiles")
+.update({
+avatar_url:avatarUrl
+})
+.eq("id",currentUser.id);
+
+if(updateError)
+throw updateError;
+
+currentProfile.avatar_url=avatarUrl;
+
+hideLoading();
+
+await renderProfilePage();
+
+alert("عکس پروفایل ذخیره شد ✅");
+
+}catch(e){
+
+hideLoading();
+
+console.error(e);
+
+alert(
+e.message||
+"آپلود عکس انجام نشد."
+);
+}
+}
+
+async function saveProfile(){
+
+const displayName=
+$("profileDisplayName")
+?.value
+.trim();
+
+const city=
+$("profileCity")
+?.value
+.trim();
+
+const province=
+$("profileProvince")
+?.value
+.trim();
+
+const ageValue=
+$("profileAge")
+?.value
+.trim();
+
+const age=
+ageValue?
+Number(ageValue):
+null;
+
+const message=$("profileMessage");
+
+if(!displayName){
+
+if(message){
+
+message.textContent=
+"اسم نمایشی رو وارد کن.";
+
+message.style.display="block";
+}
+
+return;
+}
+
+if(age!==null&&
+(
+Number.isNaN(age)||
+age<1||
+age>120
+)
+){
+
+if(message){
+
+message.textContent=
+"سن واردشده معتبر نیست.";
+
+message.style.display="block";
+}
+
+return;
+}
+
+showLoading();
+
+try{
+
+const{
+data,
+error
+}=await supabaseClient
+.from("profiles")
+.update({
+display_name:displayName,
+city:city||null,
+province:province||null,
+age:age
+})
+.eq("id",currentUser.id)
+.select("*")
+.single();
+
+if(error)throw error;
+
+currentProfile=data;
+
+hideLoading();
+
+alert("پروفایل ذخیره شد ✅");
+
+await renderApp();
+
+}catch(e){
+
+hideLoading();
+
+console.error(e);
+
+if(message){
+
+message.textContent=
+e.message||
+"ذخیره پروفایل انجام نشد.";
+
+message.style.display="block";
+}
+
+}
+}
+
 /* =========================
-شروع برنامه
+شروع
 ========================= */
 
 async function start(){
