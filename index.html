@@ -1,2776 +1,2762 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>قرارمون</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
-
-:root{
---bg:#ffffff;
---white:#ffffff;
---purple:#7557d9;
---purple2:#9479ed;
---light:#eee9ff;
---soft:#f7f5ff;
---text:#24202f;
---muted:#918c9f;
---border:rgba(105,82,160,.10);
---green:#42ae78;
---greenbg:#e8f8ef;
---red:#dc5c69;
---redbg:#fff0f2;
---shadow:0 18px 50px rgba(76,55,135,.08);
-}
-
-*{
-box-sizing:border-box;
-margin:0;
-padding:0;
-}
-
-html{
-scroll-behavior:smooth;
-}
-
-body{
-font-family:Vazirmatn,Tahoma,Arial,sans-serif;
-background:#fff;
-color:var(--text);
-min-height:100vh;
-}
-
-button,input,textarea,select{
-font-family:inherit;
-}
-
-button{
-cursor:pointer;
-border:0;
-}
-
-.hidden{
-display:none!important;
-}
-
-.loading{
-position:fixed;
-inset:0;
-z-index:9999;
-background:rgba(255,255,255,.92);
-backdrop-filter:blur(18px);
-display:flex;
-align-items:center;
-justify-content:center;
-}
-
-.loading-box{
-background:#fff;
-padding:22px 28px;
-border-radius:24px;
-box-shadow:var(--shadow);
-color:var(--purple);
-font-size:14px;
-font-weight:700;
-}
-
-.loading-box:before{
-content:"";
-display:inline-block;
-width:10px;
-height:10px;
-border:2px solid #d8ceff;
-border-top-color:var(--purple);
-border-radius:50%;
-margin-left:9px;
-vertical-align:-1px;
-animation:spin .7s linear infinite;
-}
-
-@keyframes spin{
-to{transform:rotate(360deg);}
-}
-
-.error-box{
-width:min(90%,430px);
-margin:100px auto;
-padding:28px;
-background:#fff;
-border-radius:28px;
-box-shadow:var(--shadow);
-text-align:center;
-}
-
-.error-box h2{
-margin-bottom:12px;
-}
-
-.error-box p{
-color:#777;
-line-height:1.9;
-font-size:13px;
-word-break:break-word;
-}
-
-.error-box .primary{
-margin-top:18px;
-}
-
-.auth-page{
-min-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-padding:22px;
-background:#fff;
-}
-
-.auth-box{
-width:100%;
-max-width:430px;
-padding:34px 27px;
-background:#fff;
-border:1px solid rgba(105,82,160,.08);
-border-radius:32px;
-box-shadow:0 25px 80px rgba(68,48,125,.10);
-}
-
-.logo{
-text-align:center;
-font-size:36px;
-font-weight:800;
-letter-spacing:-1.5px;
-color:var(--text);
-margin-bottom:7px;
-}
-
-.logo:after{
-content:"•";
-color:var(--purple);
-margin-right:4px;
-}
-
-.subtitle{
-text-align:center;
-color:var(--muted);
-margin-bottom:27px;
-font-size:12px;
-line-height:1.9;
-}
-
-.tabs{
-display:flex;
-gap:6px;
-padding:5px;
-margin-bottom:21px;
-border-radius:17px;
-background:#f1eef8;
-}
-
-.tab{
-flex:1;
-padding:11px;
-border-radius:13px;
-background:transparent;
-color:var(--muted);
-font-size:12px;
-font-weight:600;
-}
-
-.tab.active{
-background:#fff;
-color:var(--purple);
-box-shadow:0 5px 18px rgba(70,50,120,.08);
-}
-
-.field{
-margin-bottom:15px;
-}
-
-.field label{
-display:block;
-margin-bottom:7px;
-font-size:11px;
-color:#686274;
-font-weight:600;
-}
-
-.field input,
-.field select{
-width:100%;
-padding:14px 15px;
-border:1px solid var(--border);
-border-radius:16px;
-outline:none;
-background:#faf9fd;
-color:var(--text);
-font-size:13px;
-}
-
-.field input:focus,
-.field select:focus{
-background:#fff;
-border-color:#a28be8;
-box-shadow:0 0 0 4px rgba(117,87,217,.08);
-}
-
-.primary{
-width:100%;
-padding:14px;
-border-radius:16px;
-background:linear-gradient(135deg,var(--purple),var(--purple2));
-color:#fff;
-font-size:13px;
-font-weight:700;
-box-shadow:0 12px 28px rgba(117,87,217,.20);
-}
-
-.secondary{
-width:100%;
-padding:13px;
-border-radius:15px;
-background:var(--light);
-color:#694ab3;
-}
-
-.message{
-margin-top:14px;
-padding:11px 13px;
-border-radius:13px;
-background:var(--soft);
-color:#684c88;
-font-size:11px;
-line-height:1.8;
-display:none;
-}
-
-.app{
-min-height:100vh;
-padding-bottom:100px;
-background:#fff;
-}
-
-.topbar{
-position:sticky;
-top:0;
-z-index:100;
-padding:13px 18px;
-background:rgba(255,255,255,.82);
-backdrop-filter:blur(22px);
-border-bottom:1px solid rgba(100,80,150,.06);
-display:flex;
-align-items:center;
-justify-content:space-between;
-}
-
-.brand{
-font-size:23px;
-font-weight:800;
-letter-spacing:-1px;
-}
-
-.brand span:first-child{
-color:var(--purple);
-}
-
-.brand span:last-child{
-color:var(--text);
-}
-
-.user-name{
-margin-top:3px;
-font-size:10px;
-color:var(--muted);
-}
-
-.profile-top-btn{
-display:flex;
-align-items:center;
-gap:7px;
-padding:5px 8px 5px 10px;
-border-radius:16px;
-background:#f8f6ff;
-color:var(--purple);
-border:1px solid rgba(117,87,217,.08);
-}
-
-.profile-top-btn span{
-font-size:10px;
-font-weight:700;
-}
-
-.avatar{
-width:38px;
-height:38px;
-border-radius:50%;
-background:linear-gradient(135deg,#eee8ff,#d9d0ff);
-display:flex;
-align-items:center;
-justify-content:center;
-overflow:hidden;
-flex-shrink:0;
-color:var(--purple);
-font-size:17px;
-font-weight:800;
-}
-
-.avatar img{
-width:100%;
-height:100%;
-object-fit:cover;
-}
-
-.avatar.large{
-width:92px;
-height:92px;
-font-size:32px;
-}
-
-.avatar.small{
-width:42px;
-height:42px;
-}
-
-.container{
-width:min(100% - 28px,760px);
-margin:18px auto 100px;
-}
-
-.card{
-background:#fff;
-border:1px solid rgba(105,82,160,.08);
-border-radius:27px;
-padding:19px;
-margin-bottom:15px;
-box-shadow:var(--shadow);
-}
-
-.card-title{
-font-size:16px;
-font-weight:800;
-margin-bottom:15px;
-}
-
-.home-hero{
-padding:24px;
-background:linear-gradient(135deg,#fff,#f0ebff);
-position:relative;
-overflow:hidden;
-}
-
-.home-hero:after{
-content:"✦";
-position:absolute;
-left:25px;
-top:18px;
-color:#c5b5ff;
-font-size:42px;
-opacity:.5;
-}
-
-.home-hello{
-font-size:23px;
-font-weight:800;
-margin-bottom:5px;
-}
-
-.home-sub{
-font-size:12px;
-color:var(--muted);
-line-height:1.9;
-}
-
-.home-grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:12px;
-}
-
-.home-menu{
-background:#fff;
-border:1px solid var(--border);
-border-radius:22px;
-padding:20px 15px;
-text-align:right;
-box-shadow:0 8px 25px rgba(76,55,135,.05);
-transition:.18s;
-}
-
-.home-menu:active{
-transform:scale(.97);
-}
-
-.home-icon{
-width:43px;
-height:43px;
-border-radius:15px;
-background:var(--light);
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:21px;
-margin-bottom:12px;
-}
-
-.home-menu b{
-font-size:14px;
-}
-
-.home-menu small{
-display:block;
-color:var(--muted);
-font-size:10px;
-margin-top:5px;
-line-height:1.7;
-}
-
-.home-count{
-display:inline-block;
-margin-top:9px;
-background:#f5f1ff;
-color:var(--purple);
-padding:4px 8px;
-border-radius:9px;
-font-size:9px;
-}
-
-.chat-preview-card{
-padding:18px;
-margin-top:15px;
-}
-
-.chat-preview-head{
-display:flex;
-align-items:center;
-justify-content:space-between;
-margin-bottom:13px;
-}
-
-.chat-preview-title{
-font-size:16px;
-font-weight:800;
-}
-
-.chat-preview-link{
-font-size:10px;
-color:var(--purple);
-background:var(--light);
-padding:7px 10px;
-border-radius:11px;
-}
-
-.chat-preview-row{
-display:flex;
-align-items:center;
-gap:10px;
-padding:12px 4px;
-border-bottom:1px solid rgba(105,82,160,.07);
-cursor:pointer;
-}
-
-.chat-preview-row:last-child{
-border-bottom:0;
-}
-
-.chat-preview-info{
-flex:1;
-min-width:0;
-}
-
-.chat-preview-name{
-font-size:12px;
-font-weight:700;
-}
-
-.chat-preview-message{
-font-size:10px;
-color:var(--muted);
-margin-top:4px;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis;
-}
-
-.chat-preview-time{
-font-size:8px;
-color:#aaa;
-}
-
-.month-head{
-display:flex;
-align-items:center;
-justify-content:space-between;
-margin-bottom:18px;
-}
-
-.month-head button{
-width:40px;
-height:40px;
-border-radius:14px;
-background:var(--light);
-color:var(--purple);
-font-size:23px;
-}
-
-.month-title{
-font-size:15px;
-font-weight:800;
-}
-
-.calendar-owner{
-font-size:10px;
-color:var(--muted);
-text-align:center;
-margin-top:-10px;
-margin-bottom:13px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(7,1fr);
-gap:7px;
-}
-
-.weekday{
-text-align:center;
-font-size:9px;
-color:#aaa5b4;
-padding:5px 0 8px;
-font-weight:600;
-}
-
-.day{
-min-height:56px;
-border-radius:16px;
-background:#f8f7fb;
-display:flex;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-position:relative;
-font-size:13px;
-border:1px solid transparent;
-transition:.18s;
-}
-
-.day.empty{
-background:transparent;
-}
-
-.day.free{
-cursor:pointer;
-}
-
-.day.free:active{
-transform:scale(.93);
-background:#f0ebff;
-}
-
-.day.booked{
-background:var(--redbg);
-color:var(--red);
-border-color:#ffdce1;
-}
-
-.day.wish{
-background:#f2edff;
-color:#7656bc;
-border-color:#e0d4ff;
-cursor:pointer;
-}
-
-.day.today{
-border-color:var(--purple);
-box-shadow:0 0 0 2px rgba(117,87,217,.08);
-}
-
-.day strong{
-font-size:13px;
-}
-
-.day small{
-font-size:7px;
-margin-top:3px;
-opacity:.7;
-}
-
-.appointments-title{
-display:flex;
-align-items:center;
-justify-content:space-between;
-}
-
-.appointment{
-padding:14px;
-border:1px solid var(--border);
-background:#fff;
-border-radius:18px;
-margin-bottom:9px;
-}
-
-.appointment-date{
-color:var(--purple);
-font-size:11px;
-font-weight:800;
-margin-bottom:5px;
-}
-
-.appointment-text{
-font-size:12px;
-line-height:1.8;
-}
-
-.appointment-status{
-font-size:9px;
-color:var(--muted);
-margin-top:5px;
-}
-
-.friend-item,
-.request-item,
-.notification-item{
-padding:14px;
-border:1px solid var(--border);
-background:#fff;
-border-radius:19px;
-margin-bottom:10px;
-}
-
-.row{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:10px;
-}
-
-.name{
-font-size:13px;
-font-weight:700;
-}
-
-.username{
-color:#a19baa;
-font-size:10px;
-margin-top:4px;
-}
-
-.small-btn{
-padding:8px 11px;
-border-radius:11px;
-font-size:10px;
-font-weight:600;
-}
-
-.success-btn{
-background:var(--greenbg);
-color:#278159;
-}
-
-.danger-btn{
-background:var(--redbg);
-color:#ad4551;
-}
-
-.purple-btn{
-background:var(--light);
-color:#6949ae;
-}
-
-.button-group{
-display:flex;
-align-items:center;
-gap:7px;
-flex-wrap:wrap;
-}
-
-.unread-badge{
-display:inline-flex;
-align-items:center;
-justify-content:center;
-min-width:18px;
-height:18px;
-padding:0 5px;
-border-radius:20px;
-background:var(--red);
-color:#fff;
-font-size:8px;
-font-weight:800;
-margin-right:4px;
-}
-
-.search-row{
-display:flex;
-gap:8px;
-}
-
-.search-row input{
-flex:1;
-min-width:0;
-padding:13px;
-border:1px solid var(--border);
-border-radius:15px;
-outline:none;
-background:#faf9fd;
-font-size:12px;
-}
-
-.search-row input:focus{
-background:#fff;
-border-color:#a18ae8;
-}
-
-.search-row button{
-padding:0 17px;
-border-radius:15px;
-background:linear-gradient(135deg,var(--purple),var(--purple2));
-color:#fff;
-font-size:11px;
-font-weight:600;
-}
-
-.date-info{
-line-height:2;
-font-size:12px;
-color:#777181;
-}
-
-.notification-actions{
-display:flex;
-gap:7px;
-margin-top:12px;
-flex-wrap:wrap;
-}
-
-.empty{
-text-align:center;
-color:#aaa5b5;
-padding:25px 10px;
-font-size:12px;
-}
-
-.section-label{
-font-size:11px;
-color:var(--muted);
-font-weight:700;
-margin:4px 2px 10px;
-}
-
-.notification-item.unread{
-border-color:#d9ccff;
-background:#fbf9ff;
-}
-
-.notification-time{
-font-size:9px;
-color:#aaa;
-margin-top:7px;
-}
-
-/* PROFILE */
-
-.profile-head{
-display:flex;
-flex-direction:column;
-align-items:center;
-text-align:center;
-padding:10px 0 22px;
-}
-
-.profile-avatar-wrap{
-position:relative;
-margin-bottom:13px;
-}
-
-.avatar-upload-btn{
-position:absolute;
-bottom:-2px;
-left:-2px;
-width:30px;
-height:30px;
-border-radius:50%;
-background:var(--purple);
-color:#fff;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:14px;
-border:3px solid #fff;
-}
-
-.profile-name{
-font-size:19px;
-font-weight:800;
-}
-
-.profile-username{
-font-size:11px;
-color:var(--muted);
-margin-top:4px;
-}
-
-.profile-info-grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:10px;
-margin-top:17px;
-}
-
-.profile-info-box{
-background:#faf9fd;
-border:1px solid var(--border);
-border-radius:17px;
-padding:13px;
-}
-
-.profile-info-label{
-font-size:9px;
-color:#aaa5b4;
-margin-bottom:5px;
-}
-
-.profile-info-value{
-font-size:12px;
-font-weight:700;
-}
-
-.profile-actions{
-display:flex;
-gap:8px;
-margin-top:15px;
-}
-
-.profile-actions button{
-flex:1;
-}
-
-/* CHAT */
-
-.chat-header{
-display:flex;
-align-items:center;
-gap:10px;
-margin-bottom:15px;
-}
-
-.chat-back{
-width:40px;
-height:40px;
-border-radius:14px;
-background:var(--light);
-color:var(--purple);
-font-size:20px;
-flex-shrink:0;
-}
-
-.chat-user-info{
-flex:1;
-}
-
-.chat-user-name{
-font-size:15px;
-font-weight:800;
-}
-
-.chat-user-status{
-font-size:9px;
-color:var(--muted);
-margin-top:3px;
-}
-
-.chat-card{
-padding:14px;
-}
-
-.chat-messages{
-height:min(58vh,520px);
-overflow-y:auto;
-padding:8px 4px 15px;
-display:flex;
-flex-direction:column;
-gap:8px;
-scroll-behavior:smooth;
-}
-
-.chat-empty{
-flex:1;
-display:flex;
-align-items:center;
-justify-content:center;
-color:#aaa5b5;
-font-size:11px;
-text-align:center;
-padding:30px;
-}
-
-.chat-row{
-display:flex;
-width:100%;
-}
-
-.chat-row.mine{
-justify-content:flex-start;
-}
-
-.chat-row.theirs{
-justify-content:flex-end;
-}
-
-.chat-bubble{
-max-width:78%;
-padding:10px 13px;
-border-radius:18px;
-font-size:12px;
-line-height:1.8;
-word-break:break-word;
-white-space:pre-wrap;
-}
-
-.chat-bubble.mine{
-background:linear-gradient(135deg,var(--purple),var(--purple2));
-color:#fff;
-border-bottom-left-radius:6px;
-}
-
-.chat-bubble.theirs{
-background:#f1eef8;
-color:var(--text);
-border-bottom-right-radius:6px;
-}
-
-.chat-time{
-font-size:7px;
-opacity:.65;
-margin-top:4px;
-text-align:left;
-}
-
-.chat-input-row{
-display:flex;
-gap:8px;
-align-items:flex-end;
-border-top:1px solid var(--border);
-padding-top:12px;
-}
-
-.chat-input{
-flex:1;
-min-width:0;
-resize:none;
-height:45px;
-max-height:110px;
-padding:12px 14px;
-border-radius:15px;
-border:1px solid var(--border);
-outline:none;
-background:#faf9fd;
-font-size:12px;
-color:var(--text);
-}
-
-.chat-input:focus{
-background:#fff;
-border-color:#a18ae8;
-box-shadow:0 0 0 4px rgba(117,87,217,.06);
-}
-
-.chat-send{
-width:45px;
-height:45px;
-border-radius:15px;
-background:linear-gradient(135deg,var(--purple),var(--purple2));
-color:#fff;
-font-size:17px;
-flex-shrink:0;
-}
-
-.chat-send:disabled{
-opacity:.5;
-cursor:not-allowed;
-}
-
-.chat-date{
-text-align:center;
-font-size:8px;
-color:#aaa5b5;
-margin:10px 0 2px;
-}
-
-.chat-list-item{
-display:flex;
-align-items:center;
-gap:11px;
-padding:13px 4px;
-border-bottom:1px solid rgba(105,82,160,.07);
-cursor:pointer;
-}
-
-.chat-list-item:last-child{
-border-bottom:0;
-}
-
-.chat-list-info{
-flex:1;
-min-width:0;
-}
-
-.chat-list-name{
-font-size:12px;
-font-weight:700;
-}
-
-.chat-list-last{
-font-size:10px;
-color:var(--muted);
-margin-top:4px;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis;
-}
-
-.chat-list-side{
-text-align:left;
-}
-
-.chat-list-time{
-font-size:8px;
-color:#aaa;
-margin-bottom:5px;
-}
-
-/* NAV */
-
-.nav{
-position:fixed;
-bottom:12px;
-left:50%;
-transform:translateX(-50%);
-z-index:100;
-width:min(calc(100% - 24px),560px);
-padding:7px;
-display:flex;
-gap:5px;
-background:rgba(255,255,255,.70);
-backdrop-filter:blur(24px);
--webkit-backdrop-filter:blur(24px);
-border:1px solid rgba(255,255,255,.95);
-border-radius:25px;
-box-shadow:0 15px 45px rgba(60,45,110,.15);
-}
-
-.nav button{
-flex:1;
-padding:9px 4px;
-border-radius:17px;
-background:transparent;
-color:#aaa5b5;
-font-size:9px;
-}
-
-.nav button.active{
-background:var(--light);
-color:var(--purple);
-font-weight:700;
-}
-
-@media(max-width:380px){
-
-.auth-box{
-padding:28px 20px;
-}
-
-.day{
-min-height:51px;
-}
-
-.container{
-width:min(100% - 20px,760px);
-}
-
-.card{
-padding:16px;
-}
-
-.chat-bubble{
-max-width:84%;
-}
-
-.profile-info-grid{
-grid-template-columns:1fr 1fr;
-}
-
-}
-</style>
-</head>
-
-<body>
-
-<div id="loading" class="loading">
-<div class="loading-box">لطفاً صبر کن...</div>
-</div>
-
-<div id="root"></div>
-
-<script>
-
-const SUPABASE_URL="https://cdjnziqrkmzqyfbqeuvk.supabase.co";
-const SUPABASE_KEY="sb_publishable_-Zsn2pWcBLDOUJAeK2GlnA_Q_GBUmoU";
-
-let supabaseClient=null;
-let currentUser=null;
-let currentProfile=null;
-let currentPage="home";
-
-let calendarOwner=null;
-let calendarOwnerName="";
-let ownCalendar=true;
-
-let calendarYear=0;
-let calendarMonth=0;
-
-let chatPartnerId=null;
-let chatPartnerName="";
-let chatChannel=null;
-
-const $=id=>document.getElementById(id);
-
-function showLoading(){
-$("loading")?.classList.remove("hidden");
-}
-
-function hideLoading(){
-$("loading")?.classList.add("hidden");
-}
-
-function escapeHtml(v){
-return String(v??"")
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
-}
-
-function attrValue(v){
-return encodeURIComponent(String(v??""));
-}
-
-function decodeAttr(v){
-try{
-return decodeURIComponent(v);
-}catch{
-return String(v??"");
-}
-}
-
-function withTimeout(promise,ms=12000){
-return Promise.race([
-promise,
-new Promise((_,reject)=>
-setTimeout(
-()=>reject(new Error("اتصال به سرور بیش از حد طول کشید.")),
-ms
-)
-)
-]);
-}
-
-function showMessage(t){
-const e=$("authMessage");
-
-if(e){
-e.textContent=t;
-e.style.display="block";
-}
-}
-
-function hideMessage(){
-const e=$("authMessage");
-
-if(e){
-e.style.display="none";
-}
-}
-
-function showFatalError(e){
-
-hideLoading();
-
-$("root").innerHTML=`
-
-<div class="error-box">
-
-<h2>یه مشکلی پیش اومد</h2>
-
-<p>
-${escapeHtml(e?.message||e||"خطای ناشناخته")}
-</p>
-
-<button class="primary" onclick="location.reload()">
-تلاش دوباره
-</button>
-
-</div>
-
-`;
-}
-
-window.addEventListener("error",e=>{
-console.error(e.error||e.message);
-});
-
-window.addEventListener("unhandledrejection",e=>{
-console.error(e.reason);
-});
-
-/* =========================
-تاریخ شمسی
-========================= */
-
-const faCalendar=
-new Intl.DateTimeFormat(
-"fa-IR-u-ca-persian-nu-latn",
-{
-year:"numeric",
-month:"numeric",
-day:"numeric"
-}
-);
-
-function gregorianToJalali(y,m,d){
-
-const parts=
-faCalendar.formatToParts(
-new Date(y,m-1,d)
-);
-
-const get=t=>
-Number(
-parts.find(x=>x.type===t)?.value
-);
-
-return{
-jy:get("year"),
-jm:get("month"),
-jd:get("day")
-};
-}
-
-const jalaliIsoCache=new Map();
-
-function jalaliDateToISO(jy,jm,jd){
-
-const key=`${jy}-${jm}-${jd}`;
-
-if(jalaliIsoCache.has(key))
-return jalaliIsoCache.get(key);
-
-let gy=jy+621;
-
-let guess=
-new Date(
-Date.UTC(
-gy,
-2,
-20
-)
-);
-
-for(let i=-10;i<=380;i++){
-
-const x=
-new Date(
-guess.getTime()+
-i*86400000
-);
-
-const j=
-gregorianToJalali(
-x.getUTCFullYear(),
-x.getUTCMonth()+1,
-x.getUTCDate()
-);
-
-if(
-j.jy===jy &&
-j.jm===jm &&
-j.jd===jd
-){
-
-const iso=
-`${x.getUTCFullYear()}-${String(
-x.getUTCMonth()+1
-).padStart(2,"0")}-${String(
-x.getUTCDate()
-).padStart(2,"0")}`;
-
-jalaliIsoCache.set(key,iso);
-
-return iso;
-}
-}
-
-throw new Error("تبدیل تاریخ انجام نشد.");
-}
-
-function isoToJalali(iso){
-
-const[
-y,
-m,
-d
-]=iso.slice(0,10)
-.split("-")
-.map(Number);
-
-return gregorianToJalali(y,m,d);
-}
-
-function jalaliMonthDays(y,m){
-
-if(m>=1&&m<=6)
-return 31;
-
-if(m>=7&&m<=11)
-return 30;
-
-const a=jalaliDateToISO(y,12,1);
-const b=jalaliDateToISO(y+1,1,1);
-
-return Math.round(
-(Date.parse(b)-Date.parse(a))/86400000
-);
-}
-
-function todayJalali(){
-
-const d=new Date();
-
-return gregorianToJalali(
-d.getFullYear(),
-d.getMonth()+1,
-d.getDate()
-);
-}
-
-const months=[
-"فروردین",
-"اردیبهشت",
-"خرداد",
-"تیر",
-"مرداد",
-"شهریور",
-"مهر",
-"آبان",
-"آذر",
-"دی",
-"بهمن",
-"اسفند"
-];
-
-const weekdays=[
-"ش","ی","د","س","چ","پ","ج"
-];
-
-function jalaliDateLabel(iso){
-
-const j=isoToJalali(iso);
-
-return `${j.jd} ${months[j.jm-1]} ${j.jy}`;
-}
-
-function relativeTime(iso){
-
-if(!iso)return "";
-
-const d=new Date(iso);
-
-const s=
-Math.floor(
-(Date.now()-d.getTime())/1000
-);
-
-if(s<60)
-return "همین الان";
-
-if(s<3600)
-return `${Math.floor(s/60)} دقیقه پیش`;
-
-if(s<86400)
-return `${Math.floor(s/3600)} ساعت پیش`;
-
-if(s<604800)
-return `${Math.floor(s/86400)} روز پیش`;
-
-return d.toLocaleDateString("fa-IR");
-}
-
-function chatTime(iso){
-
-const d=new Date(iso);
-
-return d.toLocaleTimeString("fa-IR",{
-hour:"2-digit",
-minute:"2-digit"
-});
-}
-
-/* =========================
-آواتار
-========================= */
-
-function avatarHtml(profile,size=""){
-const cls=size?`avatar ${size}`:"avatar";
-
-if(profile?.avatar_url){
-
-return`
-
-<div class="${cls}">
-<img
-src="${escapeHtml(profile.avatar_url)}"
-alt=""
-onerror="this.style.display='none';this.parentElement.textContent='${escapeHtml(
-(profile.display_name||"?").slice(0,1)
-)}'">
-</div>
-
-`;
-
-}
-
-return`
-
-<div class="${cls}">
-${escapeHtml(
-(profile?.display_name||"?").slice(0,1)
-)}
-</div>
-
-`;
-}
-
-/* =========================
-ورود / ثبت نام
-========================= */
-
-function renderAuth(mode="login"){
-
-$("root").innerHTML=`
-
-<div class="auth-page">
-
-<div class="auth-box">
-
-<div class="logo">
-قرارمون
-</div>
-
-<div class="subtitle">
-یه جای ساده برای هماهنگ کردن قرار با آدمای خودت
-</div>
-
-<div class="tabs">
-
-<button
-class="tab ${mode==="login"?"active":""}"
-onclick="renderAuth('login')">
-ورود
-</button>
-
-<button
-class="tab ${mode==="signup"?"active":""}"
-onclick="renderAuth('signup')">
-ثبت‌نام
-</button>
-
-</div>
-
-${
-mode==="signup"
-?
-`
-
-<div class="field">
-<label>اسم نمایشی</label>
-<input id="displayName" placeholder="مثلاً محمد کیان">
-</div>
-
-<div class="field">
-<label>نام کاربری</label>
-<input id="username" placeholder="مثلاً kian">
-</div>
-
-<div class="field">
-<label>رمز عبور</label>
-<input id="password" type="password" placeholder="رمز عبور">
-</div>
-
-<button class="primary" onclick="signup()">
-ساخت حساب
-</button>
-
-`
-:
-`
-
-<div class="field">
-<label>نام کاربری</label>
-<input id="username" placeholder="نام کاربری">
-</div>
-
-<div class="field">
-<label>رمز عبور</label>
-<input id="password" type="password" placeholder="رمز عبور">
-</div>
-
-<button class="primary" onclick="login()">
-ورود
-</button>
-
-`
-}
-
-<div id="authMessage" class="message"></div>
-
-</div>
-</div>
-
-`;
-}
-
-async function signup(){
-
-hideMessage();
-
-const displayName=$("displayName")?.value.trim();
-const username=$("username")?.value.trim().toLowerCase();
-const password=$("password")?.value;
-
-if(!displayName||!username||!password)
-return showMessage("همه فیلدها رو کامل کن.");
-
-if(username.length<3)
-return showMessage("نام کاربری حداقل ۳ حرف باشه.");
-
-if(password.length<6)
-return showMessage("رمز عبور حداقل ۶ کاراکتر باشه.");
-
-showLoading();
-
-try{
-
-const{
-data,
-error
-}=await withTimeout(
-supabaseClient.auth.signUp({
-email:username+"@gharamoon.local",
-password,
-options:{
-data:{
-username,
-display_name:displayName
-}
-}
-})
-);
-
-if(error)throw error;
-
-if(data.session&&data.user){
-
-currentUser=data.user;
-
-await loadProfile();
-
-renderApp();
-
-hideLoading();
-
-return;
-}
-
-hideLoading();
-
-renderAuth("login");
-
-showMessage(
-"ثبت‌نام انجام شد. حالا وارد حسابت شو."
-);
-
-}catch(e){
-
-hideLoading();
-
-renderAuth("signup");
-
-showMessage(
-e.message||"ثبت‌نام انجام نشد."
-);
-}
-}
-
-async function login(){
-
-hideMessage();
-
-const username=$("username")?.value.trim().toLowerCase();
-const password=$("password")?.value;
-
-if(!username||!password)
-return showMessage(
-"نام کاربری و رمز عبور رو وارد کن."
-);
-
-showLoading();
-
-try{
-
-const{
-data:emailData,
-error:emailError
-}=await withTimeout(
-supabaseClient.rpc(
-"get_login_email",
-{
-p_username:username
-}
-)
-);
-
-if(emailError)throw emailError;
-
-if(!emailData)
-throw new Error("نام کاربری پیدا نشد.");
-
-const{
-data,
-error
-}=await withTimeout(
-supabaseClient.auth.signInWithPassword({
-email:emailData,
-password
-})
-);
-
-if(error)throw error;
-
-currentUser=data.user;
-
-await loadProfile();
-
-renderApp();
-
-hideLoading();
-
-}catch(e){
-
-hideLoading();
-
-renderAuth("login");
-
-showMessage(
-e.message||"ورود انجام نشد."
-);
-}
-}
-
-async function loadProfile(){
-
-if(!currentUser)
-throw new Error("کاربر وارد نشده است.");
-
-const{
-data,
-error
-}=await withTimeout(
-supabaseClient
-.from("profiles")
-.select("*")
-.eq("id",currentUser.id)
-.maybeSingle()
-);
-
-if(error)throw error;
-
-if(!data)
-throw new Error("پروفایل کاربر پیدا نشد.");
-
-currentProfile=data;
-}
-
-async function logout(){
-
-cleanupChatRealtime();
-
-try{
-await supabaseClient.auth.signOut();
-}catch(e){
-console.error(e);
-}
-
-currentUser=null;
-currentProfile=null;
-
-chatPartnerId=null;
-chatPartnerName="";
-
-renderAuth("login");
-}
-
-/* =========================
-اپ
-========================= */
-
-function renderApp(){
-
-$("root").innerHTML=`
-
-<div class="app">
-
-<div class="topbar">
-
-<div>
-
-<div class="brand">
-<span>قرار</span>
-<span>مون</span>
-</div>
-
-<div class="user-name">
-${escapeHtml(currentProfile.display_name)}
-</div>
-
-</div>
-
-<button
-class="profile-top-btn"
-onclick="goPage('profile')">
-
-${avatarHtml(currentProfile,"small")}
-
-<span>پروفایل</span>
-
-</button>
-
-</div>
-
-<main
-id="mainContent"
-class="container">
-</main>
-
-<nav class="nav">
-
-<button
-id="navHome"
-onclick="goPage('home')">
-⌂<br>
-خانه
-</button>
-
-<button
-id="navFriends"
-onclick="goPage('friends')">
-👥<br>
-دوستان
-</button>
-
-<button
-id="navCalendar"
-onclick="goPage('calendar')">
-📅<br>
-تقویم
-</button>
-
-<button
-id="navNotifications"
-onclick="goPage('notifications')">
-🔔<br>
-اعلان‌ها
-</button>
-
-</nav>
-
-</div>
-
-`;
-
-goPage("home");
-}
-
-async function goPage(page){
-
-if(currentPage==="chat"&&page!=="chat"){
-cleanupChatRealtime();
-}
-
-currentPage=page;
-
-document
-.querySelectorAll(".nav button")
-.forEach(x=>x.classList.remove("active"));
-
-const navId=
-"nav"+
-page.charAt(0).toUpperCase()+
-page.slice(1);
-
-const n=$(navId);
-
-if(n)n.classList.add("active");
-
-try{
-
-if(page==="home")
-await renderHome();
-
-if(page==="friends")
-await renderFriends();
-
-if(page==="calendar")
-await renderCalendarPage();
-
-if(page==="requests")
-await renderRequests();
-
-if(page==="notifications")
-await renderNotifications();
-
-if(page==="chat")
-await renderChatPage();
-
-if(page==="chatList")
-await renderChatListPage();
-
-if(page==="profile")
-await renderProfilePage();
-
-}catch(e){
-
-console.error("goPage error:",e);
-
-if($("mainContent")){
-
-$("mainContent").innerHTML=`
-
-<div class="card">
-
-<div class="empty">
-
-خطایی در باز کردن این بخش رخ داد.
-
-<br><br>
-
-${escapeHtml(
-e?.message||"خطای ناشناخته"
-)}
-
-</div>
-
-</div>
-
-`;
-}
-}
-}
-
-/* =========================
-خانه
-========================= */
-
-async function renderHome(){
-
-const[
-friendsCount,
-reqCount,
-notifCount,
-chatUnread
-]=await Promise.all([
-getFriendsCount(),
-getRequestsCount(),
-getUnreadCount(),
-getUnreadMessagesCount()
-]);
-
-const t=todayJalali();
-
-$("mainContent").innerHTML=`
-
-<div class="card home-hero">
-
-<div class="home-hello">
-سلام ${escapeHtml(currentProfile.display_name)} 👋
-</div>
-
-<div class="home-sub">
-اینجا همه‌چیز برای هماهنگ کردن قرارهای شما جمع شده.
-</div>
-
-</div>
-
-<div class="home-grid">
-
-<button
-class="home-menu"
-onclick="goPage('friends')">
-
-<div class="home-icon">
-👥
-</div>
-
-<b>دوستان</b>
-
-<small>
-پیدا کردن، چت کردن و دیدن تقویم دوستان
-</small>
-
-<span class="home-count">
-${friendsCount} دوست
-</span>
-
-</button>
-
-<button
-class="home-menu"
-onclick="goPage('calendar')">
-
-<div class="home-icon">
-📅
-</div>
-
-<b>تقویم</b>
-
-<small>
-روزهای آزاد و قرارهای ثبت‌شده
-</small>
-
-<span class="home-count">
-${months[t.jm-1]} ${t.jy}
-</span>
-
-</button>
-
-<button
-class="home-menu"
-onclick="goPage('requests')">
-
-<div class="home-icon">
-📩
-</div>
-
-<b>درخواست‌ها</b>
-
-<small>
-درخواست‌های دوستی و قرار
-</small>
-
-<span class="home-count">
-${reqCount} جدید
-</span>
-
-</button>
-
-<button
-class="home-menu"
-onclick="goPage('notifications')">
-
-<div class="home-icon">
-🔔
-</div>
-
-<b>اعلان‌ها</b>
-
-<small>
-همه اتفاقات و پاسخ‌ها
-</small>
-
-<span class="home-count">
-${notifCount} خوانده‌نشده
-</span>
-
-</button>
-
-</div>
-
-<div
-id="homeChats"
-class="card chat-preview-card">
-
-<div class="chat-preview-head">
-
-<div class="chat-preview-title">
-💬 چت‌ها
-</div>
-
-<button
-class="chat-preview-link"
-onclick="goPage('chatList')">
-همه چت‌ها
-</button>
-
-</div>
-
-<div id="homeChatList">
-در حال دریافت...
-</div>
-
-</div>
-
-`;
-
-await renderHomeChatPreview();
-
-}
-
-async function getFriendsCount(){
-
-const{
-data,
-error
-}=await supabaseClient
-.from("friendships")
-.select("requester_id,receiver_id")
-.eq("status","accepted")
-.or(
-`requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`
-);
-
-if(error){
-console.error(error);
-return 0;
-}
-
-return data?.length||0;
-}
-
-async function getRequestsCount(){
-
-const[
-{count:a},
-{count:b}
-]=await Promise.all([
-
-supabaseClient
-.from("friendships")
-.select("id",{count:"exact",head:true})
-.eq("receiver_id",currentUser.id)
-.eq("status","pending"),
-
-supabaseClient
-.from("hangout_requests")
-.select("id",{count:"exact",head:true})
-.eq("receiver_id",currentUser.id)
-.eq("status","pending")
-
-]);
-
-return(a||0)+(b||0);
-}
-
-async function getUnreadCount(){
-
-const{
-data,
-error
-}=await supabaseClient
-.from("notifications")
-.select("id")
-.eq("user_id",currentUser.id)
-.eq("is_read",false);
-
-if(error){
-console.error(error);
-return 0;
-}
-
-return data?.length||0;
-}
-
-async function getUnreadMessagesCount(){
-
-const{
-data,
-error
-}=await supabaseClient
-.from("messages")
-.select("id")
-.eq("receiver_id",currentUser.id)
-.eq("is_read",false);
-
-if(error){
-console.error(error);
-return 0;
-}
-
-return data?.length||0;
-}
-
-async function getUnreadFromFriend(friendId){
-
-const{
-data,
-error
-}=await supabaseClient
-.from("messages")
-.select("id")
-.eq("receiver_id",currentUser.id)
-.eq("sender_id",friendId)
-.eq("is_read",false);
-
-if(error){
-console.error(error);
-return 0;
-}
-
-return data?.length||0;
-}
-
-/* =========================
-چت‌ها در خانه
-========================= */
-
-async function getChatSummaries(){
-
-const{
-data:messages,
-error
-}=await supabaseClient
-.from("messages")
-.select(
-"id,sender_id,receiver_id,body,created_at,is_read"
-)
-.or(
-`sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`
-)
-.order(
-"created_at",
-{
-ascending:false
-}
-)
-.limit(100);
-
-if(error)throw error;
-
-const map={};
-
-for(const message of messages||[]){
-
-const partnerId=
-message.sender_id===currentUser.id
-?
-message.receiver_id
-:
-message.sender_id;
-
-if(!map[partnerId]){
-map[partnerId]={
-...message,
-partnerId
-};
-}
-}
-
-const ids=Object.keys(map);
-
-if(!ids.length)
-return [];
-
-const{
-data:profiles,
-error:profileError
-}=await supabaseClient
-.from("profiles")
-.select("id,display_name,username,avatar_url")
-.in("id",ids);
-
-if(profileError)throw profileError;
-
-const profileMap={};
-
-(profiles||[]).forEach(
-p=>profileMap[p.id]=p
-);
-
-const result=[];
-
-for(const id of ids){
-
-const summary=map[id];
-
-const unread=
-await getUnreadFromFriend(id);
-
-result.push({
-...summary,
-profile:profileMap[id],
-unread
-});
-}
-
-return result;
-}
-
-async function renderHomeChatPreview(){
-
-const box=$("homeChatList");
-
-if(!box)return;
-
-try{
-
-const chats=await getChatSummaries();
-
-if(!chats.length){
-
-box.innerHTML=`
-
-<div class="empty">
-هنوز چتی نداری.
-<br>
-از بخش دوستان با یکی از دوستات شروع کن 💜
-</div>
-
-`;
-
-return;
-}
-
-box.innerHTML=
-chats
-.slice(0,4)
-.map(chat=>`
-
-<div
-class="chat-preview-row"
-onclick="openChat(
-'${attrValue(chat.partnerId)}',
-'${attrValue(chat.profile?.display_name||"کاربر")}'
-)">
-
-${avatarHtml(chat.profile)}
-
-<div class="chat-preview-info">
-
-<div class="chat-preview-name">
-${escapeHtml(
-chat.profile?.display_name||
-"کاربر"
-)}
-
-${
-chat.unread>0
-?
-`<span class="unread-badge">${chat.unread}</span>`
-:
-""
-}
-
-</div>
-
-<div class="chat-preview-message">
-${escapeHtml(chat.body||"")}
-</div>
-
-</div>
-
-<div class="chat-preview-time">
-${relativeTime(chat.created_at)}
-</div>
-
-</div>
-
-`)
-.join("");
-
-}catch(e){
-
-console.error(e);
-
-box.innerHTML=`
-
-<div class="empty">
-چت‌ها فعلاً قابل دریافت نیستند.
-</div>
-
-`;
-}
-}
-
-/* =========================
-دوستان
-========================= */
-
-async function renderFriends(){
-
-$("mainContent").innerHTML=`
-
-<div class="card">
-
-<div class="card-title">
-پیدا کردن دوست
-</div>
-
-<div class="search-row">
-
-<input
-id="friendSearch"
-placeholder="نام کاربری">
-
-<button onclick="searchFriend()">
-جستجو
-</button>
-
-</div>
-
-<div id="friendSearchResult"></div>
-
-</div>
-
-<div class="card">
-
-<div class="card-title">
-دوستان من
-</div>
-
-<div id="friendsList">
-در حال دریافت...
-</div>
-
-</div>
-
-`;
-
-await loadFriends();
-}
-
-async function searchFriend(){
-
-const username=$("friendSearch")
-?.value
-.trim()
-.toLowerCase();
-
-if(!username)return;
-
-const box=$("friendSearchResult");
-
-box.innerHTML=`
-<div class="empty">
-در حال جستجو...
-</div>
-`;
-
-const{
-data,
-error
-}=await supabaseClient
-.from("profiles")
-.select("id,display_name,username,avatar_url")
-.eq("username",username)
-.maybeSingle();
-
-if(error){
-
-box.innerHTML=`
-<div class="empty">
-${escapeHtml(error.message)}
-</div>
-`;
-
-return;
-}
-
-if(!data){
-
-box.innerHTML=`
-<div class="empty">
-کاربری پیدا نشد.
-</div>
-`;
-
-return;
-}
-
-if(data.id===currentUser.id){
-
-box.innerHTML=`
-<div class="empty">
-این خودتی 😄
-</div>
-`;
-
-return;
-}
-
-const{
-data:existing,
-error:existingError
-}=await supabaseClient
-.from("friendships")
-.select("*")
-.or(
-`and(requester_id.eq.${currentUser.id},receiver_id.eq.${data.id}),and(requester_id.eq.${data.id},receiver_id.eq.${currentUser.id})`
-)
-.maybeSingle();
-
-if(existingError){
-console.error(existingError);
-}
-
-let action="";
-
-if(!existing){
-
-action=`
-
-<button
-class="small-btn purple-btn"
-onclick="sendFriendRequest('${attrValue(data.id)}')">
-افزودن
-</button>
-
-`;
-
-}else if(existing.status==="accepted"){
-
-action=`
-
-<span class="username">
-دوست شماست
-</span>
-
-`;
-
-}else if(existing.requester_id===currentUser.id){
-
-action=`
-
-<span class="username">
-درخواست ارسال شده
-</span>
-
-`;
-
-}else{
-
-action=`
-
-<button
-class="small-btn success-btn"
-onclick="acceptFriend('${attrValue(data.id)}')">
-قبول
-</button>
-
-<button
-class="small-btn danger-btn"
-onclick="rejectFriend('${attrValue(data.id)}')">
-رد
-</button>
-
-`;
-}
-
-box.innerHTML=`
-
-<div class="friend-item">
-
-<div class="row">
-
-<div style="display:flex;align-items:center;gap:10px">
-
-${avatarHtml(data)}
-
-<div>
-
-<div class="name">
-${escapeHtml(data.display_name)}
-</div>
-
-<div class="username">
-@${escapeHtml(data.username)}
-</div>
-
-</div>
-
-</div>
-
-<div>
-${action}
-</div>
-
-</div>
-
-</div>
-
-`;
-}
-
-async function sendFriendRequest(receiverId){
-
-receiverId=decodeAttr(receiverId);
-
-const{
-error
-}=await supabaseClient
-.from("friendships")
-.insert({
-requester_id:currentUser.id,
-receiver_id:receiverId,
-status:"pending"
-});
-
-if(error)
-return alert(
-error.message||
-"ارسال درخواست انجام نشد."
-);
-
-alert("درخواست دوستی ارسال شد.");
-
-await renderFriends();
-}
-
-async function loadFriends(){
-
-const box=$("friendsList");
-
-const{
-data,
-error
-}=await supabaseClient
-.from("friendships")
-.select("*")
-.eq("status","accepted")
-.or(
-`requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`
-);
-
-if(error){
-
-box.innerHTML=`
-
-<div class="empty">
-${escapeHtml(error.message)}
-</div>
-
-`;
-
-return;
-}
-
-if(!data?.length){
-
-box.innerHTML=`
-
-<div class="empty">
-هنوز دوستی نداری.
-</div>
-
-`;
-
-return;
-}
-
-const ids=data.map(
-f=>
-f.requester_id===currentUser.id
-?
-f.receiver_id
-:
-f.requester_id
-);
-
-const{
-data:profiles,
-error:profileError
-}=await supabaseClient
-.from("profiles")
-.select("id,display_name,username,avatar_url")
-.in("id",ids);
-
-if(profileError){
-
-box.innerHTML=`
-
-<div class="empty">
-${escapeHtml(profileError.message)}
-</div>
-
-`;
-
-return;
-}
-
-const unreadMap={};
-
-await Promise.all(
-(ids||[]).map(async id=>{
-unreadMap[id]=await getUnreadFromFriend(id);
-})
-);
-
-box.innerHTML=
-(profiles||[])
-.map(p=>{
-
-const unread=unreadMap[p.id]||0;
-
-return`
-
-<div class="friend-item">
-
-<div class="row">
-
-<div style="display:flex;align-items:center;gap:10px;min-width:0">
-
-${avatarHtml(p)}
-
-<div>
-
-<div class="name">
-${escapeHtml(p.display_name)}
-</div>
-
-<div class="username">
-@${escapeHtml(p.username)}
-</div>
-
-</div>
-
-</div>
-
-<div class="button-group">
-
-<button
-class="small-btn purple-btn"
-onclick="openFriendCalendar(
-'${attrValue(p.id)}',
-'${attrValue(p.display_name)}'
-)">
-تقویم
-</button>
-
-<button
-class="small-btn purple-btn"
-onclick="openChat(
-'${attrValue(p.id)}',
-'${attrValue(p.display_name)}'
-)">
-💬 چت
-${
-unread>0
-?
-`<span class="unread-badge">${unread}</span>`
-:
-""
-}
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
-})
-.join("");
-}
-
-/* =========================
-دوستی
-========================= */
-
-async function acceptFriend(actorId){
-
-actorId=decodeAttr(actorId);
-
-const{
-error
-}=await supabaseClient
-.from("friendships")
-.update({
-status:"accepted"
-})
-.eq("requester_id",actorId)
-.eq("receiver_id",currentUser.id);
-
-if(error)
-return alert(error.message);
-
-alert("دوستی قبول شد.");
-
-if(currentPage==="notifications")
-await renderNotifications();
-else
-await renderRequests();
-}
-
-async function rejectFriend(actorId){
-
-actorId=decodeAttr(actorId);
-
-const{
-error
-}=await supabaseClient
-.from("friendships")
-.delete()
-.eq("requester_id",actorId)
-.eq("receiver_id",currentUser.id);
-
-if(error)
-return alert(error.message);
-
-alert("درخواست رد شد.");
-
-if(currentPage==="notifications")
-await renderNotifications();
-else
-await renderRequests();
-}
-
-/* =====================================================
-چت واقعی
-===================================================== */
-
-function cleanupChatRealtime(){
-
-if(chatChannel){
-
-supabaseClient
-.removeChannel(chatChannel)
-.catch(e=>console.error(e));
-
-chatChannel=null;
-}
-}
-
-async function verifyFriendship(friendId){
-
-const{
-data,
-error
-}=await supabaseClient
-.from("friendships")
-.select("id")
-.eq("status","accepted")
-.or(
-`and(requester_id.eq.${currentUser.id},receiver_id.eq.${friendId}),and(requester_id.eq.${friendId},receiver_id.eq.${currentUser.id})`
-)
-.maybeSingle();
-
-if(error)throw error;
-
-return !!data;
-}
-
+<!DOCTYPE html>    <html lang="fa" dir="rtl">    
+<head>    
+<meta charset="UTF-8">    
+<meta name="viewport" content="width=device-width,initial-scale=1.0">    
+<title>قرارمون</title>    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>    <style>    
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');    
+    
+:root{    
+--bg:#ffffff;    
+--white:#ffffff;    
+--purple:#7557d9;    
+--purple2:#9479ed;    
+--light:#eee9ff;    
+--soft:#f7f5ff;    
+--text:#24202f;    
+--muted:#918c9f;    
+--border:rgba(105,82,160,.10);    
+--green:#42ae78;    
+--greenbg:#e8f8ef;    
+--red:#dc5c69;    
+--redbg:#fff0f2;    
+--shadow:0 18px 50px rgba(76,55,135,.08);    
+}    
+    
+*{    
+box-sizing:border-box;    
+margin:0;    
+padding:0;    
+}    
+    
+html{    
+scroll-behavior:smooth;    
+}    
+    
+body{    
+font-family:Vazirmatn,Tahoma,Arial,sans-serif;    
+background:#fff;    
+color:var(--text);    
+min-height:100vh;    
+}    
+    
+button,input,textarea,select{    
+font-family:inherit;    
+}    
+    
+button{    
+cursor:pointer;    
+border:0;    
+}    
+    
+.hidden{    
+display:none!important;    
+}    
+    
+.loading{    
+position:fixed;    
+inset:0;    
+z-index:9999;    
+background:rgba(255,255,255,.92);    
+backdrop-filter:blur(18px);    
+display:flex;    
+align-items:center;    
+justify-content:center;    
+}    
+    
+.loading-box{    
+background:#fff;    
+padding:22px 28px;    
+border-radius:24px;    
+box-shadow:var(--shadow);    
+color:var(--purple);    
+font-size:14px;    
+font-weight:700;    
+}    
+    
+.loading-box:before{    
+content:"";    
+display:inline-block;    
+width:10px;    
+height:10px;    
+border:2px solid #d8ceff;    
+border-top-color:var(--purple);    
+border-radius:50%;    
+margin-left:9px;    
+vertical-align:-1px;    
+animation:spin .7s linear infinite;    
+}    
+    
+@keyframes spin{    
+to{transform:rotate(360deg);}    
+}    
+    
+.error-box{    
+width:min(90%,430px);    
+margin:100px auto;    
+padding:28px;    
+background:#fff;    
+border-radius:28px;    
+box-shadow:var(--shadow);    
+text-align:center;    
+}    
+    
+.error-box h2{    
+margin-bottom:12px;    
+}    
+    
+.error-box p{    
+color:#777;    
+line-height:1.9;    
+font-size:13px;    
+word-break:break-word;    
+}    
+    
+.error-box .primary{    
+margin-top:18px;    
+}    
+    
+.auth-page{    
+min-height:100vh;    
+display:flex;    
+justify-content:center;    
+align-items:center;    
+padding:22px;    
+background:#fff;    
+}    
+    
+.auth-box{    
+width:100%;    
+max-width:430px;    
+padding:34px 27px;    
+background:#fff;    
+border:1px solid rgba(105,82,160,.08);    
+border-radius:32px;    
+box-shadow:0 25px 80px rgba(68,48,125,.10);    
+}    
+    
+.logo{    
+text-align:center;    
+font-size:36px;    
+font-weight:800;    
+letter-spacing:-1.5px;    
+color:var(--text);    
+margin-bottom:7px;    
+}    
+    
+.logo:after{    
+content:"•";    
+color:var(--purple);    
+margin-right:4px;    
+}    
+    
+.subtitle{    
+text-align:center;    
+color:var(--muted);    
+margin-bottom:27px;    
+font-size:12px;    
+line-height:1.9;    
+}    
+    
+.tabs{    
+display:flex;    
+gap:6px;    
+padding:5px;    
+margin-bottom:21px;    
+border-radius:17px;    
+background:#f1eef8;    
+}    
+    
+.tab{    
+flex:1;    
+padding:11px;    
+border-radius:13px;    
+background:transparent;    
+color:var(--muted);    
+font-size:12px;    
+font-weight:600;    
+}    
+    
+.tab.active{    
+background:#fff;    
+color:var(--purple);    
+box-shadow:0 5px 18px rgba(70,50,120,.08);    
+}    
+    
+.field{    
+margin-bottom:15px;    
+}    
+    
+.field label{    
+display:block;    
+margin-bottom:7px;    
+font-size:11px;    
+color:#686274;    
+font-weight:600;    
+}    
+    
+.field input,    
+.field select{    
+width:100%;    
+padding:14px 15px;    
+border:1px solid var(--border);    
+border-radius:16px;    
+outline:none;    
+background:#faf9fd;    
+color:var(--text);    
+font-size:13px;    
+}    
+    
+.field input:focus,    
+.field select:focus{    
+background:#fff;    
+border-color:#a28be8;    
+box-shadow:0 0 0 4px rgba(117,87,217,.08);    
+}    
+    
+.primary{    
+width:100%;    
+padding:14px;    
+border-radius:16px;    
+background:linear-gradient(135deg,var(--purple),var(--purple2));    
+color:#fff;    
+font-size:13px;    
+font-weight:700;    
+box-shadow:0 12px 28px rgba(117,87,217,.20);    
+}    
+    
+.secondary{    
+width:100%;    
+padding:13px;    
+border-radius:15px;    
+background:var(--light);    
+color:#694ab3;    
+}    
+    
+.message{    
+margin-top:14px;    
+padding:11px 13px;    
+border-radius:13px;    
+background:var(--soft);    
+color:#684c88;    
+font-size:11px;    
+line-height:1.8;    
+display:none;    
+}    
+    
+.app{    
+min-height:100vh;    
+padding-bottom:100px;    
+background:#fff;    
+}    
+    
+.topbar{    
+position:sticky;    
+top:0;    
+z-index:100;    
+padding:13px 18px;    
+background:rgba(255,255,255,.82);    
+backdrop-filter:blur(22px);    
+border-bottom:1px solid rgba(100,80,150,.06);    
+display:flex;    
+align-items:center;    
+justify-content:space-between;    
+}    
+    
+.brand{    
+font-size:23px;    
+font-weight:800;    
+letter-spacing:-1px;    
+}    
+    
+.brand span:first-child{    
+color:var(--purple);    
+}    
+    
+.brand span:last-child{    
+color:var(--text);    
+}    
+    
+.user-name{    
+margin-top:3px;    
+font-size:10px;    
+color:var(--muted);    
+}    
+    
+.profile-top-btn{    
+display:flex;    
+align-items:center;    
+gap:7px;    
+padding:5px 8px 5px 10px;    
+border-radius:16px;    
+background:#f8f6ff;    
+color:var(--purple);    
+border:1px solid rgba(117,87,217,.08);    
+}    
+    
+.profile-top-btn span{    
+font-size:10px;    
+font-weight:700;    
+}    
+    
+.avatar{    
+width:38px;    
+height:38px;    
+border-radius:50%;    
+background:linear-gradient(135deg,#eee8ff,#d9d0ff);    
+display:flex;    
+align-items:center;    
+justify-content:center;    
+overflow:hidden;    
+flex-shrink:0;    
+color:var(--purple);    
+font-size:17px;    
+font-weight:800;    
+}    
+    
+.avatar img{    
+width:100%;    
+height:100%;    
+object-fit:cover;    
+}    
+    
+.avatar.large{    
+width:92px;    
+height:92px;    
+font-size:32px;    
+}    
+    
+.avatar.small{    
+width:42px;    
+height:42px;    
+}    
+    
+.container{    
+width:min(100% - 28px,760px);    
+margin:18px auto 100px;    
+}    
+    
+.card{    
+background:#fff;    
+border:1px solid rgba(105,82,160,.08);    
+border-radius:27px;    
+padding:19px;    
+margin-bottom:15px;    
+box-shadow:var(--shadow);    
+}    
+    
+.card-title{    
+font-size:16px;    
+font-weight:800;    
+margin-bottom:15px;    
+}    
+    
+.home-hero{    
+padding:24px;    
+background:linear-gradient(135deg,#fff,#f0ebff);    
+position:relative;    
+overflow:hidden;    
+}    
+    
+.home-hero:after{    
+content:"✦";    
+position:absolute;    
+left:25px;    
+top:18px;    
+color:#c5b5ff;    
+font-size:42px;    
+opacity:.5;    
+}    
+    
+.home-hello{    
+font-size:23px;    
+font-weight:800;    
+margin-bottom:5px;    
+}    
+    
+.home-sub{    
+font-size:12px;    
+color:var(--muted);    
+line-height:1.9;    
+}    
+    
+.home-grid{    
+display:grid;    
+grid-template-columns:repeat(2,1fr);    
+gap:12px;    
+}    
+    
+.home-menu{    
+background:#fff;    
+border:1px solid var(--border);    
+border-radius:22px;    
+padding:20px 15px;    
+text-align:right;    
+box-shadow:0 8px 25px rgba(76,55,135,.05);    
+transition:.18s;    
+}    
+    
+.home-menu:active{    
+transform:scale(.97);    
+}    
+    
+.home-icon{    
+width:43px;    
+height:43px;    
+border-radius:15px;    
+background:var(--light);    
+display:flex;    
+align-items:center;    
+justify-content:center;    
+font-size:21px;    
+margin-bottom:12px;    
+}    
+    
+.home-menu b{    
+font-size:14px;    
+}    
+    
+.home-menu small{    
+display:block;    
+color:var(--muted);    
+font-size:10px;    
+margin-top:5px;    
+line-height:1.7;    
+}    
+    
+.home-count{    
+display:inline-block;    
+margin-top:9px;    
+background:#f5f1ff;    
+color:var(--purple);    
+padding:4px 8px;    
+border-radius:9px;    
+font-size:9px;    
+}    
+    
+.chat-preview-card{    
+padding:18px;    
+margin-top:15px;    
+}    
+    
+.chat-preview-head{    
+display:flex;    
+align-items:center;    
+justify-content:space-between;    
+margin-bottom:13px;    
+}    
+    
+.chat-preview-title{    
+font-size:16px;    
+font-weight:800;    
+}    
+    
+.chat-preview-link{    
+font-size:10px;    
+color:var(--purple);    
+background:var(--light);    
+padding:7px 10px;    
+border-radius:11px;    
+}    
+    
+.chat-preview-row{    
+display:flex;    
+align-items:center;    
+gap:10px;    
+padding:12px 4px;    
+border-bottom:1px solid rgba(105,82,160,.07);    
+cursor:pointer;    
+}    
+    
+.chat-preview-row:last-child{    
+border-bottom:0;    
+}    
+    
+.chat-preview-info{    
+flex:1;    
+min-width:0;    
+}    
+    
+.chat-preview-name{    
+font-size:12px;    
+font-weight:700;    
+}    
+    
+.chat-preview-message{    
+font-size:10px;    
+color:var(--muted);    
+margin-top:4px;    
+white-space:nowrap;    
+overflow:hidden;    
+text-overflow:ellipsis;    
+}    
+    
+.chat-preview-time{    
+font-size:8px;    
+color:#aaa;    
+}    
+    
+.month-head{    
+display:flex;    
+align-items:center;    
+justify-content:space-between;    
+margin-bottom:18px;    
+}    
+    
+.month-head button{    
+width:40px;    
+height:40px;    
+border-radius:14px;    
+background:var(--light);    
+color:var(--purple);    
+font-size:23px;    
+}    
+    
+.month-title{    
+font-size:15px;    
+font-weight:800;    
+}    
+    
+.calendar-owner{    
+font-size:10px;    
+color:var(--muted);    
+text-align:center;    
+margin-top:-10px;    
+margin-bottom:13px;    
+}    
+    
+.grid{    
+display:grid;    
+grid-template-columns:repeat(7,1fr);    
+gap:7px;    
+}    
+    
+.weekday{    
+text-align:center;    
+font-size:9px;    
+color:#aaa5b4;    
+padding:5px 0 8px;    
+font-weight:600;    
+}    
+    
+.day{    
+min-height:56px;    
+border-radius:16px;    
+background:#f8f7fb;    
+display:flex;    
+align-items:center;    
+justify-content:center;    
+flex-direction:column;    
+position:relative;    
+font-size:13px;    
+border:1px solid transparent;    
+transition:.18s;    
+}    
+    
+.day.empty{    
+background:transparent;    
+}    
+    
+.day.free{    
+cursor:pointer;    
+}    
+    
+.day.free:active{    
+transform:scale(.93);    
+background:#f0ebff;    
+}    
+    
+.day.booked{    
+background:var(--redbg);    
+color:var(--red);    
+border-color:#ffdce1;    
+}    
+    
+.day.wish{    
+background:#f2edff;    
+color:#7656bc;    
+border-color:#e0d4ff;    
+cursor:pointer;    
+}    
+    
+.day.today{    
+border-color:var(--purple);    
+box-shadow:0 0 0 2px rgba(117,87,217,.08);    
+}    
+    
+.day strong{    
+font-size:13px;    
+}    
+    
+.day small{    
+font-size:7px;    
+margin-top:3px;    
+opacity:.7;    
+}    
+    
+.appointments-title{    
+display:flex;    
+align-items:center;    
+justify-content:space-between;    
+}    
+    
+.appointment{    
+padding:14px;    
+border:1px solid var(--border);    
+background:#fff;    
+border-radius:18px;    
+margin-bottom:9px;    
+}    
+    
+.appointment-date{    
+color:var(--purple);    
+font-size:11px;    
+font-weight:800;    
+margin-bottom:5px;    
+}    
+    
+.appointment-text{    
+font-size:12px;    
+line-height:1.8;    
+}    
+    
+.appointment-status{    
+font-size:9px;    
+color:var(--muted);    
+margin-top:5px;    
+}    
+    
+.friend-item,    
+.request-item,    
+.notification-item{    
+padding:14px;    
+border:1px solid var(--border);    
+background:#fff;    
+border-radius:19px;    
+margin-bottom:10px;    
+}    
+    
+.row{    
+display:flex;    
+align-items:center;    
+justify-content:space-between;    
+gap:10px;    
+}    
+    
+.name{    
+font-size:13px;    
+font-weight:700;    
+}    
+    
+.username{    
+color:#a19baa;    
+font-size:10px;    
+margin-top:4px;    
+}    
+    
+.small-btn{    
+padding:8px 11px;    
+border-radius:11px;    
+font-size:10px;    
+font-weight:600;    
+}    
+    
+.success-btn{    
+background:var(--greenbg);    
+color:#278159;    
+}    
+    
+.danger-btn{    
+background:var(--redbg);    
+color:#ad4551;    
+}    
+    
+.purple-btn{    
+background:var(--light);    
+color:#6949ae;    
+}    
+    
+.button-group{    
+display:flex;    
+align-items:center;    
+gap:7px;    
+flex-wrap:wrap;    
+}    
+    
+.unread-badge{    
+display:inline-flex;    
+align-items:center;    
+justify-content:center;    
+min-width:18px;    
+height:18px;    
+padding:0 5px;    
+border-radius:20px;    
+background:var(--red);    
+color:#fff;    
+font-size:8px;    
+font-weight:800;    
+margin-right:4px;    
+}    
+    
+.search-row{    
+display:flex;    
+gap:8px;    
+}    
+    
+.search-row input{    
+flex:1;    
+min-width:0;    
+padding:13px;    
+border:1px solid var(--border);    
+border-radius:15px;    
+outline:none;    
+background:#faf9fd;    
+font-size:12px;    
+}    
+    
+.search-row input:focus{    
+background:#fff;    
+border-color:#a18ae8;    
+}    
+    
+.search-row button{    
+padding:0 17px;    
+border-radius:15px;    
+background:linear-gradient(135deg,var(--purple),var(--purple2));    
+color:#fff;    
+font-size:11px;    
+font-weight:600;    
+}    
+    
+.date-info{    
+line-height:2;    
+font-size:12px;    
+color:#777181;    
+}    
+    
+.notification-actions{    
+display:flex;    
+gap:7px;    
+margin-top:12px;    
+flex-wrap:wrap;    
+}    
+    
+.empty{    
+text-align:center;    
+color:#aaa5b5;    
+padding:25px 10px;    
+font-size:12px;    
+}    
+    
+.section-label{    
+font-size:11px;    
+color:var(--muted);    
+font-weight:700;    
+margin:4px 2px 10px;    
+}    
+    
+.notification-item.unread{    
+border-color:#d9ccff;    
+background:#fbf9ff;    
+}    
+    
+.notification-time{    
+font-size:9px;    
+color:#aaa;    
+margin-top:7px;    
+}    
+    
+/* PROFILE */    
+    
+.profile-head{    
+display:flex;    
+flex-direction:column;    
+align-items:center;    
+text-align:center;    
+padding:10px 0 22px;    
+}    
+    
+.profile-avatar-wrap{    
+position:relative;    
+margin-bottom:13px;    
+}    
+    
+.avatar-upload-btn{    
+position:absolute;    
+bottom:-2px;    
+left:-2px;    
+width:30px;    
+height:30px;    
+border-radius:50%;    
+background:var(--purple);    
+color:#fff;    
+display:flex;    
+align-items:center;    
+justify-content:center;    
+font-size:14px;    
+border:3px solid #fff;    
+}    
+    
+.profile-name{    
+font-size:19px;    
+font-weight:800;    
+}    
+    
+.profile-username{    
+font-size:11px;    
+color:var(--muted);    
+margin-top:4px;    
+}    
+    
+.profile-info-grid{    
+display:grid;    
+grid-template-columns:repeat(2,1fr);    
+gap:10px;    
+margin-top:17px;    
+}    
+    
+.profile-info-box{    
+background:#faf9fd;    
+border:1px solid var(--border);    
+border-radius:17px;    
+padding:13px;    
+}    
+    
+.profile-info-label{    
+font-size:9px;    
+color:#aaa5b4;    
+margin-bottom:5px;    
+}    
+    
+.profile-info-value{    
+font-size:12px;    
+font-weight:700;    
+}    
+    
+.profile-actions{    
+display:flex;    
+gap:8px;    
+margin-top:15px;    
+}    
+    
+.profile-actions button{    
+flex:1;    
+}    
+    
+/* CHAT */    
+    
+.chat-header{    
+display:flex;    
+align-items:center;    
+gap:10px;    
+margin-bottom:15px;    
+}    
+    
+.chat-back{    
+width:40px;    
+height:40px;    
+border-radius:14px;    
+background:var(--light);    
+color:var(--purple);    
+font-size:20px;    
+flex-shrink:0;    
+}    
+    
+.chat-user-info{    
+flex:1;    
+}    
+    
+.chat-user-name{    
+font-size:15px;    
+font-weight:800;    
+}    
+    
+.chat-user-status{    
+font-size:9px;    
+color:var(--muted);    
+margin-top:3px;    
+}    
+    
+.chat-card{    
+padding:14px;    
+}    
+    
+.chat-messages{    
+height:min(58vh,520px);    
+overflow-y:auto;    
+padding:8px 4px 15px;    
+display:flex;    
+flex-direction:column;    
+gap:8px;    
+scroll-behavior:smooth;    
+}    
+    
+.chat-empty{    
+flex:1;    
+display:flex;    
+align-items:center;    
+justify-content:center;    
+color:#aaa5b5;    
+font-size:11px;    
+text-align:center;    
+padding:30px;    
+}    
+    
+.chat-row{    
+display:flex;    
+width:100%;    
+}    
+    
+.chat-row.mine{    
+justify-content:flex-start;    
+}    
+    
+.chat-row.theirs{    
+justify-content:flex-end;    
+}    
+    
+.chat-bubble{    
+max-width:78%;    
+padding:10px 13px;    
+border-radius:18px;    
+font-size:12px;    
+line-height:1.8;    
+word-break:break-word;    
+white-space:pre-wrap;    
+}    
+    
+.chat-bubble.mine{    
+background:linear-gradient(135deg,var(--purple),var(--purple2));    
+color:#fff;    
+border-bottom-left-radius:6px;    
+}    
+    
+.chat-bubble.theirs{    
+background:#f1eef8;    
+color:var(--text);    
+border-bottom-right-radius:6px;    
+}    
+    
+.chat-time{    
+font-size:7px;    
+opacity:.65;    
+margin-top:4px;    
+text-align:left;    
+}    
+    
+.chat-input-row{    
+display:flex;    
+gap:8px;    
+align-items:flex-end;    
+border-top:1px solid var(--border);    
+padding-top:12px;    
+}    
+    
+.chat-input{    
+flex:1;    
+min-width:0;    
+resize:none;    
+height:45px;    
+max-height:110px;    
+padding:12px 14px;    
+border-radius:15px;    
+border:1px solid var(--border);    
+outline:none;    
+background:#faf9fd;    
+font-size:12px;    
+color:var(--text);    
+}    
+    
+.chat-input:focus{    
+background:#fff;    
+border-color:#a18ae8;    
+box-shadow:0 0 0 4px rgba(117,87,217,.06);    
+}    
+    
+.chat-send{    
+width:45px;    
+height:45px;    
+border-radius:15px;    
+background:linear-gradient(135deg,var(--purple),var(--purple2));    
+color:#fff;    
+font-size:17px;    
+flex-shrink:0;    
+}    
+    
+.chat-send:disabled{    
+opacity:.5;    
+cursor:not-allowed;    
+}    
+    
+.chat-date{    
+text-align:center;    
+font-size:8px;    
+color:#aaa5b5;    
+margin:10px 0 2px;    
+}    
+    
+.chat-list-item{    
+display:flex;    
+align-items:center;    
+gap:11px;    
+padding:13px 4px;    
+border-bottom:1px solid rgba(105,82,160,.07);    
+cursor:pointer;    
+}    
+    
+.chat-list-item:last-child{    
+border-bottom:0;    
+}    
+    
+.chat-list-info{    
+flex:1;    
+min-width:0;    
+}    
+    
+.chat-list-name{    
+font-size:12px;    
+font-weight:700;    
+}    
+    
+.chat-list-last{    
+font-size:10px;    
+color:var(--muted);    
+margin-top:4px;    
+white-space:nowrap;    
+overflow:hidden;    
+text-overflow:ellipsis;    
+}    
+    
+.chat-list-side{    
+text-align:left;    
+}    
+    
+.chat-list-time{    
+font-size:8px;    
+color:#aaa;    
+margin-bottom:5px;    
+}    
+    
+/* NAV */    
+    
+.nav{    
+position:fixed;    
+bottom:12px;    
+left:50%;    
+transform:translateX(-50%);    
+z-index:100;    
+width:min(calc(100% - 24px),560px);    
+padding:7px;    
+display:flex;    
+gap:5px;    
+background:rgba(255,255,255,.70);    
+backdrop-filter:blur(24px);    
+-webkit-backdrop-filter:blur(24px);    
+border:1px solid rgba(255,255,255,.95);    
+border-radius:25px;    
+box-shadow:0 15px 45px rgba(60,45,110,.15);    
+}    
+    
+.nav button{    
+flex:1;    
+padding:9px 4px;    
+border-radius:17px;    
+background:transparent;    
+color:#aaa5b5;    
+font-size:9px;    
+}    
+    
+.nav button.active{    
+background:var(--light);    
+color:var(--purple);    
+font-weight:700;    
+}    
+    
+@media(max-width:380px){    
+    
+.auth-box{    
+padding:28px 20px;    
+}    
+    
+.day{    
+min-height:51px;    
+}    
+    
+.container{    
+width:min(100% - 20px,760px);    
+}    
+    
+.card{    
+padding:16px;    
+}    
+    
+.chat-bubble{    
+max-width:84%;    
+}    
+    
+.profile-info-grid{    
+grid-template-columns:1fr 1fr;    
+}    
+    
+}    
+</style>    </head>    <body>    <div id="loading" class="loading">    
+<div class="loading-box">لطفاً صبر کن...</div>    
+</div>    <div id="root"></div>    <script>    
+    
+const SUPABASE_URL="https://cdjnziqrkmzqyfbqeuvk.supabase.co";    
+const SUPABASE_KEY="sb_publishable_-Zsn2pWcBLDOUJAeK2GlnA_Q_GBUmoU";    
+    
+let supabaseClient=null;    
+let currentUser=null;    
+let currentProfile=null;    
+let currentPage="home";    
+    
+let calendarOwner=null;    
+let calendarOwnerName="";    
+let ownCalendar=true;    
+    
+let calendarYear=0;    
+let calendarMonth=0;    
+    
+let chatPartnerId=null;    
+let chatPartnerName="";    
+let chatChannel=null;    
+    
+const $=id=>document.getElementById(id);    
+    
+function showLoading(){    
+$("loading")?.classList.remove("hidden");    
+}    
+    
+function hideLoading(){    
+$("loading")?.classList.add("hidden");    
+}    
+    
+function escapeHtml(v){    
+return String(v??"")    
+.replaceAll("&","&amp;")    
+.replaceAll("<","&lt;")    
+.replaceAll(">","&gt;")    
+.replaceAll('"',"&quot;")    
+.replaceAll("'","&#039;");    
+}    
+    
+function attrValue(v){    
+return encodeURIComponent(String(v??""));    
+}    
+    
+function decodeAttr(v){    
+try{    
+return decodeURIComponent(v);    
+}catch{    
+return String(v??"");    
+}    
+}    
+    
+function withTimeout(promise,ms=12000){    
+return Promise.race([    
+promise,    
+new Promise((_,reject)=>    
+setTimeout(    
+()=>reject(new Error("اتصال به سرور بیش از حد طول کشید.")),    
+ms    
+)    
+)    
+]);    
+}    
+    
+function showMessage(t){    
+const e=$("authMessage");    
+    
+if(e){    
+e.textContent=t;    
+e.style.display="block";    
+}    
+}    
+    
+function hideMessage(){    
+const e=$("authMessage");    
+    
+if(e){    
+e.style.display="none";    
+}    
+}    
+    
+function showFatalError(e){    
+    
+hideLoading();    
+    
+$("root").innerHTML=`    
+    
+<div class="error-box">    
+    
+<h2>یه مشکلی پیش اومد</h2>    
+    
+<p>    
+${escapeHtml(e?.message||e||"خطای ناشناخته")}    
+</p>    
+    
+<button class="primary" onclick="location.reload()">    
+تلاش دوباره    
+</button>    
+    
+</div>    
+    
+`;    
+}    
+    
+window.addEventListener("error",e=>{    
+console.error(e.error||e.message);    
+});    
+    
+window.addEventListener("unhandledrejection",e=>{    
+console.error(e.reason);    
+});    
+    
+/* =========================    
+تاریخ شمسی    
+========================= */    
+    
+const faCalendar=    
+new Intl.DateTimeFormat(    
+"fa-IR-u-ca-persian-nu-latn",    
+{    
+year:"numeric",    
+month:"numeric",    
+day:"numeric"    
+}    
+);    
+    
+function gregorianToJalali(y,m,d){    
+    
+const parts=    
+faCalendar.formatToParts(    
+new Date(y,m-1,d)    
+);    
+    
+const get=t=>    
+Number(    
+parts.find(x=>x.type===t)?.value    
+);    
+    
+return{    
+jy:get("year"),    
+jm:get("month"),    
+jd:get("day")    
+};    
+}    
+    
+const jalaliIsoCache=new Map();    
+    
+function jalaliDateToISO(jy,jm,jd){    
+    
+const key=`${jy}-${jm}-${jd}`;    
+    
+if(jalaliIsoCache.has(key))    
+return jalaliIsoCache.get(key);    
+    
+let gy=jy+621;    
+    
+let guess=    
+new Date(    
+Date.UTC(    
+gy,    
+2,    
+20    
+)    
+);    
+    
+for(let i=-10;i<=380;i++){    
+    
+const x=    
+new Date(    
+guess.getTime()+    
+i*86400000    
+);    
+    
+const j=    
+gregorianToJalali(    
+x.getUTCFullYear(),    
+x.getUTCMonth()+1,    
+x.getUTCDate()    
+);    
+    
+if(    
+j.jy===jy &&    
+j.jm===jm &&    
+j.jd===jd    
+){    
+    
+const iso=    
+`${x.getUTCFullYear()}-${String(    
+x.getUTCMonth()+1    
+).padStart(2,"0")}-${String(    
+x.getUTCDate()    
+).padStart(2,"0")}`;    
+    
+jalaliIsoCache.set(key,iso);    
+    
+return iso;    
+}    
+}    
+    
+throw new Error("تبدیل تاریخ انجام نشد.");    
+}    
+    
+function isoToJalali(iso){    
+    
+const[    
+y,    
+m,    
+d    
+]=iso.slice(0,10)    
+.split("-")    
+.map(Number);    
+    
+return gregorianToJalali(y,m,d);    
+}    
+    
+function jalaliMonthDays(y,m){    
+    
+if(m>=1&&m<=6)    
+return 31;    
+    
+if(m>=7&&m<=11)    
+return 30;    
+    
+const a=jalaliDateToISO(y,12,1);    
+const b=jalaliDateToISO(y+1,1,1);    
+    
+return Math.round(    
+(Date.parse(b)-Date.parse(a))/86400000    
+);    
+}    
+    
+function todayJalali(){    
+    
+const d=new Date();    
+    
+return gregorianToJalali(    
+d.getFullYear(),    
+d.getMonth()+1,    
+d.getDate()    
+);    
+}    
+    
+const months=[    
+"فروردین",    
+"اردیبهشت",    
+"خرداد",    
+"تیر",    
+"مرداد",    
+"شهریور",    
+"مهر",    
+"آبان",    
+"آذر",    
+"دی",    
+"بهمن",    
+"اسفند"    
+];    
+    
+const weekdays=[    
+"ش","ی","د","س","چ","پ","ج"    
+];    
+    
+function jalaliDateLabel(iso){    
+    
+const j=isoToJalali(iso);    
+    
+return `${j.jd} ${months[j.jm-1]} ${j.jy}`;    
+}    
+    
+function relativeTime(iso){    
+    
+if(!iso)return "";    
+    
+const d=new Date(iso);    
+    
+const s=    
+Math.floor(    
+(Date.now()-d.getTime())/1000    
+);    
+    
+if(s<60)    
+return "همین الان";    
+    
+if(s<3600)    
+return `${Math.floor(s/60)} دقیقه پیش`;    
+    
+if(s<86400)    
+return `${Math.floor(s/3600)} ساعت پیش`;    
+    
+if(s<604800)    
+return `${Math.floor(s/86400)} روز پیش`;    
+    
+return d.toLocaleDateString("fa-IR");    
+}    
+    
+function chatTime(iso){    
+    
+const d=new Date(iso);    
+    
+return d.toLocaleTimeString("fa-IR",{    
+hour:"2-digit",    
+minute:"2-digit"    
+});    
+}    
+    
+/* =========================    
+آواتار    
+========================= */    
+    
+function avatarHtml(profile,size=""){    
+const cls=size?`avatar ${size}`:"avatar";    
+    
+if(profile?.avatar_url){    
+    
+return`    
+    
+<div class="${cls}">    
+<img    
+src="${escapeHtml(profile.avatar_url)}"    
+alt=""    
+onerror="this.style.display='none';this.parentElement.textContent='${escapeHtml(    
+(profile.display_name||"?").slice(0,1)    
+)}'">    
+</div>    
+    
+`;    
+    
+}    
+    
+return`    
+    
+<div class="${cls}">    
+${escapeHtml(    
+(profile?.display_name||"?").slice(0,1)    
+)}    
+</div>    
+    
+`;    
+}    
+    
+/* =========================    
+ورود / ثبت نام    
+========================= */    
+    
+function renderAuth(mode="login"){    
+    
+$("root").innerHTML=`    
+    
+<div class="auth-page">    
+    
+<div class="auth-box">    
+    
+<div class="logo">    
+قرارمون    
+</div>    
+    
+<div class="subtitle">    
+یه جای ساده برای هماهنگ کردن قرار با آدمای خودت    
+</div>    
+    
+<div class="tabs">    
+    
+<button    
+class="tab ${mode==="login"?"active":""}"    
+onclick="renderAuth('login')">    
+ورود    
+</button>    
+    
+<button    
+class="tab ${mode==="signup"?"active":""}"    
+onclick="renderAuth('signup')">    
+ثبت‌نام    
+</button>    
+    
+</div>    
+    
+${    
+mode==="signup"    
+?    
+`    
+    
+<div class="field">    
+<label>اسم نمایشی</label>    
+<input id="displayName" placeholder="مثلاً محمد کیان">    
+</div>    
+    
+<div class="field">    
+<label>نام کاربری</label>    
+<input id="username" placeholder="مثلاً kian">    
+</div>    
+    
+<div class="field">    
+<label>رمز عبور</label>    
+<input id="password" type="password" placeholder="رمز عبور">    
+</div>    
+    
+<button class="primary" onclick="signup()">    
+ساخت حساب    
+</button>    
+    
+`    
+:    
+`    
+    
+<div class="field">    
+<label>نام کاربری</label>    
+<input id="username" placeholder="نام کاربری">    
+</div>    
+    
+<div class="field">    
+<label>رمز عبور</label>    
+<input id="password" type="password" placeholder="رمز عبور">    
+</div>    
+    
+<button class="primary" onclick="login()">    
+ورود    
+</button>    
+    
+`    
+}    
+    
+<div id="authMessage" class="message"></div>    
+    
+</div>    
+</div>    
+    
+`;    
+}    
+    
+async function signup(){    
+    
+hideMessage();    
+    
+const displayName=$("displayName")?.value.trim();    
+const username=$("username")?.value.trim().toLowerCase();    
+const password=$("password")?.value;    
+    
+if(!displayName||!username||!password)    
+return showMessage("همه فیلدها رو کامل کن.");    
+    
+if(username.length<3)    
+return showMessage("نام کاربری حداقل ۳ حرف باشه.");    
+    
+if(password.length<6)    
+return showMessage("رمز عبور حداقل ۶ کاراکتر باشه.");    
+    
+showLoading();    
+    
+try{    
+    
+const{    
+data,    
+error    
+}=await withTimeout(    
+supabaseClient.auth.signUp({    
+email:username+"@gharamoon.local",    
+password,    
+options:{    
+data:{    
+username,    
+display_name:displayName    
+}    
+}    
+})    
+);    
+    
+if(error)throw error;    
+    
+if(data.session&&data.user){    
+    
+currentUser=data.user;    
+    
+await loadProfile();    
+    
+renderApp();    
+    
+hideLoading();    
+    
+return;    
+}    
+    
+hideLoading();    
+    
+renderAuth("login");    
+    
+showMessage(    
+"ثبت‌نام انجام شد. حالا وارد حسابت شو."    
+);    
+    
+}catch(e){    
+    
+hideLoading();    
+    
+renderAuth("signup");    
+    
+showMessage(    
+e.message||"ثبت‌نام انجام نشد."    
+);    
+}    
+}    
+    
+async function login(){    
+    
+hideMessage();    
+    
+const username=$("username")?.value.trim().toLowerCase();    
+const password=$("password")?.value;    
+    
+if(!username||!password)    
+return showMessage(    
+"نام کاربری و رمز عبور رو وارد کن."    
+);    
+    
+showLoading();    
+    
+try{    
+    
+const{    
+data:emailData,    
+error:emailError    
+}=await withTimeout(    
+supabaseClient.rpc(    
+"get_login_email",    
+{    
+p_username:username    
+}    
+)    
+);    
+    
+if(emailError)throw emailError;    
+    
+if(!emailData)    
+throw new Error("نام کاربری پیدا نشد.");    
+    
+const{    
+data,    
+error    
+}=await withTimeout(    
+supabaseClient.auth.signInWithPassword({    
+email:emailData,    
+password    
+})    
+);    
+    
+if(error)throw error;    
+    
+currentUser=data.user;    
+    
+await loadProfile();    
+    
+renderApp();    
+    
+hideLoading();    
+    
+}catch(e){    
+    
+hideLoading();    
+    
+renderAuth("login");    
+    
+showMessage(    
+e.message||"ورود انجام نشد."    
+);    
+}    
+}    
+    
+async function loadProfile(){    
+    
+if(!currentUser)    
+throw new Error("کاربر وارد نشده است.");    
+    
+const{    
+data,    
+error    
+}=await withTimeout(    
+supabaseClient    
+.from("profiles")    
+.select("*")    
+.eq("id",currentUser.id)    
+.maybeSingle()    
+);    
+    
+if(error)throw error;    
+    
+if(!data)    
+throw new Error("پروفایل کاربر پیدا نشد.");    
+    
+currentProfile=data;    
+}    
+    
+async function logout(){    
+    
+cleanupChatRealtime();    
+    
+try{    
+await supabaseClient.auth.signOut();    
+}catch(e){    
+console.error(e);    
+}    
+    
+currentUser=null;    
+currentProfile=null;    
+    
+chatPartnerId=null;    
+chatPartnerName="";    
+    
+renderAuth("login");    
+}    
+    
+/* =========================    
+اپ    
+========================= */    
+    
+function renderApp(){    
+    
+$("root").innerHTML=`    
+    
+<div class="app">    
+    
+<div class="topbar">    
+    
+<div>    
+    
+<div class="brand">    
+<span>قرار</span>    
+<span>مون</span>    
+</div>    
+    
+<div class="user-name">    
+${escapeHtml(currentProfile.display_name)}    
+</div>    
+    
+</div>    
+    
+<button    
+class="profile-top-btn"    
+onclick="goPage('profile')">    
+    
+${avatarHtml(currentProfile,"small")}    
+    
+<span>پروفایل</span>    
+    
+</button>    
+    
+</div>    
+    
+<main    
+id="mainContent"    
+class="container">    
+</main>    
+    
+<nav class="nav">    
+    
+<button    
+id="navHome"    
+onclick="goPage('home')">    
+⌂<br>    
+خانه    
+</button>    
+    
+<button    
+id="navFriends"    
+onclick="goPage('friends')">    
+👥<br>    
+دوستان    
+</button>    
+    
+<button    
+id="navCalendar"    
+onclick="goPage('calendar')">    
+📅<br>    
+تقویم    
+</button>    
+    
+<button    
+id="navNotifications"    
+onclick="goPage('notifications')">    
+🔔<br>    
+اعلان‌ها    
+</button>    
+    
+</nav>    
+    
+</div>    
+    
+`;    
+    
+goPage("home");    
+}    
+    
+async function goPage(page){    
+    
+if(currentPage==="chat"&&page!=="chat"){    
+cleanupChatRealtime();    
+}    
+    
+currentPage=page;    
+    
+document    
+.querySelectorAll(".nav button")    
+.forEach(x=>x.classList.remove("active"));    
+    
+const navId=    
+"nav"+    
+page.charAt(0).toUpperCase()+    
+page.slice(1);    
+    
+const n=$(navId);    
+    
+if(n)n.classList.add("active");    
+    
+try{    
+    
+if(page==="home")    
+await renderHome();    
+    
+if(page==="friends")    
+await renderFriends();    
+    
+if(page==="calendar")    
+await renderCalendarPage();    
+    
+if(page==="requests")    
+await renderRequests();    
+    
+if(page==="notifications")    
+await renderNotifications();    
+    
+if(page==="chat")    
+await renderChatPage();    
+    
+if(page==="chatList")    
+await renderChatListPage();    
+    
+if(page==="profile")    
+await renderProfilePage();    
+    
+}catch(e){    
+    
+console.error("goPage error:",e);    
+    
+if($("mainContent")){    
+    
+$("mainContent").innerHTML=`    
+    
+<div class="card">    
+    
+<div class="empty">    
+    
+خطایی در باز کردن این بخش رخ داد.    
+    
+<br><br>    
+    
+${escapeHtml(    
+e?.message||"خطای ناشناخته"    
+)}    
+    
+</div>    
+    
+</div>    
+    
+`;    
+}    
+}    
+}    
+    
+/* =========================    
+خانه    
+========================= */    
+    
+async function renderHome(){    
+    
+const[    
+friendsCount,    
+reqCount,    
+notifCount,    
+chatUnread    
+]=await Promise.all([    
+getFriendsCount(),    
+getRequestsCount(),    
+getUnreadCount(),    
+getUnreadMessagesCount()    
+]);    
+    
+const t=todayJalali();    
+    
+$("mainContent").innerHTML=`    
+    
+<div class="card home-hero">    
+    
+<div class="home-hello">    
+سلام ${escapeHtml(currentProfile.display_name)} 👋    
+</div>    
+    
+<div class="home-sub">    
+اینجا همه‌چیز برای هماهنگ کردن قرارهای شما جمع شده.    
+</div>    
+    
+</div>    
+    
+<div class="home-grid">    
+    
+<button    
+class="home-menu"    
+onclick="goPage('friends')">    
+    
+<div class="home-icon">    
+👥    
+</div>    
+    
+<b>دوستان</b>    
+    
+<small>    
+پیدا کردن، چت کردن و دیدن تقویم دوستان    
+</small>    
+    
+<span class="home-count">    
+${friendsCount} دوست    
+</span>    
+    
+</button>    
+    
+<button    
+class="home-menu"    
+onclick="goPage('calendar')">    
+    
+<div class="home-icon">    
+📅    
+</div>    
+    
+<b>تقویم</b>    
+    
+<small>    
+روزهای آزاد و قرارهای ثبت‌شده    
+</small>    
+    
+<span class="home-count">    
+${months[t.jm-1]} ${t.jy}    
+</span>    
+    
+</button>    
+    
+<button    
+class="home-menu"    
+onclick="goPage('requests')">    
+    
+<div class="home-icon">    
+📩    
+</div>    
+    
+<b>درخواست‌ها</b>    
+    
+<small>    
+درخواست‌های دوستی و قرار    
+</small>    
+    
+<span class="home-count">    
+${reqCount} جدید    
+</span>    
+    
+</button>    
+    
+<button    
+class="home-menu"    
+onclick="goPage('notifications')">    
+    
+<div class="home-icon">    
+🔔    
+</div>    
+    
+<b>اعلان‌ها</b>    
+    
+<small>    
+همه اتفاقات و پاسخ‌ها    
+</small>    
+    
+<span class="home-count">    
+${notifCount} خوانده‌نشده    
+</span>    
+    
+</button>    
+    
+</div>    
+    
+<div    
+id="homeChats"    
+class="card chat-preview-card">    
+    
+<div class="chat-preview-head">    
+    
+<div class="chat-preview-title">    
+💬 چت‌ها    
+</div>    
+    
+<button    
+class="chat-preview-link"    
+onclick="goPage('chatList')">    
+همه چت‌ها    
+</button>    
+    
+</div>    
+    
+<div id="homeChatList">    
+در حال دریافت...    
+</div>    
+    
+</div>    
+    
+`;    
+    
+await renderHomeChatPreview();    
+    
+}    
+    
+async function getFriendsCount(){    
+    
+const{    
+data,    
+error    
+}=await supabaseClient    
+.from("friendships")    
+.select("requester_id,receiver_id")    
+.eq("status","accepted")    
+.or(    
+`requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`    
+);    
+    
+if(error){    
+console.error(error);    
+return 0;    
+}    
+    
+return data?.length||0;    
+}    
+    
+async function getRequestsCount(){    
+    
+const[    
+{count:a},    
+{count:b}    
+]=await Promise.all([    
+    
+supabaseClient    
+.from("friendships")    
+.select("id",{count:"exact",head:true})    
+.eq("receiver_id",currentUser.id)    
+.eq("status","pending"),    
+    
+supabaseClient    
+.from("hangout_requests")    
+.select("id",{count:"exact",head:true})    
+.eq("receiver_id",currentUser.id)    
+.eq("status","pending")    
+    
+]);    
+    
+return(a||0)+(b||0);    
+}    
+    
+async function getUnreadCount(){    
+    
+const{    
+data,    
+error    
+}=await supabaseClient    
+.from("notifications")    
+.select("id")    
+.eq("user_id",currentUser.id)    
+.eq("is_read",false);    
+    
+if(error){    
+console.error(error);    
+return 0;    
+}    
+    
+return data?.length||0;    
+}    
+    
+async function getUnreadMessagesCount(){    
+    
+const{    
+data,    
+error    
+}=await supabaseClient    
+.from("messages")    
+.select("id")    
+.eq("receiver_id",currentUser.id)    
+.eq("is_read",false);    
+    
+if(error){    
+console.error(error);    
+return 0;    
+}    
+    
+return data?.length||0;    
+}    
+    
+async function getUnreadFromFriend(friendId){    
+    
+const{    
+data,    
+error    
+}=await supabaseClient    
+.from("messages")    
+.select("id")    
+.eq("receiver_id",currentUser.id)    
+.eq("sender_id",friendId)    
+.eq("is_read",false);    
+    
+if(error){    
+console.error(error);    
+return 0;    
+}    
+    
+return data?.length||0;    
+}    
+    
+/* =========================    
+چت‌ها در خانه    
+========================= */    
+    
+async function getChatSummaries(){    
+    
+const{    
+data:messages,    
+error    
+}=await supabaseClient    
+.from("messages")    
+.select(    
+"id,sender_id,receiver_id,body,created_at,is_read"    
+)    
+.or(    
+`sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`    
+)    
+.order(    
+"created_at",    
+{    
+ascending:false    
+}    
+)    
+.limit(100);    
+    
+if(error)throw error;    
+    
+const map={};    
+    
+for(const message of messages||[]){    
+    
+const partnerId=    
+message.sender_id===currentUser.id    
+?    
+message.receiver_id    
+:    
+message.sender_id;    
+    
+if(!map[partnerId]){    
+map[partnerId]={    
+...message,    
+partnerId    
+};    
+}    
+}    
+    
+const ids=Object.keys(map);    
+    
+if(!ids.length)    
+return [];    
+    
+const{    
+data:profiles,    
+error:profileError    
+}=await supabaseClient    
+.from("profiles")    
+.select("id,display_name,username,avatar_url")    
+.in("id",ids);    
+    
+if(profileError)throw profileError;    
+    
+const profileMap={};    
+    
+(profiles||[]).forEach(    
+p=>profileMap[p.id]=p    
+);    
+    
+const result=[];    
+    
+for(const id of ids){    
+    
+const summary=map[id];    
+    
+const unread=    
+await getUnreadFromFriend(id);    
+    
+result.push({    
+...summary,    
+profile:profileMap[id],    
+unread    
+});    
+}    
+    
+return result;    
+}    
+    
+async function renderHomeChatPreview(){    
+    
+const box=$("homeChatList");    
+    
+if(!box)return;    
+    
+try{    
+    
+const chats=await getChatSummaries();    
+    
+if(!chats.length){    
+    
+box.innerHTML=`    
+    
+<div class="empty">    
+هنوز چتی نداری.    
+<br>    
+از بخش دوستان با یکی از دوستات شروع کن 💜    
+</div>    
+    
+`;    
+    
+return;    
+}    
+    
+box.innerHTML=    
+chats    
+.slice(0,4)    
+.map(chat=>`    
+    
+<div    
+class="chat-preview-row"    
+onclick="openChat(    
+'${attrValue(chat.partnerId)}',    
+'${attrValue(chat.profile?.display_name||"کاربر")}'    
+)">    
+    
+${avatarHtml(chat.profile)}    
+    
+<div class="chat-preview-info">    
+    
+<div class="chat-preview-name">    
+${escapeHtml(    
+chat.profile?.display_name||    
+"کاربر"    
+)}    
+    
+${    
+chat.unread>0    
+?    
+`<span class="unread-badge">${chat.unread}</span>`    
+:    
+""    
+}    
+    
+</div>    
+    
+<div class="chat-preview-message">    
+${escapeHtml(chat.body||"")}    
+</div>    
+    
+</div>    
+    
+<div class="chat-preview-time">    
+${relativeTime(chat.created_at)}    
+</div>    
+    
+</div>    
+    
+`)    
+.join("");    
+    
+}catch(e){    
+    
+console.error(e);    
+    
+box.innerHTML=`    
+    
+<div class="empty">    
+چت‌ها فعلاً قابل دریافت نیستند.    
+</div>    
+    
+`;    
+}    
+}    
+    
+/* =========================    
+دوستان    
+========================= */    
+    
+async function renderFriends(){    
+    
+$("mainContent").innerHTML=`    
+    
+<div class="card">    
+    
+<div class="card-title">    
+پیدا کردن دوست    
+</div>    
+    
+<div class="search-row">    
+    
+<input    
+id="friendSearch"    
+placeholder="نام کاربری">    
+    
+<button onclick="searchFriend()">    
+جستجو    
+</button>    
+    
+</div>    
+    
+<div id="friendSearchResult"></div>    
+    
+</div>    
+    
+<div class="card">    
+    
+<div class="card-title">    
+دوستان من    
+</div>    
+    
+<div id="friendsList">    
+در حال دریافت...    
+</div>    
+    
+</div>    
+    
+`;    
+    
+await loadFriends();    
+}    
+    
+async function searchFriend(){    
+    
+const username=$("friendSearch")    
+?.value    
+.trim()    
+.toLowerCase();    
+    
+if(!username)return;    
+    
+const box=$("friendSearchResult");    
+    
+box.innerHTML=`    
+<div class="empty">    
+در حال جستجو...    
+</div>    
+`;    
+    
+const{    
+data,    
+error    
+}=await supabaseClient    
+.from("profiles")    
+.select("id,display_name,username,avatar_url")    
+.eq("username",username)    
+.maybeSingle();    
+    
+if(error){    
+    
+box.innerHTML=`    
+<div class="empty">    
+${escapeHtml(error.message)}    
+</div>    
+`;    
+    
+return;    
+}    
+    
+if(!data){    
+    
+box.innerHTML=`    
+<div class="empty">    
+کاربری پیدا نشد.    
+</div>    
+`;    
+    
+return;    
+}    
+    
+if(data.id===currentUser.id){    
+    
+box.innerHTML=`    
+<div class="empty">    
+این خودتی 😄    
+</div>    
+`;    
+    
+return;    
+}    
+    
+const{    
+data:existing,    
+error:existingError    
+}=await supabaseClient    
+.from("friendships")    
+.select("*")    
+.or(    
+`and(requester_id.eq.${currentUser.id},receiver_id.eq.${data.id}),and(requester_id.eq.${data.id},receiver_id.eq.${currentUser.id})`    
+)    
+.maybeSingle();    
+    
+if(existingError){    
+console.error(existingError);    
+}    
+    
+let action="";    
+    
+if(!existing){    
+    
+action=`    
+    
+<button    
+class="small-btn purple-btn"    
+onclick="sendFriendRequest('${attrValue(data.id)}')">    
+افزودن    
+</button>    
+    
+`;    
+    
+}else if(existing.status==="accepted"){    
+    
+action=`    
+    
+<span class="username">    
+دوست شماست    
+</span>    
+    
+`;    
+    
+}else if(existing.requester_id===currentUser.id){    
+    
+action=`    
+    
+<span class="username">    
+درخواست ارسال شده    
+</span>    
+    
+`;    
+    
+}else{    
+    
+action=`    
+    
+<button    
+class="small-btn success-btn"    
+onclick="acceptFriend('${attrValue(data.id)}')">    
+قبول    
+</button>    
+    
+<button    
+class="small-btn danger-btn"    
+onclick="rejectFriend('${attrValue(data.id)}')">    
+رد    
+</button>    
+    
+`;    
+}    
+    
+box.innerHTML=`    
+    
+<div class="friend-item">    
+    
+<div class="row">    
+    
+<div style="display:flex;align-items:center;gap:10px">    
+    
+${avatarHtml(data)}    
+    
+<div>    
+    
+<div class="name">    
+${escapeHtml(data.display_name)}    
+</div>    
+    
+<div class="username">    
+@${escapeHtml(data.username)}    
+</div>    
+    
+</div>    
+    
+</div>    
+    
+<div>    
+${action}    
+</div>    
+    
+</div>    
+    
+</div>    
+    
+`;    
+}    
+    
+async function sendFriendRequest(receiverId){    
+    
+receiverId=decodeAttr(receiverId);    
+    
+const{    
+error    
+}=await supabaseClient    
+.from("friendships")    
+.insert({    
+requester_id:currentUser.id,    
+receiver_id:receiverId,    
+status:"pending"    
+});    
+    
+if(error)    
+return alert(    
+error.message||    
+"ارسال درخواست انجام نشد."    
+);    
+    
+alert("درخواست دوستی ارسال شد.");    
+    
+await renderFriends();    
+}    
+    
+async function loadFriends(){    
+    
+const box=$("friendsList");    
+    
+const{    
+data,    
+error    
+}=await supabaseClient    
+.from("friendships")    
+.select("*")    
+.eq("status","accepted")    
+.or(    
+`requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`    
+);    
+    
+if(error){    
+    
+box.innerHTML=`    
+    
+<div class="empty">    
+${escapeHtml(error.message)}    
+</div>    
+    
+`;    
+    
+return;    
+}    
+    
+if(!data?.length){    
+    
+box.innerHTML=`    
+    
+<div class="empty">    
+هنوز دوستی نداری.    
+</div>    
+    
+`;    
+    
+return;    
+}    
+    
+const ids=data.map(    
+f=>    
+f.requester_id===currentUser.id    
+?    
+f.receiver_id    
+:    
+f.requester_id    
+);    
+    
+const{    
+data:profiles,    
+error:profileError    
+}=await supabaseClient    
+.from("profiles")    
+.select("id,display_name,username,avatar_url")    
+.in("id",ids);    
+    
+if(profileError){    
+    
+box.innerHTML=`    
+    
+<div class="empty">    
+${escapeHtml(profileError.message)}    
+</div>    
+    
+`;    
+    
+return;    
+}    
+    
+const unreadMap={};    
+    
+await Promise.all(    
+(ids||[]).map(async id=>{    
+unreadMap[id]=await getUnreadFromFriend(id);    
+})    
+);    
+    
+box.innerHTML=    
+(profiles||[])    
+.map(p=>{    
+    
+const unread=unreadMap[p.id]||0;    
+    
+return`    
+    
+<div class="friend-item">    
+    
+<div class="row">    
+    
+<div style="display:flex;align-items:center;gap:10px;min-width:0">    
+    
+${avatarHtml(p)}    
+    
+<div>    
+    
+<div class="name">    
+${escapeHtml(p.display_name)}    
+</div>    
+    
+<div class="username">    
+@${escapeHtml(p.username)}    
+</div>    
+    
+</div>    
+    
+</div>    
+    
+<div class="button-group">    
+    
+<button    
+class="small-btn purple-btn"    
+onclick="openFriendCalendar(    
+'${attrValue(p.id)}',    
+'${attrValue(p.display_name)}'    
+)">    
+تقویم    
+</button>    
+    
+<button    
+class="small-btn purple-btn"    
+onclick="openChat(    
+'${attrValue(p.id)}',    
+'${attrValue(p.display_name)}'    
+)">    
+💬 چت    
+${    
+unread>0    
+?    
+`<span class="unread-badge">${unread}</span>`    
+:    
+""    
+}    
+</button>    
+    
+</div>    
+    
+</div>    
+    
+</div>    
+    
+`;    
+    
+})    
+.join("");    
+}    
+    
+/* =========================    
+دوستی    
+========================= */    
+    
+async function acceptFriend(actorId){    
+    
+actorId=decodeAttr(actorId);    
+    
+const{    
+error    
+}=await supabaseClient    
+.from("friendships")    
+.update({    
+status:"accepted"    
+})    
+.eq("requester_id",actorId)    
+.eq("receiver_id",currentUser.id);    
+    
+if(error)    
+return alert(error.message);    
+    
+alert("دوستی قبول شد.");    
+    
+if(currentPage==="notifications")    
+await renderNotifications();    
+else    
+await renderRequests();    
+}    
+    
+async function rejectFriend(actorId){    
+    
+actorId=decodeAttr(actorId);    
+    
+const{    
+error    
+}=await supabaseClient    
+.from("friendships")    
+.delete()    
+.eq("requester_id",actorId)    
+.eq("receiver_id",currentUser.id);    
+    
+if(error)    
+return alert(error.message);    
+    
+alert("درخواست رد شد.");    
+    
+if(currentPage==="notifications")    
+await renderNotifications();    
+else    
+await renderRequests();    
+}    
+    
+/* =====================================================    
+چت واقعی    
+===================================================== */    
+    
+function cleanupChatRealtime(){    
+    
+if(chatChannel){    
+    
+supabaseClient    
+.removeChannel(chatChannel)    
+.catch(e=>console.error(e));    
+    
+chatChannel=null;    
+}    
+}    
+    
+async function verifyFriendship(friendId){    
+    
+const{    
+data,    
+error    
+}=await supabaseClient    
+.from("friendships")    
+.select("id")    
+.eq("status","accepted")    
+.or(    
+`and(requester_id.eq.${currentUser.id},receiver_id.eq.${friendId}),and(requester_id.eq.${friendId},receiver_id.eq.${currentUser.id})`    
+)    
+.maybeSingle();    
+    
+if(error)throw error;    
+    
+return !!data;    
+}    
+    
 async function openChat(friendId,friendName){
 
 friendId=decodeAttr(friendId);
@@ -2782,109 +2768,103 @@ chatPartnerId=friendId;
 chatPartnerName=friendName;
 
 await goPage("chat");
-}
-
-async function renderChatPage(){
-
-const main=$("mainContent");
-
-if(!main)return;
-
-if(!chatPartnerId){
-
-await goPage("friends");
-
-return;
-}
-
-const isFriend=
-await verifyFriendship(chatPartnerId);
-
-if(!isFriend){
-
-alert(
-"فقط با دوستان تأییدشده می‌تونی چت کنی."
-);
-
-await goPage("friends");
-
-return;
-}
-
-let partnerProfile=null;
-
-const{
-data:partner
-}=await supabaseClient
-.from("profiles")
-.select("id,display_name,username,avatar_url")
-.eq("id",chatPartnerId)
-.maybeSingle();
-
-partnerProfile=partner||{
-display_name:chatPartnerName
-};
-
-main.innerHTML=`
-
-<div class="card chat-card">
-
-<div class="chat-header">
-
-<button
-class="chat-back"
-onclick="goPage('friends')">
-›
-</button>
-
-${avatarHtml(partnerProfile)}
-
-<div class="chat-user-info">
-
-<div class="chat-user-name">
-${escapeHtml(
-partnerProfile.display_name||chatPartnerName
-)}
-</div>
-
-<div class="chat-user-status">
-گفت‌وگوی خصوصی
-</div>
-
-</div>
-
-</div>
-
-<div
-id="chatMessages"
-class="chat-messages">
-
-<div class="chat-empty">
-در حال دریافت پیام‌ها...
-</div>
-
-</div>
-
-<div class="chat-input-row">
-
-<textarea
-id="chatInput"
-class="chat-input"
-placeholder="پیامت رو بنویس..."
-maxlength="2000"></textarea>
-
-<button
-id="chatSendButton"
-class="chat-send"
+}    
+    
+async function renderChatPage(){    
+    
+const main=$("mainContent");    
+    
+if(!main)return;    
+    
+if(!chatPartnerId){    
+    
+await goPage("friends");    
+    
+return;    
+}    
+    
+const isFriend=    
+await verifyFriendship(chatPartnerId);    
+    
+if(!isFriend){    
+    
+alert(    
+"فقط با دوستان تأییدشده می‌تونی چت کنی."    
+);    
+    
+await goPage("friends");    
+    
+return;    
+}    
+    
+let partnerProfile=null;    
+    
+const{    
+data:partner    
+}=await supabaseClient    
+.from("profiles")    
+.select("id,display_name,username,avatar_url")    
+.eq("id",chatPartnerId)    
+.maybeSingle();    
+    
+partnerProfile=partner||{    
+display_name:chatPartnerName    
+};    
+    
+main.innerHTML=`    
+    
+<div class="card chat-card">    
+    
+<div class="chat-header">    
+    
+<button    
+class="chat-back"    
+onclick="goPage('friends')">    
+›    
+</button>    
+    
+${avatarHtml(partnerProfile)}    
+    
+<div class="chat-user-info">    
+    
+<div class="chat-user-name">    
+${escapeHtml(    
+partnerProfile.display_name||chatPartnerName    
+)}    
+</div>    
+    
+<div class="chat-user-status">    
+گفت‌وگوی خصوصی    
+</div>    
+    
+</div>    
+    
+</div>    
+    
+<div    
+id="chatMessages"    
+class="chat-messages">    
+    
+<div class="chat-empty">    
+در حال دریافت پیام‌ها...    
+</div>    
+    
+</div>    
+    
+<div class="chat-input-row">    
+    
+<textarea    
+id="chatInput"    
+class="chat-input"    
+placeholder="پیامت رو بنویس..."    
+maxlength="2000"></textarea>    <button    
+id="chatSendButton"    
+class="chat-send"    
 onclick="sendChatMessage()">
 ➤
 </button>
 
-</div>
-
-</div>
-
-`;
+</div>    </div>    `;
 
 $("chatInput")?.addEventListener(
 "keydown",
@@ -2927,7 +2907,7 @@ error
 "id,sender_id,receiver_id,body,created_at,is_read"
 )
 .or(
-`and(sender_id.eq.${currentUser.id},receiver_id.eq.${chatPartnerId}),and(sender_id.eq.${chatPartnerId},receiver_id.eq.${currentUser.id})`
+and(sender_id.eq.${currentUser.id},receiver_id.eq.${chatPartnerId}),and(sender_id.eq.${chatPartnerId},receiver_id.eq.${currentUser.id})
 )
 .order(
 "created_at",
@@ -2940,11 +2920,9 @@ if(error){
 
 box.innerHTML=`
 
-<div class="chat-empty">
-${escapeHtml(error.message)}
-</div>
-
-`;
+<div class="chat-empty">    
+${escapeHtml(error.message)}    
+</div>    `;
 
 return;
 }
@@ -2953,13 +2931,11 @@ if(!data?.length){
 
 box.innerHTML=`
 
-<div class="chat-empty">
-هنوز پیامی بین شما رد و بدل نشده.
-<br>
-اولین پیام رو بفرست 👋
-</div>
-
-`;
+<div class="chat-empty">    
+هنوز پیامی بین شما رد و بدل نشده.    
+<br>    
+اولین پیام رو بفرست 👋    
+</div>    `;
 
 return;
 }
@@ -3011,7 +2987,7 @@ if(!box)return;
 
 const existing=
 box.querySelector(
-`[data-message-id="${message.id}"]`
+[data-message-id="${message.id}"]
 );
 
 if(existing)return;
@@ -3044,15 +3020,11 @@ bubble.className=
 
 bubble.innerHTML=`
 
-<div>
-${escapeHtml(message.body)}
-</div>
-
-<div class="chat-time">
-${chatTime(message.created_at)}
-</div>
-
-`;
+<div>    
+${escapeHtml(message.body)}    
+</div>    <div class="chat-time">    
+${chatTime(message.created_at)}    
+</div>    `;
 
 row.appendChild(bubble);
 
@@ -3166,7 +3138,7 @@ return;
 chatChannel=
 supabaseClient
 .channel(
-`chat:${currentUser.id}:${chatPartnerId}:${Date.now()}`
+chat:${currentUser.id}:${chatPartnerId}:${Date.now()}
 )
 .on(
 "postgres_changes",
@@ -3174,7 +3146,7 @@ supabaseClient
 event:"INSERT",
 schema:"public",
 table:"messages",
-filter:`receiver_id=eq.${currentUser.id}`
+filter:receiver_id=eq.${currentUser.id}
 },
 async payload=>{
 
@@ -3192,7 +3164,7 @@ return;
 
 if(
 document.querySelector(
-`[data-message-id="${message.id}"]`
+[data-message-id="${message.id}"]
 )
 )
 return;
@@ -3226,19 +3198,11 @@ const main=$("mainContent");
 
 main.innerHTML=`
 
-<div class="card">
-
-<div class="card-title">
-💬 چت‌ها
-</div>
-
-<div id="fullChatList">
-در حال دریافت...
-</div>
-
-</div>
-
-`;
+<div class="card">    <div class="card-title">    
+💬 چت‌ها    
+</div>    <div id="fullChatList">    
+در حال دریافت...    
+</div>    </div>    `;
 
 const box=$("fullChatList");
 
@@ -3250,13 +3214,11 @@ if(!chats.length){
 
 box.innerHTML=`
 
-<div class="empty">
-هنوز چتی نداری.
-<br>
-از بخش دوستان با یکی از دوستات شروع کن 💜
-</div>
-
-`;
+<div class="empty">    
+هنوز چتی نداری.    
+<br>    
+از بخش دوستان با یکی از دوستات شروع کن 💜    
+</div>    `;
 
 return;
 }
@@ -3265,20 +3227,14 @@ box.innerHTML=
 chats
 .map(chat=>`
 
-<div
-class="chat-list-item"
-onclick="openChat(
-'${attrValue(chat.partnerId)}',
-'${attrValue(chat.profile?.display_name||"کاربر")}'
-)">
+<div    
+class="chat-list-item"    
+onclick="openChat(    
+'${attrValue(chat.partnerId)}',    
+'${attrValue(chat.profile?.display_name||"کاربر")}'    
+)">    ${avatarHtml(chat.profile)}
 
-${avatarHtml(chat.profile)}
-
-<div class="chat-list-info">
-
-<div class="chat-list-name">
-
-${escapeHtml(
+<div class="chat-list-info">    <div class="chat-list-name">    ${escapeHtml(
 chat.profile?.display_name||
 "کاربر"
 )}
@@ -3286,30 +3242,16 @@ chat.profile?.display_name||
 ${
 chat.unread>0
 ?
-`<span class="unread-badge">${chat.unread}</span>`
+<span class="unread-badge">${chat.unread}</span>
 :
 ""
 }
 
-</div>
-
-<div class="chat-list-last">
-${escapeHtml(chat.body||"")}
-</div>
-
-</div>
-
-<div class="chat-list-side">
-
-<div class="chat-list-time">
-${relativeTime(chat.created_at)}
-</div>
-
-</div>
-
-</div>
-
-`)
+</div>    <div class="chat-list-last">    
+${escapeHtml(chat.body||"")}    
+</div>    </div>    <div class="chat-list-side">    <div class="chat-list-time">    
+${relativeTime(chat.created_at)}    
+</div>    </div>    </div>    `)
 .join("");
 
 }catch(e){
@@ -3318,11 +3260,9 @@ console.error(e);
 
 box.innerHTML=`
 
-<div class="empty">
-${escapeHtml(e.message||"چت‌ها قابل دریافت نیستند.")}
-</div>
-
-`;
+<div class="empty">    
+${escapeHtml(e.message||"چت‌ها قابل دریافت نیستند.")}    
+</div>    `;
 }
 }
 
@@ -3376,69 +3316,37 @@ if(!main)return;
 
 main.innerHTML=`
 
-<div class="card">
-
-<div class="month-head">
-
-<button onclick="changeMonth(-1)">
-‹
-</button>
-
-<div
-class="month-title"
-id="monthTitle">
-</div>
-
-<button onclick="changeMonth(1)">
-›
-</button>
-
-</div>
-
-<div
-id="calendarOwnerLabel"
-class="calendar-owner">
-</div>
-
-<div
-id="calendarGrid"
-class="grid">
-</div>
-
-</div>
-
-<div
-id="datePanel"
-class="card hidden">
-</div>
-
-<div class="card">
-
-<div class="appointments-title">
-
-<div
-class="card-title"
-style="margin:0">
-قرارهای ثبت‌شده
-</div>
-
-<button
-class="small-btn purple-btn"
+<div class="card">    <div class="month-head">    <button onclick="changeMonth(-1)">    
+‹    
+</button>    <div    
+class="month-title"    
+id="monthTitle">    
+</div>    <button onclick="changeMonth(1)">    
+›    
+</button>    </div>    <div    
+id="calendarOwnerLabel"    
+class="calendar-owner">    
+</div>    <div    
+id="calendarGrid"    
+class="grid">    
+</div>    </div>    <div    
+id="datePanel"    
+class="card hidden">    
+</div>    <div class="card">    <div class="appointments-title">    <div    
+class="card-title"    
+style="margin:0">    
+قرارهای ثبت‌شده    
+</div>    <button    
+class="small-btn purple-btn"    
 onclick="openMyCalendar()">
 تقویم من
 </button>
 
-</div>
-
-<div
-id="appointmentsList"
-class="empty">
-در حال دریافت...
-</div>
-
-</div>
-
-`;
+</div>    <div    
+id="appointmentsList"    
+class="empty">    
+در حال دریافت...    
+</div>    </div>    `;
 
 const t=todayJalali();
 
@@ -3465,21 +3373,13 @@ if(grid){
 
 grid.innerHTML=`
 
-<div
-class="empty"
-style="grid-column:1/-1">
+<div    
+class="empty"    
+style="grid-column:1/-1">    خطا در ساخت تقویم.
 
-خطا در ساخت تقویم.
-
-<br>
-
-<small>
-${escapeHtml(e.message||"")}
-</small>
-
-</div>
-
-`;
+<br>    <small>    
+${escapeHtml(e.message||"")}    
+</small>    </div>    `;
 }
 }
 
@@ -3500,11 +3400,9 @@ if(box){
 
 box.innerHTML=`
 
-<div class="empty">
-قرارهای این ماه فعلاً قابل دریافت نیست.
-</div>
-
-`;
+<div class="empty">    
+قرارهای این ماه فعلاً قابل دریافت نیست.    
+</div>    `;
 }
 });
 
@@ -3555,11 +3453,9 @@ if(box){
 
 box.innerHTML=`
 
-<div class="empty">
-قرارهای این ماه قابل دریافت نیست.
-</div>
-
-`;
+<div class="empty">    
+قرارهای این ماه قابل دریافت نیست.    
+</div>    `;
 }
 });
 
@@ -3576,7 +3472,7 @@ if(!title||!grid)
 return;
 
 title.textContent=
-`${months[calendarMonth-1]} ${calendarYear}`;
+${months[calendarMonth-1]} ${calendarYear};
 
 if(ownerLabel){
 
@@ -3585,7 +3481,7 @@ ownCalendar
 ?
 "تقویم من"
 :
-`تقویم ${calendarOwnerName}`;
+تقویم ${calendarOwnerName};
 
 }
 
@@ -3621,11 +3517,9 @@ grid.innerHTML=
 weekdays
 .map(x=>`
 
-<div class="weekday">
-${x}
-</div>
-
-`)
+<div class="weekday">    
+${x}    
+</div>    `)
 .join("");
 
 const[
@@ -3651,7 +3545,7 @@ for(let i=0;i<saturdayIndex;i++){
 
 grid.insertAdjacentHTML(
 "beforeend",
-`<div class="day empty"></div>`
+<div class="day empty"></div>
 );
 }
 
@@ -3698,15 +3592,11 @@ el.dataset.date=iso;
 
 el.innerHTML=`
 
-<strong>
-${day}
-</strong>
-
-<small>
-آزاد
-</small>
-
-`;
+<strong>    
+${day}    
+</strong>    <small>    
+آزاد    
+</small>    `;
 
 el.onclick=()=>
 openDate(
@@ -3867,7 +3757,7 @@ iso=>{
 
 const el=
 document.querySelector(
-`.day[data-date="${iso}"]`
+.day[data-date="${iso}"]
 );
 
 if(!el)return;
@@ -3904,11 +3794,9 @@ el.classList.add("today");
 
 el.innerHTML=`
 
-<strong>
-${j.jd}
-</strong>
-
-${
+<strong>    
+${j.jd}    
+</strong>    ${
 info?.is_booked
 ?
 "<small>قرار</small>"
@@ -3958,11 +3846,9 @@ if(!box)return;
 
 box.innerHTML=`
 
-<div class="empty">
-در حال دریافت...
-</div>
-
-`;
+<div class="empty">    
+در حال دریافت...    
+</div>    `;
 
 let todayISO;
 let nextISO;
@@ -3995,11 +3881,9 @@ calendarMonth+1,
 
 box.innerHTML=`
 
-<div class="empty">
-خطا در محاسبه تاریخ‌ها.
-</div>
-
-`;
+<div class="empty">    
+خطا در محاسبه تاریخ‌ها.    
+</div>    `;
 
 return;
 }
@@ -4044,11 +3928,9 @@ if(!data?.length){
 
 box.innerHTML=`
 
-<div class="empty">
-برای این ماه قراری ثبت نشده.
-</div>
-
-`;
+<div class="empty">    
+برای این ماه قراری ثبت نشده.    
+</div>    `;
 
 return;
 }
@@ -4105,26 +3987,18 @@ const p=map[x.partner_id];
 
 return`
 
-<div class="appointment">
-
-<div class="appointment-date">
-${jalaliDateLabel(x.date)}
-</div>
-
-<div class="appointment-text">
-با
-<b>
-${escapeHtml(
-p?.display_name||
-"کاربر"
-)}
-</b>
-قرار داری.
-</div>
-
-<div class="appointment-status">
-
-${
+<div class="appointment">    <div class="appointment-date">    
+${jalaliDateLabel(x.date)}    
+</div>    <div class="appointment-text">    
+با    
+<b>    
+${escapeHtml(    
+p?.display_name||    
+"کاربر"    
+)}    
+</b>    
+قرار داری.    
+</div>    <div class="appointment-status">    ${
 p?.username
 ?
 "@"+escapeHtml(p.username)
@@ -4132,13 +4006,9 @@ p?.username
 ""
 }
 
- · تأیید شده
+· تأیید شده
 
-</div>
-
-</div>
-
-`;
+</div>    </div>    `;
 
 })
 .join("");
@@ -4149,14 +4019,12 @@ console.error(e);
 
 box.innerHTML=`
 
-<div class="empty">
-${escapeHtml(
-e.message||
-"دریافت قرارها انجام نشد."
-)}
-</div>
-
-`;
+<div class="empty">    
+${escapeHtml(    
+e.message||    
+"دریافت قرارها انجام نشد."    
+)}    
+</div>    `;
 }
 }
 
@@ -4180,13 +4048,11 @@ const j=isoToJalali(iso);
 
 let html=`
 
-<div class="card-title">
-${j.jd}
-${months[j.jm-1]}
-${j.jy}
-</div>
-
-`;
+<div class="card-title">    
+${j.jd}    
+${months[j.jm-1]}    
+${j.jy}    
+</div>    `;
 
 if(info?.is_booked){
 
@@ -4194,32 +4060,24 @@ if(ownCalendar){
 
 html+=`
 
-<div class="date-info">
+<div class="date-info">    این تاریخ با
 
-این تاریخ با
+<b>    
+${escapeHtml(    
+info.partner_name||    
+"یک دوست"    
+)}    
+</b>    رزرو شده است.
 
-<b>
-${escapeHtml(
-info.partner_name||
-"یک دوست"
-)}
-</b>
-
-رزرو شده است.
-
-</div>
-
-`;
+</div>    `;
 
 }else{
 
 html+=`
 
-<div class="date-info">
-این تاریخ رزرو شده است.
-</div>
-
-`;
+<div class="date-info">    
+این تاریخ رزرو شده است.    
+</div>    `;
 
 }
 
@@ -4230,20 +4088,14 @@ info?.is_wish
 
 html+=`
 
-<div class="date-info">
-
-${escapeHtml(calendarOwnerName)}
+<div class="date-info">    ${escapeHtml(calendarOwnerName)}
 این روز اعلام کرده که دنبال هم‌قرار می‌گردد.
 
-</div>
-
-<br>
-
-<button
-class="primary"
-onclick="respondWishFromCalendar(
-'${attrValue(calendarOwner)}',
-'${attrValue(iso)}'
+</div>    <br>    <button    
+class="primary"    
+onclick="respondWishFromCalendar(    
+'${attrValue(calendarOwner)}',    
+'${attrValue(iso)}'    
 )">
 می‌خوام باهاش برم
 </button>
@@ -4254,18 +4106,12 @@ onclick="respondWishFromCalendar(
 
 html+=`
 
-<div class="date-info">
-
-این تاریخ آزاده.
+<div class="date-info">    این تاریخ آزاده.
 
 می‌تونی اعلام کنی که این روز دنبال هم‌قرار می‌گردی.
 
-</div>
-
-<br>
-
-<button
-class="primary"
+</div>    <br>    <button    
+class="primary"    
 onclick="createWish('${iso}')">
 می‌خوام این روز برم بیرون
 </button>
@@ -4276,18 +4122,12 @@ onclick="createWish('${iso}')">
 
 html+=`
 
-<div class="date-info">
-
-این تاریخ در تقویم
+<div class="date-info">    این تاریخ در تقویم
 ${escapeHtml(calendarOwnerName)}
 آزاد است.
 
-</div>
-
-<br>
-
-<button
-class="primary"
+</div>    <br>    <button    
+class="primary"    
 onclick="sendHangoutRequest('${iso}')">
 درخواست قرار برای این تاریخ
 </button>
@@ -4462,31 +4302,15 @@ async function renderRequests(){
 
 $("mainContent").innerHTML=`
 
-<div class="card">
-
-<div class="card-title">
-درخواست‌های دوستی
-</div>
-
-<div id="friendRequestsList">
-در حال دریافت...
-</div>
-
-</div>
-
-<div class="card">
-
-<div class="card-title">
-درخواست‌های قرار
-</div>
-
-<div id="requestsList">
-در حال دریافت...
-</div>
-
-</div>
-
-`;
+<div class="card">    <div class="card-title">    
+درخواست‌های دوستی    
+</div>    <div id="friendRequestsList">    
+در حال دریافت...    
+</div>    </div>    <div class="card">    <div class="card-title">    
+درخواست‌های قرار    
+</div>    <div id="requestsList">    
+در حال دریافت...    
+</div>    </div>    `;
 
 await loadFriendRequests();
 
@@ -4524,11 +4348,9 @@ if(error){
 
 box.innerHTML=`
 
-<div class="empty">
-${escapeHtml(error.message)}
-</div>
-
-`;
+<div class="empty">    
+${escapeHtml(error.message)}    
+</div>    `;
 
 return;
 }
@@ -4537,11 +4359,9 @@ if(!data?.length){
 
 box.innerHTML=`
 
-<div class="empty">
-درخواست دوستی جدیدی نداری.
-</div>
-
-`;
+<div class="empty">    
+درخواست دوستی جدیدی نداری.    
+</div>    `;
 
 return;
 }
@@ -4575,57 +4395,37 @@ box.innerHTML=
 data
 .map(r=>`
 
-<div class="request-item">
+<div class="request-item">    <div style="display:flex;align-items:center;gap:10px">    ${avatarHtml(map[r.requester_id])}
 
-<div style="display:flex;align-items:center;gap:10px">
-
-${avatarHtml(map[r.requester_id])}
-
-<div>
-
-<div class="name">
-${escapeHtml(
-map[r.requester_id]
-?.display_name||
-"کاربر"
-)}
-</div>
-
-<div class="username">
-@${escapeHtml(
-map[r.requester_id]
-?.username||
-""
-)}
-</div>
-
-</div>
-
-</div>
-
-<div class="notification-actions">
-
-<button
-class="small-btn success-btn"
-onclick="acceptFriend(
-'${attrValue(r.requester_id)}'
+<div>    <div class="name">    
+${escapeHtml(    
+map[r.requester_id]    
+?.display_name||    
+"کاربر"    
+)}    
+</div>    <div class="username">    
+@${escapeHtml(    
+map[r.requester_id]    
+?.username||    
+""    
+)}    
+</div>    </div>    </div>    <div class="notification-actions">    <button    
+class="small-btn success-btn"    
+onclick="acceptFriend(    
+'${attrValue(r.requester_id)}'    
 )">
 قبول
 </button>
 
-<button
-class="small-btn danger-btn"
-onclick="rejectFriend(
-'${attrValue(r.requester_id)}'
+<button    
+class="small-btn danger-btn"    
+onclick="rejectFriend(    
+'${attrValue(r.requester_id)}'    
 )">
 رد
 </button>
 
-</div>
-
-</div>
-
-`)
+</div>    </div>    `)
 .join("");
 }
 
@@ -4658,11 +4458,9 @@ if(error){
 
 box.innerHTML=`
 
-<div class="empty">
-${escapeHtml(error.message)}
-</div>
-
-`;
+<div class="empty">    
+${escapeHtml(error.message)}    
+</div>    `;
 
 return;
 }
@@ -4671,11 +4469,9 @@ if(!data?.length){
 
 box.innerHTML=`
 
-<div class="empty">
-درخواست قرار جدیدی نداری.
-</div>
-
-`;
+<div class="empty">    
+درخواست قرار جدیدی نداری.    
+</div>    `;
 
 return;
 }
@@ -4709,67 +4505,43 @@ box.innerHTML=
 data
 .map(r=>`
 
-<div class="request-item">
+<div class="request-item">    <div style="display:flex;align-items:center;gap:10px">    ${avatarHtml(map[r.requester_id])}
 
-<div style="display:flex;align-items:center;gap:10px">
-
-${avatarHtml(map[r.requester_id])}
-
-<div>
-
-<div class="name">
-${escapeHtml(
-map[r.requester_id]
-?.display_name||
-"کاربر"
-)}
-</div>
-
-<div class="username">
-@${escapeHtml(
-map[r.requester_id]
-?.username||
-""
-)}
-</div>
-
-</div>
-
-</div>
-
-<div class="date-info">
-
-درخواست قرار برای
+<div>    <div class="name">    
+${escapeHtml(    
+map[r.requester_id]    
+?.display_name||    
+"کاربر"    
+)}    
+</div>    <div class="username">    
+@${escapeHtml(    
+map[r.requester_id]    
+?.username||    
+""    
+)}    
+</div>    </div>    </div>    <div class="date-info">    درخواست قرار برای
 
 ${jalaliDateLabel(r.date)}
 
-</div>
-
-<div class="notification-actions">
-
-<button
-class="small-btn success-btn"
-onclick="respondHangout(
-'${attrValue(r.id)}',
-true
+</div>    <div class="notification-actions">    <button    
+class="small-btn success-btn"    
+onclick="respondHangout(    
+'${attrValue(r.id)}',    
+true    
 )">
 قبول
 </button>
 
-<button
-class="small-btn danger-btn"
-onclick="respondHangout(
-'${attrValue(r.id)}',
-false
+<button    
+class="small-btn danger-btn"    
+onclick="respondHangout(    
+'${attrValue(r.id)}',    
+false    
 )">
 رد
 </button>
 
-</div>
-
-</div>
-
-`)
+</div>    </div>    `)
 .join("");
 }
 
@@ -4855,29 +4627,25 @@ requestId
 
 return`
 
-<div class="notification-actions">
-
-<button
-class="small-btn success-btn"
-onclick="respondHangout(
-'${attrValue(requestId)}',
-true
+<div class="notification-actions">    <button    
+class="small-btn success-btn"    
+onclick="respondHangout(    
+'${attrValue(requestId)}',    
+true    
 )">
 قبول
 </button>
 
-<button
-class="small-btn danger-btn"
-onclick="respondHangout(
-'${attrValue(requestId)}',
-false
+<button    
+class="small-btn danger-btn"    
+onclick="respondHangout(    
+'${attrValue(requestId)}',    
+false    
 )">
 رد
 </button>
 
-</div>
-
-`;
+</div>    `;
 }
 
 if(
@@ -4888,31 +4656,27 @@ wishDate
 
 return`
 
-<div class="notification-actions">
-
-<button
-class="small-btn success-btn"
-onclick="respondWish(
-'${attrValue(actorId)}',
-'${attrValue(wishDate)}',
-true
+<div class="notification-actions">    <button    
+class="small-btn success-btn"    
+onclick="respondWish(    
+'${attrValue(actorId)}',    
+'${attrValue(wishDate)}',    
+true    
 )">
 می‌خوام باهاش برم
 </button>
 
-<button
-class="small-btn danger-btn"
-onclick="respondWish(
-'${attrValue(actorId)}',
-'${attrValue(wishDate)}',
-false
+<button    
+class="small-btn danger-btn"    
+onclick="respondWish(    
+'${attrValue(actorId)}',    
+'${attrValue(wishDate)}',    
+false    
 )">
 نه
 </button>
 
-</div>
-
-`;
+</div>    `;
 }
 
 if(
@@ -4922,27 +4686,23 @@ actorId
 
 return`
 
-<div class="notification-actions">
-
-<button
-class="small-btn success-btn"
-onclick="acceptFriend(
-'${attrValue(actorId)}'
+<div class="notification-actions">    <button    
+class="small-btn success-btn"    
+onclick="acceptFriend(    
+'${attrValue(actorId)}'    
 )">
 قبول دوستی
 </button>
 
-<button
-class="small-btn danger-btn"
-onclick="rejectFriend(
-'${attrValue(actorId)}'
+<button    
+class="small-btn danger-btn"    
+onclick="rejectFriend(    
+'${attrValue(actorId)}'    
 )">
 رد
 </button>
 
-</div>
-
-`;
+</div>    `;
 }
 
 return "";
@@ -4952,19 +4712,11 @@ async function renderNotifications(){
 
 $("mainContent").innerHTML=`
 
-<div class="card">
-
-<div class="card-title">
-اعلان‌ها
-</div>
-
-<div id="notificationsList">
-در حال دریافت...
-</div>
-
-</div>
-
-`;
+<div class="card">    <div class="card-title">    
+اعلان‌ها    
+</div>    <div id="notificationsList">    
+در حال دریافت...    
+</div>    </div>    `;
 
 const{
 data,
@@ -4993,11 +4745,9 @@ if(error){
 
 $("notificationsList").innerHTML=`
 
-<div class="empty">
-${escapeHtml(error.message)}
-</div>
-
-`;
+<div class="empty">    
+${escapeHtml(error.message)}    
+</div>    `;
 
 return;
 }
@@ -5006,11 +4756,9 @@ if(!data?.length){
 
 $("notificationsList").innerHTML=`
 
-<div class="empty">
-اعلانی نداری.
-</div>
-
-`;
+<div class="empty">    
+اعلانی نداری.    
+</div>    `;
 
 return;
 }
@@ -5019,41 +4767,29 @@ $("notificationsList").innerHTML=
 data
 .map(n=>`
 
-<div
-class="notification-item ${
-n.is_read
-?
-""
-:
-"unread"
-}">
+<div    
+class="notification-item ${    
+n.is_read    
+?    
+""    
+:    
+"unread"    
+}">    <div class="name">    
+${escapeHtml(    
+n.title||"اعلان"    
+)}    
+</div>    <div    
+style="    
+margin-top:7px;    
+color:#666;    
+font-size:12px;    
+line-height:1.9">    ${escapeHtml(n.body||"")}
 
-<div class="name">
-${escapeHtml(
-n.title||"اعلان"
-)}
-</div>
+</div>    <div class="notification-time">    
+${relativeTime(n.created_at)}    
+</div>    ${notificationActions(n)}
 
-<div
-style="
-margin-top:7px;
-color:#666;
-font-size:12px;
-line-height:1.9">
-
-${escapeHtml(n.body||"")}
-
-</div>
-
-<div class="notification-time">
-${relativeTime(n.created_at)}
-</div>
-
-${notificationActions(n)}
-
-</div>
-
-`)
+</div>    `)
 .join("");
 
 await markNotificationsRead();
@@ -5190,63 +4926,48 @@ ${escapeHtml(p.display_name||"بدون نام")}
 <div class="profile-info-grid">
 
 <div class="profile-info-box">
-
 <div class="profile-info-label">
 نام
 </div>
-
 <div class="profile-info-value">
 ${escapeHtml(p.display_name||"—")}
 </div>
-
 </div>
 
 <div class="profile-info-box">
-
 <div class="profile-info-label">
 نام کاربری
 </div>
-
 <div class="profile-info-value">
 @${escapeHtml(p.username||"—")}
 </div>
-
 </div>
 
 <div class="profile-info-box">
-
 <div class="profile-info-label">
 شهر
 </div>
-
 <div class="profile-info-value">
 ${escapeHtml(p.city||"ثبت نشده")}
 </div>
-
 </div>
 
 <div class="profile-info-box">
-
 <div class="profile-info-label">
 استان
 </div>
-
 <div class="profile-info-value">
 ${escapeHtml(p.province||"ثبت نشده")}
 </div>
-
 </div>
 
 <div class="profile-info-box">
-
 <div class="profile-info-label">
 سن
 </div>
-
 <div class="profile-info-value">
 ${p.age?escapeHtml(p.age):"ثبت نشده"}
 </div>
-
 </div>
 
 </div>
@@ -5429,6 +5150,7 @@ alert(
 e.message||
 "آپلود عکس انجام نشد."
 );
+
 }
 }
 
@@ -5474,7 +5196,8 @@ message.style.display="block";
 return;
 }
 
-if(age!==null&&
+if(
+age!==null&&
 (
 Number.isNaN(age)||
 age<1||
@@ -5512,7 +5235,8 @@ age:age
 .select("*")
 .single();
 
-if(error)throw error;
+if(error)
+throw error;
 
 currentProfile=data;
 
@@ -5604,7 +5328,5 @@ hideLoading();
 
 start();
 
-</script>
-
-</body>
- </html>
+</script>    </body>    
+ </html>    
