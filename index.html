@@ -3724,12 +3724,21 @@ ${day}
 آزاد    
 </small>    `;
 
-el.onclick=()=>
+el.onclick=()=>{
+
+document
+.querySelectorAll(".day.selected")
+.forEach(x=>x.classList.remove("selected"));
+
+el.classList.add("selected");
+
 openDate(
 iso,
 day,
 window.calendarDayData?.[iso]||null
 );
+
+};
 
 grid.appendChild(el);
 }
