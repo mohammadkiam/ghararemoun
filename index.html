@@ -3362,6 +3362,52 @@ status
 );
 }
 
+  function subscribeNotificationsRealtime(){
+
+if(!currentUser)
+return;
+
+if(window.notificationChannel){
+supabaseClient.removeChannel(
+window.notificationChannel
+);
+}
+
+window.notificationChannel=
+supabaseClient
+.channel(
+`notifications:${currentUser.id}:${Date.now()}`
+)
+.on(
+"postgres_changes",
+{
+event:"INSERT",
+schema:"public",
+table:"notifications",
+filter:`user_id=eq.${currentUser.id}`
+},
+async payload=>{
+
+console.log(
+"Notification realtime:",
+payload
+);
+
+await getUnreadCount();
+
+}
+)
+.subscribe(
+status=>{
+console.log(
+"Notification realtime status:",
+status
+);
+}
+);
+
+  }  
+
 /* =========================
 لیست چت‌ها
 ========================= */
