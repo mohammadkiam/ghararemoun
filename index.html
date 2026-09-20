@@ -3026,7 +3026,7 @@ error
 "id,sender_id,receiver_id,body,created_at,is_read"
 )
 .or(
-and(sender_id.eq.${currentUser.id},receiver_id.eq.${chatPartnerId}),and(sender_id.eq.${chatPartnerId},receiver_id.eq.${currentUser.id})
+`and(sender_id.eq.${currentUser.id},receiver_id.eq.${chatPartnerId}),and(sender_id.eq.${chatPartnerId},receiver_id.eq.${currentUser.id})`
 )
 .order(
 "created_at",
