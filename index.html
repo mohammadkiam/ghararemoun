@@ -2577,7 +2577,7 @@ data:profiles,
 error:profileError    
 }=await supabaseClient    
 .from("profiles")    
-.select("id,display_name,username,avatar_url")    
+.select("id,display_name,username,avatar_url,city,province,age")    
 .in("id",ids);    
     
 if(profileError){    
@@ -2656,8 +2656,16 @@ unread>0
 :    
 ""    
 }    
-</button>    
-    
+</button> 
+   
+    <button
+class="small-btn purple-btn"
+onclick="openFriendProfile(
+'${attrValue(p.id)}'
+)">
+👤 پروفایل
+</button>
+
 </div>    
     
 </div>    
@@ -2738,6 +2746,117 @@ chatChannel=null;
 }    
 }    
     
+async function openFriendProfile(friendId){
+
+friendId=decodeAttr(friendId);
+
+try{
+
+const isFriend=await verifyFriendship(friendId);
+
+if(!isFriend){
+alert("فقط دوستان تأییدشده می‌توانند پروفایل یکدیگر را ببینند.");
+return;
+}
+
+const{
+data,
+error
+}=await supabaseClient
+.from("profiles")
+.select("id,display_name,username,avatar_url,city,province,age")
+.eq("id",friendId)
+.maybeSingle();
+
+if(error)throw error;
+
+if(!data){
+alert("پروفایل این کاربر پیدا نشد.");
+return;
+}
+
+currentPage="friendProfile";
+
+$("mainContent").innerHTML=`
+
+<div class="card">
+
+<button
+class="secondary"
+onclick="goPage('friends')">
+← برگشت به دوستان
+</button>
+
+</div>
+
+<div class="card">
+
+<div class="profile-head">
+
+${avatarHtml(data,"large")}
+
+<div class="profile-name">
+${escapeHtml(data.display_name||"بدون نام")}
+</div>
+
+<div class="profile-username">
+@${escapeHtml(data.username||"")}
+</div>
+
+</div>
+
+<div class="profile-info-grid">
+
+<div class="profile-info-box">
+<div class="profile-info-label">نام</div>
+<div class="profile-info-value">
+${escapeHtml(data.display_name||"ثبت نشده")}
+</div>
+</div>
+
+<div class="profile-info-box">
+<div class="profile-info-label">نام کاربری</div>
+<div class="profile-info-value">
+@${escapeHtml(data.username||"ثبت نشده")}
+</div>
+</div>
+
+<div class="profile-info-box">
+<div class="profile-info-label">شهر</div>
+<div class="profile-info-value">
+${escapeHtml(data.city||"ثبت نشده")}
+</div>
+</div>
+
+<div class="profile-info-box">
+<div class="profile-info-label">استان</div>
+<div class="profile-info-value">
+${escapeHtml(data.province||"ثبت نشده")}
+</div>
+</div>
+
+<div class="profile-info-box">
+<div class="profile-info-label">سن</div>
+<div class="profile-info-value">
+${data.age ? escapeHtml(String(data.age)) : "ثبت نشده"}
+</div>
+</div>
+
+</div>
+
+</div>
+
+`;
+
+}catch(e){
+
+console.error(e);
+
+alert(e.message||"باز کردن پروفایل انجام نشد.");
+
+}
+
+}
 async function verifyFriendship(friendId){    
     
 const{    
