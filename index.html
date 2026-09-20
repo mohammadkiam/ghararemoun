@@ -2622,48 +2622,44 @@ return`
     
 ${avatarHtml(p)}    
     
-<div>    
-    
-<div class="name">    
-${escapeHtml(p.display_name)}    
-</div>    
-    
-<div class="username">    
-@${escapeHtml(p.username)}    
-</div>    
-    
-</div>    
-    
-</div>    
-    
-<div class="button-group">    
-    
-<button    
-class="small-btn purple-btn"    
-onclick="openFriendCalendar(    
-'${attrValue(p.id)}',    
-'${attrValue(p.display_name)}'    
-)">    
-تقویم    
-</button>    
-    
-<button    
-class="small-btn purple-btn"    
-onclick="openChat(    
-'${attrValue(p.id)}',    
-'${attrValue(p.display_name)}'    
-)">    
-💬 چت    
-${    
-unread>0    
-?    
-`<span class="unread-badge">${unread}</span>`    
-:    
-""    
-}    
-</button> 
-   
-    <button
+ <div style="min-width:0;flex:1">
+
+<div class="name">
+${escapeHtml(p.display_name)}
+</div>
+
+<div class="username">
+@${escapeHtml(p.username)}
+</div>
+
+<div class="button-group">
+
+<button
+class="small-btn purple-btn"
+onclick="openFriendCalendar(
+'${attrValue(p.id)}',
+'${attrValue(p.display_name)}'
+)">
+تقویم
+</button>
+
+<button
+class="small-btn purple-btn"
+onclick="openChat(
+'${attrValue(p.id)}',
+'${attrValue(p.display_name)}'
+)">
+💬 چت
+${
+unread>0
+?
+`<span class="unread-badge">${unread}</span>`
+:
+""
+}
+</button>
+
+<button
 class="small-btn purple-btn"
 onclick="openFriendProfile(
 '${attrValue(p.id)}'
@@ -2671,7 +2667,13 @@ onclick="openFriendProfile(
 👤 پروفایل
 </button>
 
-</div>    
+</div>
+
+</div>
+
+</div>
+
+</div> 
     
 </div>    
     
