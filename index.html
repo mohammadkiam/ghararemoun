@@ -3727,6 +3727,8 @@ ${day}
 
 el.onclick=()=>{
 
+window.selectedCalendarDate=iso;
+
 document
 .querySelectorAll(".day.selected")
 .forEach(x=>x.classList.remove("selected"));
