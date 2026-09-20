@@ -3589,7 +3589,8 @@ box.innerHTML=`
 }
 
 function renderCalendar(){
-
+window.selectedCalendarDate = window.selectedCalendarDate || null;
+    
 const title=$("monthTitle");
 const ownerLabel=$("calendarOwnerLabel");
 const grid=$("calendarGrid");
