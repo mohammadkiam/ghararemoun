@@ -37,26 +37,7 @@ font-family:Vazirmatn,Tahoma,Arial,sans-serif;
 background:#fff;    
 color:var(--text);    
 min-height:100vh;    
-}
-
-body.dark{
---bg:#0f0e14;--white:#17151f;--text:#f3f0f8;--muted:#aaa3b5;--border:rgba(210,195,245,.12);--light:#2a2142;--soft:#1b1824;--greenbg:#173328;--redbg:#3a2025;--shadow:0 18px 50px rgba(0,0,0,.30);
-background:var(--bg);color:var(--text);
-}
-body.dark .topbar{background:rgba(20,18,27,.86);border-bottom-color:rgba(255,255,255,.06);}
-body.dark .card,body.dark .profile-info-box,body.dark .chat-card{background:var(--white);border-color:var(--border);}
-body.dark .nav{background:rgba(25,22,33,.78);border-color:rgba(255,255,255,.10);box-shadow:0 15px 45px rgba(0,0,0,.35);}
-body.dark input,body.dark textarea,body.dark select,body.dark .search-row input{background:#211e2a;color:var(--text);border-color:var(--border);}
-body.dark .day{background:#1d1a26;border-color:var(--border);color:var(--text);}
-body.dark .day.free{background:#211e2a;}
-body.dark .day.booked{background:#42262c;}
-body.dark .day.wish{background:#3b3150;}
-body.dark .notification-item.unread{background:#211c2d;border-color:#4b3b6c;}
-body.dark .loading{background:rgba(15,14,20,.92);}
-body.dark .loading-box{background:#17151f;color:var(--text);}
-.top-actions{display:flex;align-items:center;gap:9px;}
-.theme-toggle{width:42px;height:42px;border-radius:50%;background:var(--light);color:var(--purple);display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:none;}
-    
+}    
     
 button,input,textarea,select{    
 font-family:inherit;    
@@ -710,10 +691,7 @@ display:flex;
 align-items:center;    
 gap:7px;    
 flex-wrap:nowrap;    
-}
-.friend-main{display:flex;align-items:center;gap:10px;min-width:0;flex:1;}
-.friend-row .button-group{flex-shrink:0;}
-    
+}    
     
 .unread-badge{    
 display:inline-flex;    
@@ -1123,8 +1101,6 @@ color:#aaa5b5;
 font-size:12px;    
 }    
     
-.past-day{background:transparent!important;border-color:transparent!important;box-shadow:none!important;cursor:default!important;}
-.nav button:disabled{opacity:.35;cursor:not-allowed;}
 .nav button.active{    
 background:var(--light);    
 color:var(--purple);    
@@ -1749,12 +1725,10 @@ throw new Error("پروفایل کاربر پیدا نشد.");
 currentProfile=data;    
 }    
     
-async function logout(){
-
-cleanupChatRealtime();
-if(window.notificationChannel){supabaseClient.removeChannel(window.notificationChannel);window.notificationChannel=null;}
-if(window.notificationPoll){clearInterval(window.notificationPoll);window.notificationPoll=null;}
-
+async function logout(){    
+    
+cleanupChatRealtime();    
+    
 try{    
 await supabaseClient.auth.signOut();    
 }catch(e){    
@@ -1770,26 +1744,10 @@ chatPartnerName="";
 renderAuth("login");    
 }    
     
-/* =========================
-تم سایت
-========================= */
-function applyTheme(){
-const dark=localStorage.getItem("gharamoon-theme")==="dark";
-document.body.classList.toggle("dark",dark);
-const btn=$("themeToggle");
-if(btn)btn.textContent=dark?"☀️":"🌙";
-}
-function toggleTheme(){
-const dark=!document.body.classList.contains("dark");
-document.body.classList.toggle("dark",dark);
-localStorage.setItem("gharamoon-theme",dark?"dark":"light");
-const btn=$("themeToggle");
-if(btn)btn.textContent=dark?"☀️":"🌙";
-}
-
-/* =========================
-اپ
-========================= */
+/* =========================    
+اپ    
+========================= */    
+    
 function renderApp(){    
     
 $("root").innerHTML=`    
@@ -1811,12 +1769,13 @@ ${escapeHtml(currentProfile.display_name)}
     
 </div>    
     
-<div class="top-actions">
-<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="تغییر تم">🌙</button>
-<button class="profile-top-btn" onclick="goPage('profile')">
-${avatarHtml(currentProfile,"small")}
-</button>
-</div>    
+<button    
+class="profile-top-btn"    
+onclick="goPage('profile')">    
+    
+${avatarHtml(currentProfile,"small")}        
+    
+</button>    
     
 </div>    
     
@@ -1861,15 +1820,9 @@ onclick="goPage('notifications')">
     
 </div>    
     
-`;
-
-applyTheme();
-subscribeNotificationsRealtime();
-getUnreadCount();
-if(window.notificationPoll)clearInterval(window.notificationPoll);
-window.notificationPoll=setInterval(()=>{if(currentUser)getUnreadCount();},5000);
-
-goPage("chat");
+`;    
+    
+goPage("chat");    
 }    
     
 async function goPage(page){    
@@ -2139,6 +2092,25 @@ supabaseClient
 ]);    
     
 return(a||0)+(b||0);    
+}    
+    
+async function getUnreadCount(){    
+    
+const{    
+data,    
+error    
+}=await supabaseClient    
+.from("notifications")    
+.select("id")    
+.eq("user_id",currentUser.id)    
+.eq("is_read",false);    
+    
+if(error){    
+console.error(error);    
+return 0;    
+}    
+    
+return data?.length||0;    
 }    
     
 async function getUnreadCount(){
@@ -2686,37 +2658,80 @@ unreadMap[id]=await getUnreadFromFriend(id);
 })    
 );    
     
-box.innerHTML=
-(profiles||[])
-.map(p=>{
-
-const unread=unreadMap[p.id]||0;
-
-return`
-
-<div class="friend-item">
-<div class="row friend-row">
-
-<div class="friend-main">
-<div onclick="openFriendProfile('${attrValue(p.id)}')" style="cursor:pointer;flex-shrink:0">
+box.innerHTML=    
+(profiles||[])    
+.map(p=>{    
+    
+const unread=unreadMap[p.id]||0;    
+    
+return`    
+    
+<div class="friend-item">    
+    
+<div class="row">    
+    
+<div style="display:flex;align-items:center;gap:10px;min-width:0">    
+    
+<div
+onclick="openFriendProfile('${attrValue(p.id)}')"
+style="cursor:pointer;flex-shrink:0"
+>
 ${avatarHtml(p)}
+</div>    
+    
+ <div style="min-width:0;flex:1">
+
+<div class="name">
+${escapeHtml(p.display_name)}
 </div>
-<div style="min-width:0">
-<div class="name">${escapeHtml(p.display_name)}</div>
-<div class="username">@${escapeHtml(p.username)}</div>
-</div>
+
+<div class="username">
+@${escapeHtml(p.username)}
 </div>
 
 <div class="button-group">
-<button class="small-btn purple-btn" onclick="openFriendCalendar('${attrValue(p.id)}','${attrValue(p.display_name)}')">تقویم</button>
-<button class="small-btn purple-btn" onclick="openChat('${attrValue(p.id)}','${attrValue(p.display_name)}')">💬 چت ${unread>0?`<span class="unread-badge">${unread}</span>`:""}</button>
+
+<button
+class="small-btn purple-btn"
+onclick="openFriendCalendar(
+'${attrValue(p.id)}',
+'${attrValue(p.display_name)}'
+)">
+تقویم
+</button>
+
+<button
+class="small-btn purple-btn"
+onclick="openChat(
+'${attrValue(p.id)}',
+'${attrValue(p.display_name)}'
+)">
+💬 چت
+${
+unread>0
+?
+`<span class="unread-badge">${unread}</span>`
+:
+""
+}
+</button>
+
 </div>
 
 </div>
+
 </div>
-`;
-})
-.join("");
+
+</div> 
+    
+</div>    
+    
+</div>    
+    
+`;    
+    
+})    
+.join("");    
 }    
     
 /* =========================    
@@ -3521,7 +3536,7 @@ if(!main)return;
 
 main.innerHTML=`
 
-<div class="card">    <div class="month-head">    <button id="prevMonthBtn" onclick="changeMonth(-1)">    
+<div class="card">    <div class="month-head">    <button onclick="changeMonth(-1)">    
 ‹    
 </button>    <div    
 class="month-title"    
@@ -3616,9 +3631,6 @@ box.innerHTML=`
 
 async function changeMonth(dir){
 
-const today=todayJalali();
-if(dir<0 && (calendarYear<today.jy || (calendarYear===today.jy && calendarMonth<=today.jm)))return;
-
 calendarMonth+=dir;
 
 if(calendarMonth>12){
@@ -3682,12 +3694,6 @@ return;
 
 title.textContent=
 `${months[calendarMonth-1]} ${calendarYear}`;
-
-const prevMonthBtn=$("prevMonthBtn");
-if(prevMonthBtn){
-const t=todayJalali();
-prevMonthBtn.disabled=(calendarYear===t.jy&&calendarMonth===t.jm)||calendarYear<t.jy;
-}
 
 if(ownerLabel){
 
@@ -3765,7 +3771,6 @@ grid.insertAdjacentHTML(
 }
 
 const today=todayJalali();
-const todayISO=jalaliDateToISO(today.jy,today.jm,today.jd);
 
 const startTime=
 Date.parse(
@@ -3788,11 +3793,6 @@ const iso=
 date
 .toISOString()
 .slice(0,10);
-
-if(iso<todayISO){
-grid.insertAdjacentHTML("beforeend",`<div class="day empty past-day"></div>`);
-continue;
-}
 
 const el=
 document.createElement("div");
