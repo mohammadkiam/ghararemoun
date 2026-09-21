@@ -1266,6 +1266,10 @@ body.dark .day.selected strong{
 .nav .svg-icon{width:22px;height:22px;}
 .home-icon .svg-icon{width:28px;height:28px;}
 .theme-toggle .svg-icon{width:21px;height:21px;}
+.nav .svg-icon{width:26px;height:26px;margin-bottom:2px;}
+.nav button>span:not(.nav-badge):not(.svg-icon){display:block;}
+.theme-toggle .svg-icon{width:23px;height:23px;}
+
 .chat-send .svg-icon{width:20px;height:20px;}
 .avatar-upload-btn .svg-icon{width:18px;height:18px;}
 .friend-card-content{display:flex;flex-direction:column;gap:10px;}
@@ -1897,6 +1901,12 @@ bell:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 10a6 6 0 0 0-12 0
 moon:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.5A8.5 8.5 0 0 1 8.5 4 8.5 8.5 0 1 0 20 15.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>`,
 sun:`<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
 mail:`<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m5 7 7 5 7-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>`,
+chatEmoji:`<svg viewBox="0 0 28 28" aria-hidden="true"><path d="M22.5 13.2c0 5.1-4.1 9.2-9.2 9.2-1.1 0-2.2-.2-3.2-.6L6 23.5l1.1-3.8A9.1 9.1 0 0 1 4 13.2C4 8.1 8.1 4 13.3 4s9.2 4.1 9.2 9.2Z" fill="#d9c9ff"/><path d="M9.3 12.1h.01M17.2 12.1h.01" stroke="#6b4bc1" stroke-width="2.8" stroke-linecap="round"/><path d="M9.4 16.2c1.2 1.2 2.5 1.7 3.9 1.7s2.7-.5 3.9-1.7" fill="none" stroke="#6b4bc1" stroke-width="1.7" stroke-linecap="round"/></svg>`,
+friendsEmoji:`<svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="10" cy="9" r="4" fill="#ffd9a8"/><circle cx="19" cy="10" r="3.3" fill="#ffc6d5"/><path d="M4.5 22c.5-4.1 2.4-6.2 5.5-6.2s5 2.1 5.5 6.2" fill="#c9d9ff"/><path d="M15.5 22c.3-3.2 1.7-4.9 4.1-4.9s3.8 1.7 4.1 4.9" fill="#e4c9ff"/></svg>`,
+calendarEmoji:`<svg viewBox="0 0 28 28" aria-hidden="true"><rect x="4" y="5.5" width="20" height="18" rx="4" fill="#c9d9ff"/><path d="M4 10h20" stroke="#6b4bc1" stroke-width="2"/><path d="M9 3.8v4M19 3.8v4" stroke="#6b4bc1" stroke-width="2.3" stroke-linecap="round"/><circle cx="9" cy="15" r="1.2" fill="#6b4bc1"/><circle cx="14" cy="15" r="1.2" fill="#6b4bc1"/><circle cx="19" cy="15" r="1.2" fill="#6b4bc1"/><circle cx="9" cy="19.5" r="1.2" fill="#6b4bc1"/><circle cx="14" cy="19.5" r="1.2" fill="#6b4bc1"/></svg>`,
+bellEmoji:`<svg viewBox="0 0 28 28" aria-hidden="true"><path d="M14 4.5a6.5 6.5 0 0 0-6.5 6.5c0 6-2.5 7-2.5 8.5h18c0-1.5-2.5-2.5-2.5-8.5A6.5 6.5 0 0 0 14 4.5Z" fill="#ffe08a"/><path d="M11.2 22c.7 1.2 1.6 1.8 2.8 1.8s2.1-.6 2.8-1.8" fill="none" stroke="#e0a400" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+moonEmoji:`<svg viewBox="0 0 28 28" aria-hidden="true"><path d="M22.2 17.7A10.5 10.5 0 0 1 10.3 5.8 10.5 10.5 0 1 0 22.2 17.7Z" fill="#ffd65c"/><circle cx="18.8" cy="8.1" r="1" fill="#fff3b5"/><circle cx="22" cy="11.3" r=".8" fill="#fff3b5"/></svg>`,
+sunEmoji:`<svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="6" fill="#ffd65c"/><g stroke="#f0ad00" stroke-width="2" stroke-linecap="round"><path d="M14 2.8v3"/><path d="M14 22.2v3"/><path d="m5.9 5.9 2.1 2.1"/><path d="m20 20 2.1 2.1"/><path d="M2.8 14h3"/><path d="M22.2 14h3"/><path d="m5.9 22.1 2.1-2.1"/><path d="m20 8 2.1-2.1"/></g></svg>`,
 edit:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 16.5-.8 4.3 4.3-.8L18.8 8.7a2.5 2.5 0 0 0-3.5-3.5L4 16.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m14 6 4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>`,
 send:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 4 18 8-18 8 3.5-8L3 4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M6.5 12H21" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>`
 };
@@ -1907,7 +1917,7 @@ function applyTheme(){
 const dark=localStorage.getItem("gharamoon-theme")==="dark";
 document.body.classList.toggle("dark",dark);
 const btn=$("themeToggle");
-if(btn)btn.innerHTML=dark?icon("sun"):icon("moon");
+if(btn)btn.innerHTML=dark?icon("sunEmoji"):icon("moonEmoji");
 }
 
 function toggleTheme(){
@@ -1915,7 +1925,7 @@ const dark=!document.body.classList.contains("dark");
 document.body.classList.toggle("dark",dark);
 localStorage.setItem("gharamoon-theme",dark?"dark":"light");
 const btn=$("themeToggle");
-if(btn)btn.innerHTML=dark?icon("sun"):icon("moon");
+if(btn)btn.innerHTML=dark?icon("sunEmoji"):icon("moonEmoji");
 }
 
 function renderApp(){    
@@ -1940,7 +1950,7 @@ ${escapeHtml(currentProfile.display_name)}
 </div>    
     
 <div class="top-actions">
-<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="تغییر تم">${localStorage.getItem("gharamoon-theme")==="dark"?icon("sun"):icon("moon")}</button>
+<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="تغییر تم">${localStorage.getItem("gharamoon-theme")==="dark"?icon("sunEmoji"):icon("moonEmoji")}</button>
 <button class="profile-top-btn" onclick="goPage('profile')">
 ${avatarHtml(currentProfile,"small")}
 </button>
@@ -1958,31 +1968,30 @@ class="container">
 <button
 id="navChat"
 onclick="goPage('chat')">
-<br>
-چت
+${icon("chatEmoji")}
+<span>چت</span>
 </button>
     
 <button    
 id="navFriends"    
 onclick="goPage('friends')">    
-<br>    
-دوستان    
+${icon("friendsEmoji")}
+<span>دوستان</span>
 </button>    
     
 <button    
 id="navCalendar"    
 onclick="goPage('calendar')">    
-<br>    
-تقویم    
+${icon("calendarEmoji")}
+<span>تقویم</span>
 </button>    
     
 <button
 id="navNotifications"
 onclick="goPage('notifications')">
-
+${icon("bellEmoji")}
 <span id="notificationBadge" class="nav-badge"></span>
-<br>
-اعلان‌ها
+<span>اعلان‌ها</span>
 </button>
     
 </nav>    
