@@ -2483,7 +2483,7 @@ placeholder="نام کاربری">
 <label>استان</label>
 <input
 id="locationProvince"
-placeholder="مثلاً خوزستان"
+placeholder="استان"
 maxlength="80"
 oninput="toggleLocationCity()">
 </div>
@@ -2492,7 +2492,7 @@ oninput="toggleLocationCity()">
 <label>شهر</label>
 <input
 id="locationCity"
-placeholder="اول استان را وارد کن"
+placeholder="شهر"
 maxlength="80"
 disabled>
 </div>
@@ -2693,7 +2693,7 @@ const city=$("locationCity");
 if(!province||!city)return;
 const hasProvince=province.value.trim().length>0;
 city.disabled=!hasProvince;
-city.placeholder=hasProvince?"مثلاً خرمشهر":"اول استان را وارد کن";
+city.placeholder="شهر";
 if(!hasProvince)city.value="";
 }
 
@@ -2702,8 +2702,8 @@ const province=$("locationProvince")?.value.trim();
 const city=$("locationCity")?.value.trim();
 const box=$("locationSearchResult");
 if(!box)return;
-if(!province)return alert("اول استان را وارد کن.");
-if(!city)return alert("بعد از استان، شهر را هم وارد کن.");
+if(!province)return alert("استان را وارد کنید.");
+if(!city)return alert("شهر را وارد کنید.");
 box.innerHTML=`<div class="empty">در حال پیدا کردن افراد...</div>`;
 try{
 const{data:profiles,error:profileError}=await withTimeout(
@@ -2854,6 +2854,7 @@ ${avatarHtml(p)}
 <div class="button-group">
 <button class="small-btn purple-btn" onclick="openFriendCalendar('${attrValue(p.id)}','${attrValue(p.display_name)}')">تقویم</button>
 <button class="small-btn purple-btn" onclick="openChat('${attrValue(p.id)}','${attrValue(p.display_name)}')">💬 چت ${unread>0?`<span class="unread-badge">${unread}</span>`:""}</button>
+<button class="small-btn danger-btn" onclick="removeFriend('${attrValue(p.id)}')">لغو دوستی</button>
 </div>
 
 </div>
@@ -2870,6 +2871,30 @@ ${avatarHtml(p)}
 دوستی    
 ========================= */    
     
+async function removeFriend(friendId){
+
+friendId=decodeAttr(friendId);
+if(!friendId)return;
+
+if(!confirm("دوستی با این کاربر لغو شود؟"))return;
+
+showLoading();
+try{
+const{error}=await withTimeout(
+supabaseClient.rpc("remove_friendship",{p_friend_id:friendId}),
+12000
+);
+if(error)throw error;
+hideLoading();
+alert("دوستی لغو شد.");
+await renderFriends();
+}catch(e){
+hideLoading();
+console.error(e);
+alert(e.message||"لغو دوستی انجام نشد.");
+}
+}
+
 async function acceptFriend(actorId){    
     
 actorId=decodeAttr(actorId);    
@@ -3134,7 +3159,7 @@ main.innerHTML=`
     
 <button    
 class="chat-back"    
-onclick="goPage('friends')">    
+onclick="goPage('chatList')">    
 ›    
 </button>    
     
@@ -3668,7 +3693,28 @@ calendarMonth=t.jm;
 goPage("calendar");
 }
 
+async function cleanupPastData(){
+
+try{
+
+const{error}=await withTimeout(
+supabaseClient.rpc("cleanup_past_bookings"),
+10000
+);
+
+if(error)throw error;
+
+}catch(e){
+
+console.error("cleanupPastData:",e);
+
+}
+
+}
+
 async function renderCalendarPage(){
+
+await cleanupPastData();
 
 const main=$("mainContent");
 
@@ -5422,7 +5468,7 @@ maxlength="80">
 <input
 id="profileProvince"
 value="${escapeHtml(p.province||"")}"
-placeholder="مثلاً خوزستان"
+placeholder="استان"
 maxlength="80">
 
 </div>
@@ -5436,7 +5482,7 @@ maxlength="80">
 <input
 id="profileCity"
 value="${escapeHtml(p.city||"")}"
-placeholder="مثلاً خرمشهر"
+placeholder="شهر"
 maxlength="80">
 
 </div>
