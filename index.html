@@ -296,6 +296,18 @@ font-size:10px;
 font-weight:700;    
 }    
     
+.top-actions{display:flex;align-items:center;gap:9px;}
+.theme-toggle{width:42px;height:42px;border-radius:50%;background:var(--light);color:var(--purple);display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:none;}
+body.dark{--bg:#0f0e14;--white:#17151f;--text:#f3f0f8;--muted:#aaa3b5;--border:rgba(210,195,245,.12);--light:#2a2142;--soft:#1b1824;--greenbg:#173328;--redbg:#3a2025;--shadow:0 18px 50px rgba(0,0,0,.30);background:var(--bg);color:var(--text);}
+body.dark .topbar{background:rgba(23,21,31,.94);border-color:var(--border);}
+body.dark .card,body.dark .profile-info-box,body.dark .chat-card{background:#17151f;border-color:var(--border);}
+body.dark .nav{background:rgba(23,21,31,.94);border-color:var(--border);}
+body.dark input,body.dark textarea,body.dark select,body.dark .search-row input{background:#1b1824;color:var(--text);border-color:var(--border);}
+body.dark .day{background:#211e2a;color:var(--text);}
+body.dark .day.booked{background:#3a2025;}
+body.dark .day.wish{background:#2a2142;}
+body.dark .notification-item.unread{background:#241d36;}
+body.dark .loading,body.dark .loading-box{background:#17151f;color:var(--text);}
 .avatar{    
 width:38px;    
 height:38px;    
@@ -686,6 +698,9 @@ background:var(--light);
 color:#6949ae;    
 }    
     
+.friend-main{display:flex;align-items:center;gap:10px;min-width:0;flex:1;}
+.friend-row .button-group{flex-shrink:0;}
+
 .button-group{    
 display:flex;    
 align-items:center;    
@@ -1134,6 +1149,107 @@ grid-template-columns:1fr 1fr;
 }    
     
 }    
+.nav button:disabled{opacity:.35;cursor:not-allowed;}
+.past-day{background:transparent!important;border-color:transparent!important;box-shadow:none!important;cursor:default!important;}
+
+
+/* ===== DARK MODE — SOFT CHARCOAL / PURPLE ===== */
+body.dark{
+  --bg:#111016;
+  --white:#1b1921;
+  --soft:#211e29;
+  --text:#eeeaf5;
+  --muted:#aaa3b4;
+  --border:rgba(220,205,250,.11);
+  --light:#302744;
+  --greenbg:#19382a;
+  --redbg:#3b2429;
+  --shadow:0 18px 50px rgba(0,0,0,.24);
+  background:#111016;
+  color:var(--text);
+}
+
+body.dark .app{background:#111016;}
+body.dark .topbar{background:rgba(27,25,33,.88);border-bottom-color:rgba(220,205,250,.09);}
+body.dark .card,
+body.dark .appointment,
+body.dark .notification-item,
+body.dark .home-menu,
+body.dark .chat-card,
+body.dark .profile-info-box{background:#1b1921;border-color:var(--border);}
+body.dark .home-hero{background:linear-gradient(135deg,#1e1a28,#252033);}
+body.dark .home-menu{box-shadow:0 8px 25px rgba(0,0,0,.16);}
+body.dark .home-count{background:#27213a;color:#cfc2ff;}
+body.dark .home-icon{background:#302744;}
+body.dark .chat-preview-link{background:#302744;}
+body.dark .nav{background:rgba(27,25,33,.82);border-color:rgba(220,205,250,.12);box-shadow:0 15px 45px rgba(0,0,0,.28);}
+body.dark .nav button{color:#9f98aa;}
+body.dark .nav button.active{background:#302744;color:#c5b5ff;}
+body.dark input,
+body.dark textarea,
+body.dark select,
+body.dark .search-row input,
+body.dark .chat-input{background:#211f28;color:#eeeaf5;border-color:var(--border);}
+body.dark .field input:focus,
+body.dark .field select:focus,
+body.dark .search-row input:focus{background:#25222d;border-color:#8d74d8;}
+body.dark .secondary,
+body.dark .purple-btn,
+body.dark .chat-back{background:#302744;color:#c9bcff;}
+body.dark .message{background:#211e29;color:#c9bfff;}
+body.dark .date-info{color:#aaa3b4;}
+body.dark .day{background:#1d1b24;border-color:var(--border);color:#eeeaf5;}
+body.dark .day.free{background:#1d1b24;}
+body.dark .day.booked{background:#40262d;color:#ffd9de;}
+body.dark .day.wish{background:#342b46;color:#eee7ff;}
+body.dark .day.selected{background:#3a3152;border-color:#8d74d8;color:#eee7ff;box-shadow:0 0 0 2px rgba(141,116,216,.18);}
+body.dark .notification-item.unread{background:#282039;border-color:#59477d;}
+body.dark .success-btn{background:#19382a;color:#76d7a5;}
+body.dark .danger-btn{background:#3b2429;color:#ff9ca8;}
+body.dark .chat-bubble.theirs{background:#292632;color:#eeeaf5;}
+body.dark .chat-list-item{border-bottom-color:rgba(220,205,250,.08);}
+body.dark .profile-info-label{color:#aaa3b4;}
+body.dark .avatar{background:linear-gradient(135deg,#352c49,#292334);color:#c9bcff;}
+body.dark .theme-toggle{background:#302744;color:#c9bcff;}
+body.dark .loading{background:rgba(17,16,22,.92);}
+body.dark .loading-box{background:#1b1921;color:#eeeaf5;}
+body.dark .error-box{background:#1b1921;color:#eeeaf5;}
+body.dark .empty,
+body.dark .chat-empty{color:#9992a5;}
+body.dark .notification-time,
+body.dark .chat-list-time{color:#918b9b;}
+body.dark .past-day{background:transparent!important;border-color:transparent!important;}
+
+
+body.dark .app{
+  background:var(--bg)!important;
+}
+body.dark .container{
+  background:transparent!important;
+}
+body.dark .appointment,
+body.dark .home-menu,
+body.dark .error-box{
+  background:var(--white)!important;
+  color:var(--text);
+  border-color:var(--border);
+}
+body.dark .home-hero{
+  background:linear-gradient(135deg,#211d2b,#2b2340)!important;
+}
+body.dark .day.selected{
+  background:#7054c9!important;
+  border-color:#a993ff!important;
+  color:#ffffff!important;
+  box-shadow:0 0 0 3px rgba(169,147,255,.28),0 6px 18px rgba(117,87,217,.28)!important;
+  font-weight:900!important;
+}
+body.dark .day.selected strong{
+  color:#ffffff!important;
+  font-size:16px!important;
+  font-weight:900!important;
+}
+
 </style>    </head>    <body>    <div id="loading" class="loading">    
 <div class="loading-box">لطفاً صبر کن...</div>    
 </div>    <div id="root"></div>    <script>    
@@ -1727,7 +1843,9 @@ currentProfile=data;
     
 async function logout(){    
     
-cleanupChatRealtime();    
+cleanupChatRealtime();
+if(window.notificationChannel){supabaseClient.removeChannel(window.notificationChannel);window.notificationChannel=null;}
+if(window.notificationPoll){clearInterval(window.notificationPoll);window.notificationPoll=null;}    
     
 try{    
 await supabaseClient.auth.signOut();    
@@ -1748,6 +1866,21 @@ renderAuth("login");
 اپ    
 ========================= */    
     
+function applyTheme(){
+const dark=localStorage.getItem("gharamoon-theme")==="dark";
+document.body.classList.toggle("dark",dark);
+const btn=$("themeToggle");
+if(btn)btn.textContent=dark?"☀️":"🌙";
+}
+
+function toggleTheme(){
+const dark=!document.body.classList.contains("dark");
+document.body.classList.toggle("dark",dark);
+localStorage.setItem("gharamoon-theme",dark?"dark":"light");
+const btn=$("themeToggle");
+if(btn)btn.textContent=dark?"☀️":"🌙";
+}
+
 function renderApp(){    
     
 $("root").innerHTML=`    
@@ -1769,13 +1902,12 @@ ${escapeHtml(currentProfile.display_name)}
     
 </div>    
     
-<button    
-class="profile-top-btn"    
-onclick="goPage('profile')">    
-    
-${avatarHtml(currentProfile,"small")}        
-    
-</button>    
+<div class="top-actions">
+<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="تغییر تم">🌙</button>
+<button class="profile-top-btn" onclick="goPage('profile')">
+${avatarHtml(currentProfile,"small")}
+</button>
+</div>    
     
 </div>    
     
@@ -1822,6 +1954,12 @@ onclick="goPage('notifications')">
     
 `;    
     
+applyTheme();
+subscribeNotificationsRealtime();
+getUnreadCount();
+if(window.notificationPoll)clearInterval(window.notificationPoll);
+window.notificationPoll=setInterval(()=>{if(currentUser)getUnreadCount();},5000);
+
 goPage("chat");    
 }    
     
@@ -2094,65 +2232,15 @@ supabaseClient
 return(a||0)+(b||0);    
 }    
     
-async function getUnreadCount(){    
-    
-const{    
-data,    
-error    
-}=await supabaseClient    
-.from("notifications")    
-.select("id")    
-.eq("user_id",currentUser.id)    
-.eq("is_read",false);    
-    
-if(error){    
-console.error(error);    
-return 0;    
-}    
-    
-return data?.length||0;    
-}    
-    
 async function getUnreadCount(){
-
-const{
-data,
-error
-}=await supabaseClient
-.from("notifications")
-.select("id")
-.eq("user_id",currentUser.id)
-.eq("is_read",false);
-
-if(error){
-console.error(error);
-return 0;
-}
-
+const{data,error}=await supabaseClient.from("notifications").select("id").eq("user_id",currentUser.id).eq("is_read",false);
+if(error){console.error(error);return 0;}
 const count=data?.length||0;
-
 const badge=$("notificationBadge");
-
-if(badge){
-
-if(count>0){
-
-badge.textContent=count>99?"99+":count;
-badge.style.display="inline-flex";
-
-}else{
-
-badge.textContent="";
-badge.style.display="none";
-
-}
-
-}
-
+if(badge){if(count>0){badge.textContent=count>99?"99+":count;badge.style.display="inline-flex";}else{badge.textContent="";badge.style.display="none";}}
 return count;
+}
 
-    }
-    
 async function getUnreadFromFriend(friendId){    
     
 const{    
@@ -2668,66 +2756,25 @@ return`
     
 <div class="friend-item">    
     
-<div class="row">    
-    
-<div style="display:flex;align-items:center;gap:10px;min-width:0">    
-    
-<div
-onclick="openFriendProfile('${attrValue(p.id)}')"
-style="cursor:pointer;flex-shrink:0"
->
+<div class="row friend-row">
+<div class="friend-main">
+<div onclick="openFriendProfile('${attrValue(p.id)}')" style="cursor:pointer;flex-shrink:0">
 ${avatarHtml(p)}
-</div>    
-    
- <div style="min-width:0;flex:1">
-
-<div class="name">
-${escapeHtml(p.display_name)}
 </div>
-
-<div class="username">
-@${escapeHtml(p.username)}
+<div style="min-width:0">
+<div class="name">${escapeHtml(p.display_name)}</div>
+<div class="username">@${escapeHtml(p.username)}</div>
 </div>
-
+</div>
 <div class="button-group">
-
-<button
-class="small-btn purple-btn"
-onclick="openFriendCalendar(
-'${attrValue(p.id)}',
-'${attrValue(p.display_name)}'
-)">
-تقویم
-</button>
-
-<button
-class="small-btn purple-btn"
-onclick="openChat(
-'${attrValue(p.id)}',
-'${attrValue(p.display_name)}'
-)">
-💬 چت
-${
-unread>0
-?
-`<span class="unread-badge">${unread}</span>`
-:
-""
-}
-</button>
-
+<button class="small-btn purple-btn" onclick="openFriendCalendar('${attrValue(p.id)}','${attrValue(p.display_name)}')">تقویم</button>
+<button class="small-btn purple-btn" onclick="openChat('${attrValue(p.id)}','${attrValue(p.display_name)}')">💬 چت ${unread>0?`<span class="unread-badge">${unread}</span>`:""}</button>
 </div>
 
 </div>
 
 </div>
 
-</div> 
-    
-</div>    
-    
-</div>    
-    
 `;    
     
 })    
@@ -3536,7 +3583,7 @@ if(!main)return;
 
 main.innerHTML=`
 
-<div class="card">    <div class="month-head">    <button onclick="changeMonth(-1)">    
+<div class="card">    <div class="month-head">    <button id="prevMonthBtn" onclick="changeMonth(-1)">    
 ‹    
 </button>    <div    
 class="month-title"    
@@ -3631,6 +3678,9 @@ box.innerHTML=`
 
 async function changeMonth(dir){
 
+const today=todayJalali();
+if(dir<0 && (calendarYear<today.jy || (calendarYear===today.jy && calendarMonth<=today.jm)))return;
+
 calendarMonth+=dir;
 
 if(calendarMonth>12){
@@ -3694,6 +3744,9 @@ return;
 
 title.textContent=
 `${months[calendarMonth-1]} ${calendarYear}`;
+
+const prevMonthBtn=$("prevMonthBtn");
+if(prevMonthBtn){const t=todayJalali();prevMonthBtn.disabled=(calendarYear===t.jy&&calendarMonth===t.jm)||calendarYear<t.jy;}
 
 if(ownerLabel){
 
@@ -3793,6 +3846,9 @@ const iso=
 date
 .toISOString()
 .slice(0,10);
+
+const todayISO=jalaliDateToISO(today.jy,today.jm,today.jd);
+if(iso<todayISO){grid.insertAdjacentHTML("beforeend",`<div class="day empty past-day"></div>`);continue;}
 
 const el=
 document.createElement("div");
@@ -4009,6 +4065,10 @@ info?.is_wish
 :
 "free"
 );
+
+if(window.selectedCalendarDate===iso){
+el.classList.add("selected");
+}
 
 const j=isoToJalali(iso);
 
