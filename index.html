@@ -2544,7 +2544,7 @@ placeholder="نام کاربری">
 <div class="card">
 
 <div class="card-title">
-پیدا کردن افراد با استان و شهر
+پیدا کردن افراد با استان
 </div>
 
 <div class="field">
@@ -2552,17 +2552,7 @@ placeholder="نام کاربری">
 <input
 id="locationProvince"
 placeholder="استان"
-maxlength="80"
-oninput="toggleLocationCity()">
-</div>
-
-<div class="field">
-<label>شهر</label>
-<input
-id="locationCity"
-placeholder="شهر"
-maxlength="80"
-disabled>
+maxlength="80">
 </div>
 
 <button
@@ -2755,29 +2745,17 @@ ${action}
 `;    
 }    
     
-function toggleLocationCity(){
-const province=$("locationProvince");
-const city=$("locationCity");
-if(!province||!city)return;
-const hasProvince=province.value.trim().length>0;
-city.disabled=!hasProvince;
-city.placeholder="شهر";
-if(!hasProvince)city.value="";
-}
-
 async function searchUsersByLocation(){
 const province=$("locationProvince")?.value.trim();
-const city=$("locationCity")?.value.trim();
 const box=$("locationSearchResult");
 if(!box)return;
 if(!province)return alert("استان را وارد کنید.");
-if(!city)return alert("شهر را وارد کنید.");
 box.innerHTML=`<div class="empty">در حال پیدا کردن افراد...</div>`;
 try{
 const{data:profiles,error:profileError}=await withTimeout(
-supabaseClient.rpc("search_users_by_location",{p_province:province,p_city:city}),10000);
+supabaseClient.rpc("search_users_by_location",{p_province:province,p_city:null}),10000);
 if(profileError)throw profileError;
-if(!profiles?.length){box.innerHTML=`<div class="empty">کاربری با این استان و شهر پیدا نشد.</div>`;return;}
+if(!profiles?.length){box.innerHTML=`<div class="empty">کاربری با این استان پیدا نشد.</div>`;return;}
 const{data:relations,error:relationError}=await withTimeout(
 supabaseClient.from("friendships").select("requester_id,receiver_id,status").or(`requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`),10000);
 if(relationError)throw relationError;
@@ -2790,7 +2768,7 @@ if(!existing){action=`<button class="small-btn purple-btn" onclick="sendFriendRe
 else if(existing.status==="accepted"){action=`<span class="username">دوست شماست</span>`;}
 else if(existing.requester_id===currentUser.id){action=`<span class="username">درخواست ارسال شده</span>`;}
 else{action=`<button class="small-btn success-btn" onclick="acceptFriend('${attrValue(data.id)}')">قبول</button> <button class="small-btn danger-btn" onclick="rejectFriend('${attrValue(data.id)}')">رد</button>`;}
-return `<div class="friend-item"><div class="row"><div style="display:flex;align-items:center;gap:10px;min-width:0">${avatarHtml(data)}<div style="min-width:0"><div class="name">${escapeHtml(data.display_name||"بدون نام")}</div><div class="username">@${escapeHtml(data.username||"")}</div><div class="username">${escapeHtml(data.province||province)} · ${escapeHtml(data.city||city)}</div></div></div><div>${action}</div></div></div>`;
+return `<div class="friend-item"><div class="row"><div style="display:flex;align-items:center;gap:10px;min-width:0">${avatarHtml(data)}<div style="min-width:0"><div class="name">${escapeHtml(data.display_name||"بدون نام")}</div><div class="username">@${escapeHtml(data.username||"")}</div><div class="username">${escapeHtml(data.province||province)}</div></div></div><div>${action}</div></div></div>`;
 }).join("");
 }catch(e){console.error(e);box.innerHTML=`<div class="empty">${escapeHtml(e.message||"جستجوی افراد انجام نشد.")}</div>`;}
 }
