@@ -2472,6 +2472,41 @@ placeholder="نام کاربری">
 <div id="friendSearchResult"></div>    
     
 </div>    
+
+<div class="card">
+
+<div class="card-title">
+پیدا کردن افراد با استان و شهر
+</div>
+
+<div class="field">
+<label>استان</label>
+<input
+id="locationProvince"
+placeholder="مثلاً خوزستان"
+maxlength="80"
+oninput="toggleLocationCity()">
+</div>
+
+<div class="field">
+<label>شهر</label>
+<input
+id="locationCity"
+placeholder="اول استان را وارد کن"
+maxlength="80"
+disabled>
+</div>
+
+<button
+class="primary"
+style="width:100%;margin-top:4px"
+onclick="searchUsersByLocation()">
+پیدا کردن افراد
+</button>
+
+<div id="locationSearchResult"></div>
+
+</div>    
     
 <div class="card">    
     
@@ -2573,7 +2608,7 @@ action=`
 <button    
 class="small-btn purple-btn"    
 onclick="sendFriendRequest('${attrValue(data.id)}')">    
-افزودن    
+درخواست دوستی    
 </button>    
     
 `;    
@@ -2652,6 +2687,46 @@ ${action}
 `;    
 }    
     
+function toggleLocationCity(){
+const province=$("locationProvince");
+const city=$("locationCity");
+if(!province||!city)return;
+const hasProvince=province.value.trim().length>0;
+city.disabled=!hasProvince;
+city.placeholder=hasProvince?"مثلاً خرمشهر":"اول استان را وارد کن";
+if(!hasProvince)city.value="";
+}
+
+async function searchUsersByLocation(){
+const province=$("locationProvince")?.value.trim();
+const city=$("locationCity")?.value.trim();
+const box=$("locationSearchResult");
+if(!box)return;
+if(!province)return alert("اول استان را وارد کن.");
+if(!city)return alert("بعد از استان، شهر را هم وارد کن.");
+box.innerHTML=`<div class="empty">در حال پیدا کردن افراد...</div>`;
+try{
+const{data:profiles,error:profileError}=await withTimeout(
+supabaseClient.rpc("search_users_by_location",{p_province:province,p_city:city}),10000);
+if(profileError)throw profileError;
+if(!profiles?.length){box.innerHTML=`<div class="empty">کاربری با این استان و شهر پیدا نشد.</div>`;return;}
+const{data:relations,error:relationError}=await withTimeout(
+supabaseClient.from("friendships").select("requester_id,receiver_id,status").or(`requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`),10000);
+if(relationError)throw relationError;
+const relationMap={};
+(relations||[]).forEach(r=>{const otherId=r.requester_id===currentUser.id?r.receiver_id:r.requester_id;relationMap[otherId]=r;});
+box.innerHTML=profiles.map(data=>{
+const existing=relationMap[data.id];
+let action="";
+if(!existing){action=`<button class="small-btn purple-btn" onclick="sendFriendRequest('${attrValue(data.id)}')">درخواست دوستی</button>`;}
+else if(existing.status==="accepted"){action=`<span class="username">دوست شماست</span>`;}
+else if(existing.requester_id===currentUser.id){action=`<span class="username">درخواست ارسال شده</span>`;}
+else{action=`<button class="small-btn success-btn" onclick="acceptFriend('${attrValue(data.id)}')">قبول</button> <button class="small-btn danger-btn" onclick="rejectFriend('${attrValue(data.id)}')">رد</button>`;}
+return `<div class="friend-item"><div class="row"><div style="display:flex;align-items:center;gap:10px;min-width:0">${avatarHtml(data)}<div style="min-width:0"><div class="name">${escapeHtml(data.display_name||"بدون نام")}</div><div class="username">@${escapeHtml(data.username||"")}</div><div class="username">${escapeHtml(data.province||province)} · ${escapeHtml(data.city||city)}</div></div></div><div>${action}</div></div></div>`;
+}).join("");
+}catch(e){console.error(e);box.innerHTML=`<div class="empty">${escapeHtml(e.message||"جستجوی افراد انجام نشد.")}</div>`;}
+}
+
 async function sendFriendRequest(receiverId){    
     
 receiverId=decodeAttr(receiverId);    
@@ -2989,6 +3064,14 @@ if(error)throw error;
 return !!data;    
 }    
     
+async function goChatList(){
+
+cleanupChatRealtime();
+chatPartnerId=null;
+chatPartnerName=null;
+await goPage("chatList");
+}
+
 async function openChat(friendId,friendName){
 
 friendId=decodeAttr(friendId);
@@ -4310,7 +4393,16 @@ p?.username
 
 · تأیید شده
 
-</div>    </div>    `;
+</div>
+
+<button
+class="small-btn danger-btn"
+style="margin-top:10px;width:100%"
+onclick="cancelAppointment('${attrValue(x.date)}','${attrValue(x.partner_id)}')">
+لغو قرار
+</button>
+
+</div>    `;
 
 })
 .join("");
@@ -4327,6 +4419,32 @@ e.message||
 "دریافت قرارها انجام نشد."    
 )}    
 </div>    `;
+}
+}
+
+async function cancelAppointment(date,partnerId){
+
+date=decodeAttr(date);
+partnerId=decodeAttr(partnerId);
+if(!date||!partnerId)return;
+
+if(!confirm("این قرار برای هر دو نفر لغو شود؟"))return;
+
+showLoading();
+try{
+const{error}=await withTimeout(
+supabaseClient.rpc("cancel_booking",{p_date:date,p_partner_id:partnerId}),
+12000
+);
+if(error)throw error;
+hideLoading();
+alert("قرار لغو شد و تاریخ دوباره آزاد شد.");
+$("datePanel")?.classList.add("hidden");
+await renderCalendar();
+}catch(e){
+hideLoading();
+console.error(e);
+alert(e.message||"لغو قرار انجام نشد.");
 }
 }
 
