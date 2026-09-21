@@ -368,7 +368,7 @@ overflow:hidden;
 }    
     
 .home-hero:after{    
-content:"✦";    
+content:"";    
 position:absolute;    
 left:25px;    
 top:18px;    
@@ -1260,7 +1260,55 @@ body.dark .day.selected strong{
   font-weight:900!important;
 }
 
-</style>    </head>    <body>    <div id="loading" class="loading">    
+</style>    
+<style id="apple-ios-theme">
+:root{
+  --ios-bg:#f5f5f7;
+  --ios-card:rgba(255,255,255,.82);
+  --ios-text:#1d1d1f;
+  --ios-muted:#6e6e73;
+  --ios-blue:#007aff;
+  --ios-purple:#7c5cff;
+  --ios-border:rgba(60,60,67,.12);
+  --ios-shadow:0 12px 35px rgba(0,0,0,.08);
+}
+*{box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Arial,sans-serif;background:var(--ios-bg);color:var(--ios-text);-webkit-font-smoothing:antialiased;}
+.app{background:var(--ios-bg)!important;}
+.topbar{background:rgba(245,245,247,.78)!important;backdrop-filter:saturate(180%) blur(22px)!important;-webkit-backdrop-filter:saturate(180%) blur(22px)!important;border-bottom:1px solid var(--ios-border)!important;}
+.card,.friend-item,.request-item,.notification-item,.appointment,.chat-card,.chat-list-item,.home-menu,.profile-info-box{border-radius:22px!important;border:1px solid var(--ios-border)!important;box-shadow:var(--ios-shadow)!important;}
+input,textarea,select{border-radius:14px!important;border:1px solid rgba(60,60,67,.18)!important;background:rgba(255,255,255,.9)!important;}
+button{font-family:inherit!important;-webkit-tap-highlight-color:transparent;}
+.primary,.success-btn{background:var(--ios-blue)!important;color:#fff!important;border-radius:14px!important;}
+.purple-btn,.secondary{border-radius:14px!important;}
+.theme-toggle{width:42px!important;height:42px!important;border-radius:50%!important;background:rgba(118,118,128,.12)!important;color:var(--ios-text)!important;}
+.apple-icon{display:inline-flex;align-items:center;justify-content:center;line-height:0;vertical-align:middle;}
+.apple-icon svg{display:block;}
+.nav{background:rgba(255,255,255,.78)!important;backdrop-filter:saturate(180%) blur(24px)!important;-webkit-backdrop-filter:saturate(180%) blur(24px)!important;border-top:1px solid var(--ios-border)!important;}
+.nav button{color:#6e6e73!important;}
+.nav button.active{color:var(--ios-blue)!important;}
+.friend-item .row{flex-direction:column!important;align-items:stretch!important;}
+.friend-item .row > div:first-child{width:100%!important;}
+.friend-item .button-group{width:100%!important;justify-content:flex-start!important;align-items:center!important;flex-wrap:wrap!important;margin-top:10px!important;padding-top:10px!important;border-top:1px solid var(--ios-border)!important;}
+.friend-item .button-group .small-btn{flex:0 0 auto!important;}
+body.dark{
+  --ios-bg:#000;
+  --ios-card:rgba(28,28,30,.86);
+  --ios-text:#f5f5f7;
+  --ios-muted:#98989d;
+  --ios-border:rgba(255,255,255,.12);
+  --ios-shadow:0 12px 35px rgba(0,0,0,.35);
+}
+body.dark,.dark .app{background:#000!important;color:var(--ios-text)!important;}
+body.dark .topbar{background:rgba(28,28,30,.78)!important;border-color:var(--ios-border)!important;}
+body.dark .card,body.dark .friend-item,body.dark .request-item,body.dark .notification-item,body.dark .appointment,body.dark .chat-card,body.dark .chat-list-item,body.dark .home-menu,body.dark .profile-info-box{background:rgba(28,28,30,.86)!important;color:var(--ios-text)!important;border-color:var(--ios-border)!important;}
+body.dark input,body.dark textarea,body.dark select{background:#1c1c1e!important;color:#f5f5f7!important;border-color:rgba(255,255,255,.16)!important;}
+body.dark .nav{background:rgba(28,28,30,.82)!important;border-color:var(--ios-border)!important;}
+body.dark .nav button{color:#98989d!important;}
+body.dark .nav button.active{color:#0a84ff!important;}
+body.dark .theme-toggle{background:rgba(118,118,128,.24)!important;color:#f5f5f7!important;}
+</style>
+</head>    <body>    <div id="loading" class="loading">    
 <div class="loading-box">لطفاً صبر کن...</div>    
 </div>    <div id="root"></div>    <script>    
     
@@ -1876,11 +1924,31 @@ renderAuth("login");
 اپ    
 ========================= */    
     
+function appleIcon(name,size=20){
+const icons={
+chat:'<path d="M6 18l-2.5 2v-4A8 8 0 1 1 12 20H6Z"/><path d="M8 11h.01M12 11h.01M16 11h.01" stroke-linecap="round"/>',
+users:'<path d="M16 19v-1.5a4.5 4.5 0 0 0-9 0V19"/><circle cx="11.5" cy="8" r="3.5"/><path d="M18 19v-1a3.5 3.5 0 0 0-2.5-3.35M15.5 4.8a3.2 3.2 0 0 1 0 6.2"/>',
+calendar:'<rect x="3.5" y="5" width="17" height="16" rx="3"/><path d="M7 3v4M17 3v4M3.5 9.5h17"/>',
+bell:'<path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9Z"/><path d="M10 21h4"/>',
+moon:'<path d="M20 15.5A8.5 8.5 0 0 1 8.5 4 8.5 8.5 0 1 0 20 15.5Z"/>',
+sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/>',
+mail:'<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/>',
+heart:'<path d="M20.8 8.8c0 5.4-8.8 10.2-8.8 10.2S3.2 14.2 3.2 8.8A4.8 4.8 0 0 1 12 6.1a4.8 4.8 0 0 1 8.8 2.7Z"/>',
+check:'<path d="m5 12 4 4L19 6"/>',
+edit:'<path d="M4 20h4L19 9l-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/>',
+arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+hand:'<path d="M8 12V6a1.5 1.5 0 0 1 3 0v5-7a1.5 1.5 0 0 1 3 0v7-6a1.5 1.5 0 0 1 3 0v7-4a1.5 1.5 0 0 1 3 0v6c0 4-2.5 6-6.5 6h-1c-3 0-4.5-1.2-6.5-3.5L3 13a1.8 1.8 0 0 1 2.7-2.3L8 12Z"/>',
+smile:'<circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01" stroke-linecap="round"/>',
+star:'<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"/>'
+};
+return `<span class="apple-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${icons[name]||icons.star}</svg></span>`;
+}
+
 function applyTheme(){
 const dark=localStorage.getItem("gharamoon-theme")==="dark";
 document.body.classList.toggle("dark",dark);
 const btn=$("themeToggle");
-if(btn)btn.textContent=dark?"☀️":"🌙";
+if(btn)btn.innerHTML=dark?appleIcon("sun",20):appleIcon("moon",20);
 }
 
 function toggleTheme(){
@@ -1888,7 +1956,7 @@ const dark=!document.body.classList.contains("dark");
 document.body.classList.toggle("dark",dark);
 localStorage.setItem("gharamoon-theme",dark?"dark":"light");
 const btn=$("themeToggle");
-if(btn)btn.textContent=dark?"☀️":"🌙";
+if(btn)btn.innerHTML=dark?appleIcon("sun",20):appleIcon("moon",20);
 }
 
 function renderApp(){    
@@ -1913,7 +1981,7 @@ ${escapeHtml(currentProfile.display_name)}
 </div>    
     
 <div class="top-actions">
-<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="تغییر تم">🌙</button>
+<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="تغییر تم">${appleIcon("moon",20)}</button>
 <button class="profile-top-btn" onclick="goPage('profile')">
 ${avatarHtml(currentProfile,"small")}
 </button>
@@ -1931,28 +1999,28 @@ class="container">
 <button
 id="navChat"
 onclick="goPage('chat')">
-💬<br>
+${appleIcon("chat",20)}<br>
 چت
 </button>
     
 <button    
 id="navFriends"    
 onclick="goPage('friends')">    
-👥<br>    
+${appleIcon("users",20)}<br>    
 دوستان    
 </button>    
     
 <button    
 id="navCalendar"    
 onclick="goPage('calendar')">    
-📅<br>    
+${appleIcon("calendar",20)}<br>    
 تقویم    
 </button>    
     
 <button
 id="navNotifications"
 onclick="goPage('notifications')">
-🔔
+${appleIcon("bell",20)}
 <span id="notificationBadge" class="nav-badge"></span>
 <br>
 اعلان‌ها
@@ -2074,7 +2142,7 @@ $("mainContent").innerHTML=`
 <div class="card home-hero">    
     
 <div class="home-hello">    
-سلام ${escapeHtml(currentProfile.display_name)} 👋    
+سلام ${escapeHtml(currentProfile.display_name)} ${appleIcon("hand",18)}    
 </div>    
     
 <div class="home-sub">    
@@ -2090,7 +2158,7 @@ class="home-menu"
 onclick="goPage('friends')">    
     
 <div class="home-icon">    
-👥    
+${appleIcon("users",20)}    
 </div>    
     
 <b>دوستان</b>    
@@ -2110,7 +2178,7 @@ class="home-menu"
 onclick="goPage('calendar')">    
     
 <div class="home-icon">    
-📅    
+${appleIcon("calendar",20)}    
 </div>    
     
 <b>تقویم</b>    
@@ -2130,7 +2198,7 @@ class="home-menu"
 onclick="goPage('requests')">    
     
 <div class="home-icon">    
-📩    
+${appleIcon("mail",20)}    
 </div>    
     
 <b>درخواست‌ها</b>    
@@ -2150,7 +2218,7 @@ class="home-menu"
 onclick="goPage('notifications')">    
     
 <div class="home-icon">    
-🔔    
+${appleIcon("bell",20)}    
 </div>    
     
 <b>اعلان‌ها</b>    
@@ -2174,7 +2242,7 @@ class="card chat-preview-card">
 <div class="chat-preview-head">    
     
 <div class="chat-preview-title">    
-💬 چت‌ها    
+${appleIcon("chat",20)} چت‌ها    
 </div>    
     
 <button    
@@ -2374,7 +2442,7 @@ box.innerHTML=`
 <div class="empty">    
 هنوز چتی نداری.    
 <br>    
-از بخش دوستان با یکی از دوستات شروع کن 💜    
+از بخش دوستان با یکی از دوستات شروع کن ${appleIcon("heart",18)}    
 </div>    
     
 `;    
@@ -2577,7 +2645,7 @@ if(data.id===currentUser.id){
     
 box.innerHTML=`    
 <div class="empty">    
-این خودتی 😄    
+این خودتی ${appleIcon("smile",18)}    
 </div>    
 `;    
     
@@ -2853,7 +2921,7 @@ ${avatarHtml(p)}
 </div>
 <div class="button-group">
 <button class="small-btn purple-btn" onclick="openFriendCalendar('${attrValue(p.id)}','${attrValue(p.display_name)}')">تقویم</button>
-<button class="small-btn purple-btn" onclick="openChat('${attrValue(p.id)}','${attrValue(p.display_name)}')">💬 چت ${unread>0?`<span class="unread-badge">${unread}</span>`:""}</button>
+<button class="small-btn purple-btn" onclick="openChat('${attrValue(p.id)}','${attrValue(p.display_name)}')">${appleIcon("chat",20)} چت ${unread>0?`<span class="unread-badge">${unread}</span>`:""}</button>
 <button class="small-btn danger-btn" onclick="removeFriend('${attrValue(p.id)}')">لغو دوستی</button>
 </div>
 
@@ -3201,7 +3269,7 @@ maxlength="2000"></textarea>    <button
 id="chatSendButton"    
 class="chat-send"    
 onclick="sendChatMessage()">
-➤
+${appleIcon("arrow",20)}
 </button>
 
 </div>    </div>    `;
@@ -3273,7 +3341,7 @@ box.innerHTML=`
 <div class="chat-empty">    
 هنوز پیامی بین شما رد و بدل نشده.    
 <br>    
-اولین پیام رو بفرست 👋    
+اولین پیام رو بفرست ${appleIcon("hand",18)}    
 </div>    `;
 
 return;
@@ -3584,7 +3652,7 @@ const main=$("mainContent");
 main.innerHTML=`
 
 <div class="card">    <div class="card-title">    
-💬 چت‌ها    
+${appleIcon("chat",20)} چت‌ها    
 </div>    <div id="fullChatList">    
 در حال دریافت...    
 </div>    </div>    `;
@@ -3602,7 +3670,7 @@ box.innerHTML=`
 <div class="empty">    
 هنوز چتی نداری.    
 <br>    
-از بخش دوستان با یکی از دوستات شروع کن 💜    
+از بخش دوستان با یکی از دوستات شروع کن ${appleIcon("heart",18)}    
 </div>    `;
 
 return;
@@ -4744,7 +4812,7 @@ if(error)throw error;
 hideLoading();
 
 alert(
-"قرار ثبت شد ❤️"
+"قرار ثبت شد"
 );
 
 await renderCalendar();
@@ -5044,7 +5112,7 @@ hideLoading();
 alert(
 accept
 ?
-"قرار قبول شد ❤️"
+"قرار قبول شد"
 :
 "درخواست رد شد."
 );
@@ -5326,7 +5394,7 @@ hideLoading();
 alert(
 accept
 ?
-"قرار ثبت شد ❤️"
+"قرار ثبت شد"
 :
 "درخواست رد شد."
 );
@@ -5367,7 +5435,7 @@ ${avatarHtml(p,"large")}
 <label
 class="avatar-upload-btn"
 for="avatarInput">
-✎
+${appleIcon("edit",18)}
 </label>
 
 <input
@@ -5604,7 +5672,7 @@ hideLoading();
 
 await renderProfilePage();
 
-alert("عکس پروفایل ذخیره شد ✅");
+alert("عکس پروفایل ذخیره شد");
 
 }catch(e){
 
@@ -5708,7 +5776,7 @@ currentProfile=data;
 
 hideLoading();
 
-alert("پروفایل ذخیره شد ✅");
+alert("پروفایل ذخیره شد");
 
 await renderApp();
 
